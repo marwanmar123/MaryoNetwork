@@ -1,4 +1,6 @@
-﻿using MaryoNetwork.Models;
+﻿using MaryoNetwork.Data;
+using MaryoNetwork.Models;
+using MaryoNetwork.Models.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,20 +14,32 @@ namespace MaryoNetwork.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
         public IActionResult Index()
         {
-            return View();
+
+            return View(_db.Categories.ToList());
         }
 
         public IActionResult Privacy()
         {
             return View();
+        }
+
+
+        public IActionResult Posts(string id)
+        {
+
+            Category ctgr = _db.Categories.Find(id);
+            var result = _db.Posts.Where(x => x.CategoryId == id).OrderByDescending(y => y.CreatedOn).ToList();
+            return View(result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
