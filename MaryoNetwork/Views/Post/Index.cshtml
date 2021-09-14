@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MaryoNetwork.Models.Posts.Post>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+
+<h1>@ViewBag.Cat</h1>
+
+<form asp-controller="Post" asp-action="CreatePost">
+    <input type="text" name="Title" />
+    <input type="text" name="Image" />
+    <input type="text" name="Content" />
+    <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
+    <button type="submit" class="btn btn-xs btn-primary">Submit</button>
+</form>
+
+
+<table class="table text-center">
+    <thead>
+
+        <tr>
+            <td>content</td>
+            <td>title</td>
+            <td>image</td>
+            <td>User</td>
+            <td>Comment</td>
+            <td>Like</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Content</td>
+                <td>@item.Title</td>
+                <td>@item.Image</td>
+                <td>@item.User.FullName</td>
+                <td>
+                    <form method="post" asp-controller="Post" asp-action="CreateComment">
+                        <input type="text" name="Content" />
+                        <input type="hidden" name="PostId" value="@item.Id" />
+                        <button type="submit" class="btn btn-xs btn-primary">Comment</button>
+                    </form>
+                    @foreach (var i in item.Comments)
+                    {
+                        <p>@i.Content</p>
+                        <p>@i.CreatedOn</p>
+                        @Html.DisplayFor(modelItem => i.User.FullName)
+                    }
+                    <p class="comment-count-@(item.Id)">(@item.Comments.Count())</p>
+                </td>
+                <td>
+                    <form method="post" asp-controller="Post" asp-action="LikePost">
+                        <input type="hidden" name="PostId" value="@item.Id" />
+                        <button type="submit" class="btn btn-xs btn-primary">like</button>
+                    </form>
+                    @*<p class="comment-count-@(item.Id)">@item.Likes.Count(null)</p>*@
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>
