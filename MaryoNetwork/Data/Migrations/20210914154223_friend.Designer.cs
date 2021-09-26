@@ -4,20 +4,37 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210914154223_friend")]
+    partial class friend
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("FriendUser", b =>
+                {
+                    b.Property<string>("FriendUsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FriendsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FriendUsersId", "FriendsId");
+
+                    b.HasIndex("FriendsId");
+
+                    b.ToTable("FriendUser");
+                });
 
             modelBuilder.Entity("MaryoNetwork.Models.Categories.Category", b =>
                 {
@@ -60,47 +77,21 @@ namespace MaryoNetwork.Data.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("MaryoNetwork.Models.Friends.FriendRequest", b =>
+            modelBuilder.Entity("MaryoNetwork.Models.Friends.Friend", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("FriendRequestStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReceiverId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("FriendRequests");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Friends.UserFriend", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FriendId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("FriendUsersId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FriendId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserFriend");
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.Likes.Like", b =>
@@ -169,9 +160,6 @@ namespace MaryoNetwork.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("CoverPicture")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -181,9 +169,6 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -207,9 +192,6 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<byte[]>("ProfilePicture")
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -369,6 +351,21 @@ namespace MaryoNetwork.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("FriendUser", b =>
+                {
+                    b.HasOne("MaryoNetwork.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("FriendUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MaryoNetwork.Models.Friends.Friend", null)
+                        .WithMany()
+                        .HasForeignKey("FriendsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MaryoNetwork.Models.Comments.Comment", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.Posts.Post", "Post")
@@ -380,36 +377,6 @@ namespace MaryoNetwork.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Friends.FriendRequest", b =>
-                {
-                    b.HasOne("MaryoNetwork.Models.User", "Receiver")
-                        .WithMany("FriendRequestReceived")
-                        .HasForeignKey("ReceiverId");
-
-                    b.HasOne("MaryoNetwork.Models.User", "Sender")
-                        .WithMany("FriendRequestSent")
-                        .HasForeignKey("SenderId");
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Friends.UserFriend", b =>
-                {
-                    b.HasOne("MaryoNetwork.Models.User", "Friend")
-                        .WithMany("OtherFriends")
-                        .HasForeignKey("FriendId");
-
-                    b.HasOne("MaryoNetwork.Models.User", "User")
-                        .WithMany("Friends")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Friend");
 
                     b.Navigation("User");
                 });
@@ -505,17 +472,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.User", b =>
-                {
-                    b.Navigation("FriendRequestReceived");
-
-                    b.Navigation("FriendRequestSent");
-
-                    b.Navigation("Friends");
-
-                    b.Navigation("OtherFriends");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,16 +1,14 @@
-﻿@model IEnumerable<MaryoNetwork.Models.Posts.Post>
-
+﻿@model MaryoNetwork.ViewModels.ProfileViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Profile";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>@Model.User.FullName</h1>
+<img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(@Model.User.ProfilePicture)">
+@*<img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(@Model.User.CoverPicture)">*@
 
 
-
+<h1>Profile</h1>
 <form asp-controller="Post" asp-action="CreatePost">
     <input type="text" name="Title" />
     <input type="text" name="Image" />
@@ -33,7 +31,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Post)
         {
             <tr>
                 <td>@item.Content</td>
@@ -52,7 +50,7 @@
                         <p>@i.CreatedOn</p>
                         @Html.DisplayFor(modelItem => i.User.FullName)
                     }
-                    <p class="comment-count-@(item.Id)">(@item.Comments.Count())</p>
+                    @*<p class="comment-count-@(item.Id)">(@item.Comments.Count())</p>*@
                 </td>
                 <td>
                     <form method="post" asp-controller="Post" asp-action="LikePost">

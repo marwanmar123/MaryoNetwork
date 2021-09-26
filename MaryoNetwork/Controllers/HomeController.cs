@@ -47,5 +47,12 @@ namespace MaryoNetwork.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Profile(string userId)
+        {
+            //var user = _db.Users.Where(a=>a.)
+
+            return View();
+        }
     }
 }

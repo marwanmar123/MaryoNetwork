@@ -3,6 +3,7 @@ using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Repository.Implement;
 using MaryoNetwork.Repository.Interfaces;
+using MaryoNetwork.Services.Friends;
 using MaryoNetwork.Services.Posts;
 using MaryoNetwork.Services.Users;
 using Microsoft.AspNetCore.Builder;
@@ -38,13 +39,14 @@ namespace MaryoNetwork
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
             services.AddScoped<ICrudRepository<Category>, CategoryRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IFriendService, FriendService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

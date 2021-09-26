@@ -30,13 +30,7 @@ namespace MaryoNetwork.Controllers
         }
 
 
-
-
-
-
-
-
-        [Authorize]
+        //[Authorize]
         public IActionResult Index(string id)
         {
             var list = _db.Posts.Include(c => c.Comments).Include(u => u.User).Where(x => x.CategoryId == id).OrderByDescending(y => y.CreatedOn).ToList();

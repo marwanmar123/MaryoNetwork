@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MaryoNetwork.Models.User>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+        @foreach (var item in Model)
+        {
+            <div>
+                <a  class="d-flex" asp-action="Profile" asp-route-id="@item.Id">
+                    <div class="p-1">
+            
+                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.ProfilePicture)">
+                    </div>
+                    <p class="p-1">
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </p>
+                </a>
+            </div>
+        }
+   

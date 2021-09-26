@@ -1,6 +1,8 @@
-﻿using MaryoNetwork.Models;
+﻿using MaryoNetwork.Configurations;
+using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -22,6 +24,17 @@ namespace MaryoNetwork.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<UserFriend> UserFriend { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new FriendRequestConfigurations());
+
+            base.OnModelCreating(builder);
+        }
 
     }
 }
