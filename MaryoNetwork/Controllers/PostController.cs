@@ -1,15 +1,22 @@
 ﻿using MaryoNetwork.Data;
+using MaryoNetwork.Extensions;
 using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
 using MaryoNetwork.Services.Posts;
 using MaryoNetwork.Services.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
@@ -19,14 +26,17 @@ namespace MaryoNetwork.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IPostService _postService;
         private readonly IUserService _userService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public PostController(ApplicationDbContext db,
             IPostService postService,
-            IUserService userService)
+            IUserService userService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
             _postService = postService;
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -42,7 +52,7 @@ namespace MaryoNetwork.Controllers
             return View();
         }
 
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost(Post post, string postId)
@@ -62,7 +72,12 @@ namespace MaryoNetwork.Controllers
             _db.Add(addPost);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Post", new { id = post.CategoryId });
+            return RedirectToAction("index", "post", new { id = post.CategoryId });
+            //var rq = _httpContextAccessor.HttpContext.Features.Get<IHttpRequestFeature>();
+            //string host = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
+            //object factory = ServiceProvider.GetService(typeof(Microsoft.AspNetCore.Http.IHttpContextAccessor));
+            //Microsoft.AspNetCore.Http.HttpContext context = ((Microsoft.AspNetCore.Http.HttpContextAccessor)factory).HttpContext;
+            //return (IActionResult)context;
         }
 
 
