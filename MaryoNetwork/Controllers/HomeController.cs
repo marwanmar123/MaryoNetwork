@@ -1,6 +1,7 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,7 +22,7 @@ namespace MaryoNetwork.Controllers
             _logger = logger;
             _db = db;
         }
-
+        //[Authorize]
         public IActionResult Index()
         {
 
@@ -33,7 +34,7 @@ namespace MaryoNetwork.Controllers
             return View();
         }
 
-
+        //[Authorize]
         public IActionResult Posts(string id)
         {
 
@@ -46,13 +47,6 @@ namespace MaryoNetwork.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public IActionResult Profile(string userId)
-        {
-            //var user = _db.Users.Where(a=>a.)
-
-            return View();
         }
     }
 }

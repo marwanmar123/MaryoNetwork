@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+@{
+    string fullName = null;
+    string id = null;
+    byte[] image = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        User user = await UserManager.FindByEmailAsync(User.Identity.Name);
+        if (user != null)
+        {
+            fullName = user.FullName;
+            id = user.Id;
+            image = user.ProfilePicture;
+        }
+
+
+    }
+}
+
+
+<!--<aside class="main-sidebar d-block">
+
+    <div class="d-flex flex-column p-2">
+        <a href="/Identity/Account/Manage" class="d-flex">
+            @if (image != null)
+            {
+                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(image)">
+            }
+            else
+            {
+                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
+            }
+            @fullName
+        </a>-->
+@*</a>*@
+<!--<a class="p-1" asp-controller="Dashboard" asp-action="Index">category</a>
+        <a class="p-1">User</a>
+    </div>
+
+</aside>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="page-wrapper chiller-theme toggled ">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <a href="#">pro sidebar</a>
+                <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <a href="/Identity/Account/Manage" class="d-flex">
+                        @if (image != null)
+                        {
+                            <img class="img-responsive img-rounded" src="data:image/*;base64,@Convert.ToBase64String(image)">
+                        }
+                        else
+                        {
+                            <p class="img-responsive img-rounded">@fullName.Substring(0, 2).ToUpper()</p>
+                        }
+                    </a>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">
+                        <a href="/Identity/Account/Manage" class="d-flex">
+                            <strong>@fullName</strong>
+                        </a>
+                    </span>
+                    <span class="user-role">Administrator</span>
+                    <span class="user-status">
+                        <i class="fa fa-circle"></i>
+                        <span>Online</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>General</span>
+                    </li>
+
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="far fa-gem"></i>
+                            <span>Category&Post</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a asp-controller="Dashboard" asp-action="Index" class="m-xl-2">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a asp-controller="Category" asp-action="Index" class="m-xl-2">Manager</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a asp-controller="Role" asp-action="Index">
+                            <i class="far fa-gem"></i>
+                            <span>User&Role</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+
+</div>

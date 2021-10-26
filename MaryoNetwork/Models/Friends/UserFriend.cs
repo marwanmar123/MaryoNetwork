@@ -8,6 +8,7 @@ namespace MaryoNetwork.Models.Friends
 {
     public class UserFriend
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
         public string UserId { get; set; }

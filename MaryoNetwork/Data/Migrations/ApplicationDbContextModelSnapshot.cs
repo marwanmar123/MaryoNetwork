@@ -63,6 +63,7 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Friends.FriendRequest", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("FriendRequestStatus")
@@ -86,6 +87,7 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Friends.UserFriend", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FriendId")
@@ -109,17 +111,17 @@ namespace MaryoNetwork.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LikeById")
+                    b.Property<string>("PostId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PostId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LikeById");
-
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -129,6 +131,9 @@ namespace MaryoNetwork.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(450)");
@@ -161,6 +166,9 @@ namespace MaryoNetwork.Data.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -376,7 +384,7 @@ namespace MaryoNetwork.Data.Migrations
                         .HasForeignKey("PostId");
 
                     b.HasOne("MaryoNetwork.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Post");
@@ -416,17 +424,17 @@ namespace MaryoNetwork.Data.Migrations
 
             modelBuilder.Entity("MaryoNetwork.Models.Likes.Like", b =>
                 {
-                    b.HasOne("MaryoNetwork.Models.User", "LikeBy")
-                        .WithMany()
-                        .HasForeignKey("LikeById");
-
                     b.HasOne("MaryoNetwork.Models.Posts.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId");
 
-                    b.Navigation("LikeBy");
+                    b.HasOne("MaryoNetwork.Models.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.Posts.Post", b =>
@@ -436,7 +444,7 @@ namespace MaryoNetwork.Data.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("MaryoNetwork.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Category");
@@ -509,13 +517,19 @@ namespace MaryoNetwork.Data.Migrations
 
             modelBuilder.Entity("MaryoNetwork.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("FriendRequestReceived");
 
                     b.Navigation("FriendRequestSent");
 
                     b.Navigation("Friends");
 
+                    b.Navigation("Likes");
+
                     b.Navigation("OtherFriends");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

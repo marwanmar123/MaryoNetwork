@@ -30,19 +30,19 @@ namespace MaryoNetwork.Controllers
 
             this._friendService.Create(senderId, receiverId);
 
-            return RedirectToAction("AccountDetails", "Users", new { id = receiverId });
+            return RedirectToAction("Profile", "User", new { id = receiverId });
         }
 
         public IActionResult Accept(string senderId, string receiverId)
         {
             this._friendService.Accept(senderId, receiverId);
-            return RedirectToAction("AccountDetails", "Users", new { id = senderId });
+            return RedirectToAction("Profile", "User", new { id = senderId });
         }
 
         public IActionResult Decline(string senderId, string receiverId)
         {
             this._friendService.Decline(senderId, receiverId);
-            return RedirectToAction("AccountDetails", "Users", new { id = senderId });
+            return RedirectToAction("Profile", "User", new { id = senderId });
         }
     }
 }

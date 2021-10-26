@@ -17,10 +17,11 @@ namespace MaryoNetwork.Models.Posts
         public string Content { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public string Image { get; set; }
+        public bool Approved { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<Like> Likes { get; set; }
+        public IEnumerable<Like> Likes { get; set; }
         public string CategoryId { get; set; }
         public Category Category { get; set; }
     }

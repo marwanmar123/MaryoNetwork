@@ -6,6 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Shared\Components\NewFolder1\**" />
+    <Content Remove="Views\Shared\Components\NewFolder1\**" />
+    <EmbeddedResource Remove="Views\Shared\Components\NewFolder1\**" />
+    <None Remove="Views\Shared\Components\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml~RF108e486d.TMP" />
     <None Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml~RF297438f1.TMP" />
   </ItemGroup>
 

@@ -1,11 +1,63 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    var userAccount = new User();
+    string fullName = null;
+    string id = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        User user = await UserManager.FindByEmailAsync(User.Identity.Name);
+        if (user != null)
+        {
+            fullName = user.FullName;
+            id = user.Id;
+        }
+
+
+    }
+}
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
-    var post = Model.Input.Posts;
+    var profile = Model.Input.Users;
 }
 
+<div class="well">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h4>You must be friend with @fullName in order to see his posts!</h4>
+        </div>
+    </div>
+    <div class="row">
+       
+        @if (userAccount.FriendRequestSent.Any(fr => fr.ReceiverId == id))
+        {
+            <div class="col-sm-12 text-center">
+                <a asp-controller="Friend" asp-action="Accept"
+                   asp-route-senderId="@userAccount.Id"
+                   asp-route-receiverId="@id" class="btn btn-success btn-sm">Accept Friend Request</a>
+                <a asp-controller="Friend" asp-action="Decline"
+                   asp-route-senderId="@userAccount.Id"
+                   asp-route-receiverId="@id" class="btn btn-danger btn-sm">Decline Friend Request</a>
+            </div> }
+        else if (userAccount.FriendRequestReceived.Any(fr => fr.SenderId == id))
+        {
+            <div class="col-sm-12 text-center">
+                <h4 style="color:darkolivegreen">Your friend request is @userAccount.FriendRequestReceived.FirstOrDefault(fr => fr.SenderId == id).FriendRequestStatus.ToString()</h4>
+            </div> }
+        else
+        {
+            <div class="col-sm-12 text-center">
+                <a asp-controller="Friend" asp-action="AddFriend"
+                   asp-route-senderId="@id"
+                   asp-route-receiverId="@userAccount.Id" class="btn btn-primary btn-sm">Add Friend</a>
+            </div>}
+    </div>
+</div>
 
 
 <h4>@ViewData["Title"]</h4>
@@ -14,6 +66,7 @@
 <div class="row">
     <div class="col-md-6">
         <form id="profile-form" method="post" enctype="multipart/form-data">
+            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Username"></label>
@@ -23,6 +76,11 @@
                 <label asp-for="Input.FullName"></label>
                 <input asp-for="Input.FullName" class="form-control" />
                 <span asp-validation-for="Input.FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.About"></label>
+                <textarea asp-for="Input.About" class="form-control"></textarea>
+                <span asp-validation-for="Input.About" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.PhoneNumber"></label>
@@ -35,11 +93,13 @@
                     <label asp-for="Input.ProfilePicture" style="width: 100%;"></label>
                     @if (Model.Input.ProfilePicture != null)
                     {
+
                         <img id="profilePicture" style="width:250px;height:250px; object-fit:cover" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.ProfilePicture))">
                     }
                     else
                     {
-                        <img id="profilePicture" style="width:350px;height:350px; object-fit:cover" src="~/image/58417f6ba6515b1e0ad75a2b.png">
+                        <img id="profilePicture" style="width:250px;height:250px; object-fit:cover" src="~/image/58417f6ba6515b1e0ad75a2b.png">
+                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@Model.Input.FullName.Substring(0, 2).ToUpper()</p>
                     }
                     <input type="file"
                            accept=".png,.jpg,.jpeg,.gif,.tif"
@@ -71,64 +131,88 @@
                     <span asp-validation-for="Input.CoverPicture" class="text-danger"></span>
                 </div>
             </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+
         </form>
     </div>
-
 
     <table class="table text-center">
         <thead>
 
             <tr>
+                <td>User</td>
                 <td>content</td>
                 <td>title</td>
                 <td>image</td>
-                <td>User</td>
                 <td>Comment</td>
                 <td>Like</td>
-                <td>Categoty</td>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in post)
+            @foreach (var u in profile)
             {
-            <tr>
-                <td>@item.Content</td>
-                <td>@item.Title</td>
-                <td>@item.Image</td>
-                <td>@item.User.FullName</td>
 
-                <td>
-                    <form method="post" asp-controller="Post" asp-action="CreateComment">
-                        <input type="text" name="Content" />
-                        <input type="hidden" name="PostId" value="@item.Id" />
-                        <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                    </form>
-                    @foreach (var i in item.Comments)
-                    {
-                        <p>@i.Content</p>
-                        <p>@i.CreatedOn</p>
-                        @Html.DisplayFor(modelItem => i.User.FullName)
-                    }
-                    <p class="comment-count-@(item.Id)">(@item.Comments.Count())</p>
-                </td>
-                <td>
-                    <form method="post" asp-controller="Post" asp-action="LikePost">
-                        <input type="hidden" name="PostId" value="@item.Id" />
-                        <button type="submit" class="btn btn-xs btn-primary">like</button>
-                    </form>
-                    @*<p class="comment-count-@(item.Id)">@item.Likes.Count(null)</p>*@
-                </td>
-                <td>@item.Category.Name</td>
-            </tr>
+                @foreach (var p in u.Posts)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => u.FullName)
+                            @if (p.User.ProfilePicture != null)
+                            {
+                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(p.User.ProfilePicture)">
+                            }
+                            else
+                            {
+                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
+                            }
+                        </td>
+                        <td>@p.Category.Name</td>
+                        <td>@p.Content</td>
+                        <td>@p.Title</td>
+                        <td>@p.Image</td>
+                        <td>
+                            <form method="post" asp-controller="Post" asp-action="CreateComment">
+                                    <input type="text" name="Content" />
+                                    <input type="hidden" name="PostId" value="@p.Id" />
+                                    <input type="hidden" name="UserId" value="@id" />
+                                    <button type="submit" class="btn btn-xs btn-primary">Comment</button>
+                                </form>
+                            @foreach (var c in p.Comments)
+                            {
+                        <div class="d-flex">
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@c.UserId">
+                                    @Html.DisplayFor(modelItem => c.User.FullName)
+                                    @if (c.User.ProfilePicture != null)
+                                    {
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(c.User.ProfilePicture)">
+                                    }
+                                    else
+                                    {
+                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
+                                    }
+                                </a>
+                                <p>@c.Content</p>|
+                                <p>@c.CreatedOn</p>|
+                        </div>
+                            }
+                            <p class="comment-count-@(p.Id)">(@p.Comments.Count())</p>
+                        </td>
+                        <td>
+                            <form method="post" asp-controller="Post" asp-action="LikePost">
+                                <input type="hidden" name="PostId" value="@p.Id" />
+                                <button type="submit" class="btn btn-xs btn-primary">like</button>
+                            </form>
+                            @*<p class="comment-count-@(item.Id)">@item.Likes.Count(null)</p>*@
+                        </td>
 
-            }
+                    </tr>
+                }
 
-        </tbody>
-    </table>
+    }
+            </tbody>
+        </table>
 
 
-</div>
+        </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

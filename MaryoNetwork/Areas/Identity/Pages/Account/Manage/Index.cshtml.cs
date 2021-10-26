@@ -50,6 +50,10 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             [Display(Name = "FullName")]
             public string FullName { get; set; }
 
+            [Display(Name = "About me")]
+            [MaxLength(400)]
+            public string About { get; set; }
+
             [Display(Name = "Profile Picture")]
             public byte[] ProfilePicture { get; set; }
 
@@ -57,7 +61,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             public byte[] CoverPicture { get; set; }
 
             [Display(Name = "Posts")]
-            public IEnumerable<Post> Posts { get; set; }
+            public IEnumerable<User> Users { get; set; }
 
         }
 
@@ -66,6 +70,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var fullName = user.FullName;
+            var about = user.About;
             var profilePicture = user.ProfilePicture;
             var coverPicture = user.CoverPicture;
             Username = userName;
@@ -74,10 +79,12 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 FullName = fullName,
+                About = about,
                 PhoneNumber = phoneNumber,
                 ProfilePicture = profilePicture,
                 CoverPicture = coverPicture,
-                Posts = _db.Posts.Include(c => c.Comments).Include(u => u.User).Where(x => x.UserId == user.Id).Include(x=>x.Category).OrderByDescending(y => y.CreatedOn).ToList(),
+                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync()
+                //Posts.Include(c => c.Comments).Include(u => u.User).Where(x => x.UserId == user.Id).Include(x => x.Category).OrderByDescending(y => y.CreatedOn).ToList()
             };
         }
 
@@ -97,6 +104,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
         {
             var user = await _userManager.GetUserAsync(User);
             var fullName = user.FullName;
+            var about = user.About;
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -121,6 +129,11 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             if (Input.FullName != fullName)
             {
                 user.FullName = Input.FullName;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.About != about)
+            {
+                user.About = Input.About;
                 await _userManager.UpdateAsync(user);
             }
 

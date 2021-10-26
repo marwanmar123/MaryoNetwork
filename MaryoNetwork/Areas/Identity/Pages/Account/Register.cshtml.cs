@@ -14,6 +14,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MaryoNetwork.Models.Posts;
+using MaryoNetwork.Data;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace MaryoNetwork.Areas.Identity.Pages.Account
 {
@@ -24,17 +28,23 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _db;
+        private readonly IHttpContextAccessor _accessor;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext db,
+            IHttpContextAccessor accessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _db = db;
+            _accessor = accessor;
         }
 
         [BindProperty]
@@ -74,13 +84,24 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+
+        public async Task<string> GetCurrentUserIdAsync()
+        {
+            var user = await _userManager.GetUserAsync(_accessor.HttpContext.User);
+
+            return await _userManager.GetUserIdAsync(user);
+        }
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                var usId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var user = new User { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName };
+                //, Posts = new Post { Title = "hello", Content = "inscription", CreatedOn = DateTime.Now, Image = "hhhh", UserId = await GetCurrentUserIdAsync(), CategoryId = "868d3225-1c67-48d2-93d3-9c60ec8772d9" }
+                //var post = new Post { Title = "hello", Content = "inscription", CreatedOn = DateTime.Now, Image = "hhhh", UserId = user.Id, CategoryId = "868d3225-1c67-48d2-93d3-9c60ec8772d9" };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -96,6 +117,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _userManager.AddToRoleAsync(user, "User");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

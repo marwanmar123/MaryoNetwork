@@ -1,7 +1,67 @@
 ﻿@model MaryoNetwork.ViewModels.ProfileViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+@{
+    string fullName = null;
+    string id = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        User user = await UserManager.FindByEmailAsync(User.Identity.Name);
+        if (user != null)
+        {
+            fullName = user.FullName;
+            id = user.Id;
+        }
+
+
+    }
+}
+
 @{
     ViewData["Title"] = "Profile";
 }
+
+
+<div class="well">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h4>You must be friend with @Model.User.FullName in order to see his posts!</h4>
+        </div>
+    </div>
+    <div class="row">
+        @if (Model.User.FriendRequestSent.Any(fr => fr.ReceiverId == id))
+        {
+            <div class="col-sm-12 text-center">
+                <a asp-controller="Friend" asp-action="Accept"
+                   asp-route-senderId="@Model.User.Id"
+                   asp-route-receiverId="@id" class="btn btn-success btn-sm">Accept Friend Request</a>
+                <a asp-controller="Friend" asp-action="Decline"
+                   asp-route-senderId="@Model.User.Id"
+                   asp-route-receiverId="@id" class="btn btn-danger btn-sm">Decline Friend Request</a>
+            </div> }
+        else if (Model.User.FriendRequestReceived.Any(fr => fr.SenderId == id))
+        {
+            <div class="col-sm-12 text-center">
+                <h4 style="color:darkolivegreen">Your friend request is @Model.User.FriendRequestReceived.FirstOrDefault(fr => fr.SenderId == id).FriendRequestStatus.ToString()</h4>
+            </div> }
+        else
+        {
+            <div class="col-sm-12 text-center">
+                <a asp-controller="Friend" asp-action="AddFriend"
+                   asp-route-senderId="@id"
+                   asp-route-receiverId="@Model.User.Id" class="btn btn-primary btn-sm">Add Friend</a>
+            </div>}
+    </div>
+</div>
+
+
+
+
+
+<h1>Profile</h1>
 
 <h1>@Model.User.FullName</h1>
 @if (Model.User.ProfilePicture != null)
@@ -10,65 +70,89 @@
 }
 else
 {
-    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/58417f6ba6515b1e0ad75a2b.png">
+    <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@Model.User.FullName.Substring(0, 2).ToUpper()</p>
 }
 @*<img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(@Model.User.CoverPicture)">*@
 
 
-<h1>Profile</h1>
-<form asp-controller="Post" asp-action="CreatePost">
-    <input type="text" name="Title" />
-    <input type="text" name="Image" />
-    <input type="text" name="Content" />
-    <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
-    <button type="submit" class="btn btn-xs btn-primary">Submit</button>
-</form>
+
 
 
 <table class="table text-center">
     <thead>
 
         <tr>
+            <td>User</td>
             <td>content</td>
             <td>title</td>
             <td>image</td>
-            <td>User</td>
             <td>Comment</td>
             <td>Like</td>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Post)
+        @foreach (var u in Model.Users)
         {
-            <tr>
-                <td>@item.Content</td>
-                <td>@item.Title</td>
-                <td>@item.Image</td>
-                <td>@item.User.FullName</td>
-                <td>
-                    <form method="post" asp-controller="Post" asp-action="CreateComment">
-                        <input type="text" name="Content" />
-                        <input type="hidden" name="PostId" value="@item.Id" />
-                        <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                    </form>
-                    @foreach (var i in item.Comments)
-                    {
-                        <p>@i.Content</p>
-                        <p>@i.CreatedOn</p>
-                        @Html.DisplayFor(modelItem => i.User.FullName)
-                    }
-                    @*<p class="comment-count-@(item.Id)">(@item.Comments.Count())</p>*@
-                </td>
-                <td>
-                    <form method="post" asp-controller="Post" asp-action="LikePost">
-                        <input type="hidden" name="PostId" value="@item.Id" />
-                        <button type="submit" class="btn btn-xs btn-primary">like</button>
-                    </form>
-                    @*<p class="comment-count-@(item.Id)">@item.Likes.Count(null)</p>*@
-                </td>
-            </tr>
+
+
+            @foreach (var p in u.Posts)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="User" asp-action="Profile" asp-route-id="@p.UserId">
+                            @if (p.User.ProfilePicture != null)
+                            {
+                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(p.User.ProfilePicture)">
+                            }
+                            else
+                            {
+                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@p.User.FullName.Substring(0, 2).ToUpper()</p>
+                            }
+                            @Html.DisplayFor(modelItem => u.FullName)
+                        </a>
+                    </td>
+                    <td>@p.Category.Name</td>
+                    <td>@p.Content</td>
+                    <td>@p.Title</td>
+                    <td>@p.Image</td>
+                    <td>
+                        @*<form method="post" asp-controller="Post" asp-action="CreateComment">
+                                <input type="text" name="Content" />
+                                <input type="hidden" name="PostId" value="@item.Id" />
+                                <input type="hidden" name="UserId" value="@id" />
+                                <button type="submit" class="btn btn-xs btn-primary">Comment</button>
+                            </form>*@
+                        @foreach (var c in p.Comments)
+                        {
+                            <div class="d-flex">
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@c.UserId">
+                                    @Html.DisplayFor(modelItem => c.User.FullName)
+                                    @if (c.User.ProfilePicture != null)
+                                    {
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(c.User.ProfilePicture)">
+                                    }
+                                    else
+                                    {
+                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@c.User.FullName.Substring(0, 2).ToUpper()</p>
+                                    }
+                                </a>
+                                <p>@c.Content</p>|
+                                <p>@c.CreatedOn</p>|
+                            </div>
+                        }
+                        <p class="comment-count-@(p.Id)">(@p.Comments.Count())</p>
+                    </td>
+                    <td>
+                        <form method="post" asp-controller="Post" asp-action="LikePost">
+                            <input type="hidden" name="PostId" value="@p.Id" />
+                            <button type="submit" class="btn btn-xs btn-primary">like</button>
+                        </form>
+                        @*<p class="comment-count-@(p.Id)">@p.Likes.Count(null)</p>*@
+                    </td>
+
+                </tr>
+            }
 
         }
-
     </tbody>
 </table>

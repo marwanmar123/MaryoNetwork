@@ -1,9 +1,26 @@
 ﻿@model IEnumerable<MaryoNetwork.Models.Posts.Post>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
+@{
+    string fullName = null;
+    string id = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        User user = await UserManager.FindByEmailAsync(User.Identity.Name);
+        if (user != null)
+        {
+            fullName = user.FullName;
+            id = user.Id;
+        }
+    }
+}
 @{
     ViewData["Title"] = "Home Page";
 }
 
+<p>@ViewBag.url</p>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
@@ -24,65 +41,94 @@
     <thead>
 
         <tr>
+            <td>User</td>
             <td>content</td>
             <td>title</td>
             <td>image</td>
-            <td>User</td>
             <td>Comment</td>
             <td>Like</td>
-            <td>ProfilePicture</td>
+            @*<td>ProfilePicture</td>*@
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                   
+                    <a asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">
+                        @Html.DisplayFor(modelItem => item.User.FullName)
+                        @if (item.User.ProfilePicture != null)
+                        {
+                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.User.ProfilePicture)">
+                        }
+                        else
+                        {
+                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@item.User.FullName.Substring(0, 2).ToUpper()</p>
+                        }
+                    </a>
+                </td>
                 <td>@item.Content</td>
                 <td>@item.Title</td>
                 <td>@item.Image</td>
-                <td>@item.User.FullName</td>
                 <td>
-                    <form method="post" asp-controller="Post" asp-action="CreateComment">
+                    <form id="form" method="post" asp-controller="Post" asp-action="CreateComment" >
                         <input type="text" name="Content" />
                         <input type="hidden" name="PostId" value="@item.Id" />
+                        <input type="hidden" name="UserId" value="@id" />
                         <button type="submit" class="btn btn-xs btn-primary">Comment</button>
                     </form>
                     @foreach (var i in item.Comments)
                     {
-                        <p>@i.Content</p>
-                        <p>@i.CreatedOn</p>
-                        @Html.DisplayFor(modelItem => i.User.FullName)
+                <div class="d-flex">
+                    <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
                         @if (i.User.ProfilePicture != null)
                         {
                             <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
                         }
                         else
                         {
-                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/58417f6ba6515b1e0ad75a2b.png">
+                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
                         }
+                        @Html.DisplayFor(modelItem => i.User.FullName)
+                    </a>
+                    <p>@i.Content</p>|
+                    <p>@i.CreatedOn</p>|
+                </div>
                     }
-                    <p class="comment-count-@(item.Id)">(@item.Comments.Count())</p>
+                    <p>(@item.Comments.Count())</p>
+                    @*<p>@item.Likes.Count()</p>*@
+
                 </td>
                 <td>
                     <form method="post" asp-controller="Post" asp-action="LikePost">
                         <input type="hidden" name="PostId" value="@item.Id" />
                         <button type="submit" class="btn btn-xs btn-primary">like</button>
                     </form>
-                    @*<p class="comment-count-@(item.Id)">@item.Likes.Count(null)</p>*@
+                    <p> like= @ViewBag.likeCount</p>
+                    @*@foreach(var l in item.Likes)
+                        {
+                        }*@
+                    @*@if(item.Likes.Where(l=>l.PostId == item.Id).Count() != 0)
+                        {
+                            <p>@item.Likes.Count()</p>
+                        }
+                        else
+                        {
+                            <p> 0 like</p>
+                        }*@
+                    @*<p>like id = @ViewBag.count</p>*@
                 </td>
-                <td>
-                    @if (item.User.ProfilePicture != null)
-                    {
-                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.User.ProfilePicture)">
-                    }
-                    else
-                    {
-                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/58417f6ba6515b1e0ad75a2b.png">
-                    }
-                </td>
+                @*<td>
+                   
+                </td>*@
             </tr>
 
         }
 
     </tbody>
 </table>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
