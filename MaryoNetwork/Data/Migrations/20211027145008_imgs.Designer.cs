@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211027145008_imgs")]
+    partial class imgs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,7 +110,6 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Images.Image", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CreatedOn")
@@ -129,15 +130,10 @@ namespace MaryoNetwork.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UploadedById")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PostId");
 
                     b.HasIndex("UploadedById");
 
@@ -182,6 +178,9 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -460,15 +459,9 @@ namespace MaryoNetwork.Data.Migrations
 
             modelBuilder.Entity("MaryoNetwork.Models.Images.Image", b =>
                 {
-                    b.HasOne("MaryoNetwork.Models.Posts.Post", "post")
-                        .WithMany("Images")
-                        .HasForeignKey("PostId");
-
                     b.HasOne("MaryoNetwork.Models.User", "UploadedBy")
                         .WithMany("Images")
                         .HasForeignKey("UploadedById");
-
-                    b.Navigation("post");
 
                     b.Navigation("UploadedBy");
                 });
@@ -562,8 +555,6 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Posts.Post", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Images");
 
                     b.Navigation("Likes");
                 });

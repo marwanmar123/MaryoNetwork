@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211026165143_removeUp")]
+    partial class removeUp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,45 +107,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.ToTable("UserFriend");
                 });
 
-            modelBuilder.Entity("MaryoNetwork.Models.Images.Image", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("Data")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UploadedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UploadedById");
-
-                    b.ToTable("Image");
-                });
-
             modelBuilder.Entity("MaryoNetwork.Models.Likes.Like", b =>
                 {
                     b.Property<string>("Id")
@@ -182,6 +145,9 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -458,21 +424,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MaryoNetwork.Models.Images.Image", b =>
-                {
-                    b.HasOne("MaryoNetwork.Models.Posts.Post", "post")
-                        .WithMany("Images")
-                        .HasForeignKey("PostId");
-
-                    b.HasOne("MaryoNetwork.Models.User", "UploadedBy")
-                        .WithMany("Images")
-                        .HasForeignKey("UploadedById");
-
-                    b.Navigation("post");
-
-                    b.Navigation("UploadedBy");
-                });
-
             modelBuilder.Entity("MaryoNetwork.Models.Likes.Like", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.Posts.Post", "Post")
@@ -563,8 +514,6 @@ namespace MaryoNetwork.Data.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Images");
-
                     b.Navigation("Likes");
                 });
 
@@ -577,8 +526,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("FriendRequestSent");
 
                     b.Navigation("Friends");
-
-                    b.Navigation("Images");
 
                     b.Navigation("Likes");
 

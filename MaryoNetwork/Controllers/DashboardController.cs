@@ -31,6 +31,7 @@ namespace MaryoNetwork.Controllers
         {
             Category ctgr = _db.Categories.Find(id);
             var list = _db.Posts
+                .Include(u=> u.Images)
                 .Include(c => c.Comments
                 .Where(c => c.PostId == c.Post.Id))
                 .Include(u => u.User)

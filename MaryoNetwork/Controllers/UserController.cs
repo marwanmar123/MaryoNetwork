@@ -36,7 +36,7 @@ namespace MaryoNetwork.Controllers
             }
             var data = new ProfileViewModel
             {
-                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync(),
+                Users = await _db.Users.Include(p => p.Images).Include(p => p.Posts.Where(p => p.UserId == user.Id)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync(),
                 User = _db.Users.FirstOrDefault(a => a.Id == id)
             };
 

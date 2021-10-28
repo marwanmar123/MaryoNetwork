@@ -15,6 +15,7 @@
             id = user.Id;
         }
     }
+
 }
 @{
     ViewData["Title"] = "Home Page";
@@ -28,14 +29,18 @@
 
 
 
-<form asp-controller="Post" asp-action="CreatePost">
+<form asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
     <input type="text" name="Title" />
-    <input type="text" name="Image" />
+    <input type="file" name="files" multiple required />
     <input type="text" name="Content" />
     <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
     <button type="submit" class="btn btn-xs btn-primary">Submit</button>
 </form>
-
+<!--<form method="post" enctype="multipart/form-data">
+    <input type="file" name="files" multiple required />-->
+    @*<button type="submit" class="btn btn-primary" asp-controller="File" asp-action="UploadToFileSystem">Upload to File System</button>*@
+    <!--<button class="btn btn-success" type="submit" asp-controller="Post" asp-action="UploadToDatabase">Upload to Database</button>
+</form>-->
 
 <table class="table text-center">
     <thead>
@@ -70,7 +75,12 @@
                 </td>
                 <td>@item.Content</td>
                 <td>@item.Title</td>
-                <td>@item.Image</td>
+                <td>
+                    @foreach(var f in item.Images)
+                    {
+                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                    }
+                </td>
                 <td>
                     <form id="form" method="post" asp-controller="Post" asp-action="CreateComment" >
                         <input type="text" name="Content" />

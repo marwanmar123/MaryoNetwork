@@ -1,5 +1,6 @@
 ﻿using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace MaryoNetwork.Models.Posts
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
-        public string Image { get; set; }
+        public ICollection<Image> Images { get; set; }
         public bool Approved { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }

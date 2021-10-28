@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Services\Users\" />
+    <Folder Include="wwwroot\image\post\" />
   </ItemGroup>
 
 </Project>

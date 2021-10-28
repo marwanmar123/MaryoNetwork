@@ -1,6 +1,7 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Extensions;
 using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
 using MaryoNetwork.Services.Posts;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -47,6 +49,7 @@ namespace MaryoNetwork.Controllers
         public IActionResult Index(string id)
         {
             var list = _db.Posts
+                .Include(i=>i.Images)
                 .Include(c => c.Comments
                 .Where(c=>c.PostId == c.Post.Id))
                 .Include(u => u.User)
@@ -64,7 +67,7 @@ namespace MaryoNetwork.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost(Post post, string postId)
+        public async Task<IActionResult> CreatePost(Post post, List<IFormFile> files, string postId)
         {
             var postt = await _postService.GetPostWithUserAsync(postId);
             var totalLike = _db.Likes.Where(l => l.PostId == postId);
@@ -72,15 +75,38 @@ namespace MaryoNetwork.Controllers
             var addPost = new Post
             {
                 Title = post.Title,
-                Image = post.Image,
                 Content = post.Content,
                 UserId = await _userService.GetCurrentUserIdAsync(),
                 CategoryId = post.CategoryId,
                 Approved = false
             };
 
-            
             _db.Add(addPost);
+
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                var extension = Path.GetExtension(file.FileName);
+                var fileModel = new Image
+                {
+                    CreatedOn = DateTime.UtcNow,
+                    FileType = file.ContentType,
+                    Extension = extension,
+                    Name = fileName,
+                    UploadedById = await _userService.GetCurrentUserIdAsync(),
+                    PostId = addPost.Id
+                };
+                using (var dataStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(dataStream);
+                    fileModel.Data = dataStream.ToArray();
+                }
+                await _db.AddAsync(fileModel);
+                await _db.SaveChangesAsync();
+            }
+
+
+            
             await _db.SaveChangesAsync();
 
             return RedirectToAction("index", "post", new { id = post.CategoryId });
@@ -91,6 +117,35 @@ namespace MaryoNetwork.Controllers
             //return (IActionResult)context;
         }
 
+
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> UploadToDatabase(List<IFormFile> files, Post post)
+        //{
+        //    foreach (var file in files)
+        //    {
+        //        var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+        //        var extension = Path.GetExtension(file.FileName);
+        //        var fileModel = new Image
+        //        {
+        //            CreatedOn = DateTime.UtcNow,
+        //            FileType = file.ContentType,
+        //            Extension = extension,
+        //            Name = fileName,
+        //            UploadedById = await _userService.GetCurrentUserIdAsync(),
+        //        };
+        //        using (var dataStream = new MemoryStream())
+        //        {
+        //            await file.CopyToAsync(dataStream);
+        //            fileModel.Data = dataStream.ToArray();
+        //        }
+        //        _db.Add(fileModel);
+        //        _db.SaveChanges();
+        //    }
+        //    TempData["Message"] = "File successfully uploaded to Database";
+        //    return RedirectToAction("index", "post", new { id = post.CategoryId });
+        //}
 
 
         [HttpPost]

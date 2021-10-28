@@ -1,5 +1,6 @@
 ﻿using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Friends;
+using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +19,7 @@ namespace MaryoNetwork.Models
         public byte[] CoverPicture { get; set; }
         public bool IsDeleted { get; set; } = false;
         public ICollection<Post> Posts { get; set; }
+        public ICollection<Image> Images { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Like> Likes { get; set; }
         public IEnumerable<FriendRequest> FriendRequestSent { get; set; } = new List<FriendRequest>();
