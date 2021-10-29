@@ -9,49 +9,87 @@
 <p>
     <a asp-controller="Editor" asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Html)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Css)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Js)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Html)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Css)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Js)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="containerOne d-flex flex-wrap">
+    @foreach (var item in Model)
+    {
+        <div class="profile-card-2  ml-4 mr-4">
+            @if (item.Image != null)
+            {
+
+                <img class="img img-responsive" src="data:image/*;base64,@Convert.ToBase64String(item.Image)">
+            }
+            else
+            {
+                <img class="img img-responsive" src="">
+            }
+            <div class="profile-name">@item.Title</div>
+            <div class="profile-username">@item.User.FullName</div>
+            <div class="profile-icons"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a></div>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Html)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Css)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Js)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Html)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Css)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Js)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Id)
+                </td>
+                <td>
+                    @if (item.Image != null)
+                    {
+
+                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.Image)">
+                    }
+                    else
+                    {
+                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="">
+                    }
+
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

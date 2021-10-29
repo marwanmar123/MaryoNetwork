@@ -19,8 +19,9 @@
             <div class="p-4 d-flex justify-content-around">
                 <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Home</a>
             </div>
-            <form asp-controller="Editor" asp-action="Create">
+            <form asp-controller="Editor" asp-action="Create" enctype="multipart/form-data">
                 <button type="submit" class="btn btn-xs btn-primary">Submit</button>
+                <input type="file" name="Image" required />
                 <input type="text" name="Title" />
                 <textarea id="htmlCode" name="Html" placeholder="HTML Code" oninput="showPreview()"></textarea>
                 <textarea id="cssCode" name="Css" placeholder="CSS Code" oninput="showPreview()"></textarea>

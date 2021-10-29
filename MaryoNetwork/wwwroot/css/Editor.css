@@ -26,7 +26,11 @@ form {
         width: 100%;
         height: 33.33%;
         font-size: 18px;
+        font-weight: 400;
         padding: 10px;
+        background-color: #262727;
+        color: #a5a0a0;
+        font-family: inherit;
     }
 
 .preview-area {

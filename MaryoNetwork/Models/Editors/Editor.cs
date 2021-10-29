@@ -11,6 +11,7 @@ namespace MaryoNetwork.Models.Editors
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string Title { get; set; }
+        public byte[] Image { get; set; }
         public string Html { get; set; }
         public string Css { get; set; }
         public string Js { get; set; }

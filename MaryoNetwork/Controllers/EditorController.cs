@@ -1,9 +1,11 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models.Editors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -20,7 +22,7 @@ namespace MaryoNetwork.Controllers
         }
         public IActionResult Index()
         {
-            var components = _db.Editors.ToList();
+            var components = _db.Editors.Include(e=>e.User).ToList();
             return View(components);
         }
         public async Task<IActionResult> Details(string id)
@@ -57,6 +59,18 @@ namespace MaryoNetwork.Controllers
                 Js = editor.Js,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
+
+            if (Request.Form.Files.Count > 0)
+            {
+                IFormFile file = Request.Form.Files.FirstOrDefault();
+                using (var dataStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(dataStream);
+                    addEditor.Image = dataStream.ToArray();
+                }
+                //await _userManager.UpdateAsync(user);
+            }
+
             await _db.AddAsync(addEditor);
             await _db.SaveChangesAsync();
 
