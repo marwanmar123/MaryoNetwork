@@ -16,38 +16,31 @@
     <script src="https://kit.fontawesome.com/3cfa8bb33f.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <partial name="_Sidebar" />
-    @*@await Component.InvokeAsync("SideBar")*@
-
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div>
+    <div class="container">
+        <partial name="_Sidebar" />
+        @*@await Component.InvokeAsync("SideBar")*@
 
 
-    <section id="featured-services" class="featured-services">
-        <div class="container" data-aos="fade-up">
-            <div class="row">
-                @*@foreach (var tdt in ViewBag.dt)
-                {
-                    <p>@tdt</p>
-                }*@
-                @foreach (var item in Model)
-                {
-                    <a asp-controller="Dashboard" asp-action="PostCatDashboard" asp-route-id="@item.Id" class="m-xl-2">
-                        @item.Name
-                        <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                            <div class="icon-box" style="width:100%;" data-aos="fade-up" data-aos-delay="100">
-                                <div class="icon"><i class="icofont-heart-beat"></i></div>
+        <section id="featured-services" class="featured-services">
+            <div data-aos="fade-up">
+                <div class="row text-center">
+                    @foreach (var item in Model)
+                    {
+                        <a asp-controller="Dashboard" asp-action="PostCatDashboard" asp-route-id="@item.Id" class="m-xl-2">
+                            @item.Name
+                            <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                                <div class="icon-box" style="width:100%;" data-aos="fade-up" data-aos-delay="100">
+                                    <div class="icon"><i class="icofont-heart-beat"></i></div>
 
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                }
-            </div>
+                        </a>
+                    }
+                </div>
 
-        </div>
-    </section>
+            </div>
+        </section>
+    </div>
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - MaryoNetwork - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

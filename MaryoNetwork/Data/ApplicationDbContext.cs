@@ -2,6 +2,7 @@
 using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Editors;
 using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
@@ -24,6 +25,7 @@ namespace MaryoNetwork.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Editor> Editors { get; set; }
         public DbSet<UserFriend> UserFriend { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         
