@@ -22,6 +22,7 @@
             <form asp-controller="Editor" asp-action="Create" enctype="multipart/form-data">
                 <button type="submit" class="btn btn-xs btn-primary">Submit</button>
                 <input type="file" name="Image" required />
+                <label>Title</label>
                 <input type="text" name="Title" />
                 <textarea id="htmlCode" name="Html" placeholder="HTML Code" oninput="showPreview()"></textarea>
                 <textarea id="cssCode" name="Css" placeholder="CSS Code" oninput="showPreview()"></textarea>

@@ -13,16 +13,16 @@ namespace MaryoNetwork.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
 
-            builder
-                .HasMany(u => u.Friends)
-                .WithOne(uf => uf.User)
-                .HasForeignKey(uf => uf.UserId);
+//            builder
+//                .HasMany(u => u.Friends)
+//                .WithOne(uf => uf.User)
+//                .HasForeignKey(uf => uf.UserId);
 
-            builder
-               .HasMany(u => u.OtherFriends)
-               .WithOne(uf => uf.Friend)
-               .HasForeignKey(uf => uf.FriendId);
-;
+//            builder
+//               .HasMany(u => u.OtherFriends)
+//               .WithOne(uf => uf.Friend)
+//               .HasForeignKey(uf => uf.FriendId);
+//;
         }
     }
 }

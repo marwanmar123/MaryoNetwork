@@ -12,15 +12,15 @@ namespace MaryoNetwork.Configurations
     {
         public void Configure(EntityTypeBuilder<FriendRequest> builder)
         {
-            builder
-                .HasOne(fr => fr.Sender)
-                .WithMany(u => u.FriendRequestSent)
-                .HasForeignKey(fr => fr.SenderId);
+            //builder
+            //    .HasOne(fr => fr.Sender)
+            //    .WithMany(u => u.FriendRequestSent)
+            //    .HasForeignKey(fr => fr.SenderId);
 
-            builder
-               .HasOne(fr => fr.Receiver)
-               .WithMany(u => u.FriendRequestReceived)
-               .HasForeignKey(fr => fr.ReceiverId);
+            //builder
+            //   .HasOne(fr => fr.Receiver)
+            //   .WithMany(u => u.FriendRequestReceived)
+            //   .HasForeignKey(fr => fr.ReceiverId);
         }
     }
 }

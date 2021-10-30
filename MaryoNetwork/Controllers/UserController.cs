@@ -2,6 +2,7 @@
 using MaryoNetwork.Models;
 using MaryoNetwork.Models.Posts;
 using MaryoNetwork.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,10 +16,12 @@ namespace MaryoNetwork.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<User> _userManager;
 
-        public UserController(ApplicationDbContext db)
+        public UserController(ApplicationDbContext db, UserManager<User> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
 
@@ -74,7 +77,7 @@ namespace MaryoNetwork.Controllers
             var aspNetUser = await _db.Users.FindAsync(id);
             _db.Users.Remove(aspNetUser);
             await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Role");
         }
 
 
@@ -94,5 +97,18 @@ namespace MaryoNetwork.Controllers
 
             return View(user);
         }
+
+
+
+        //public async Task<IActionResult> AddFriend(string Id)
+        //{
+        //    var friend = await _userManager.FindByIdAsync(Id);
+        //    var currentUser = await _userManager.GetUserAsync(this.User);
+        //    friend.FriendsUser.Add(currentUser);
+        //    currentUser.FriendsUser.Add(friend);
+        //    await _userManager.UpdateAsync(currentUser);
+        //    await _userManager.UpdateAsync(friend);
+        //    return View("Profile", currentUser.Friends);
+        //}
     }
 }

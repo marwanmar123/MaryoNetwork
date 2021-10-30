@@ -26,38 +26,38 @@
     var profile = Model.Input.Users;
 }
 
-<div class="well">
-    <div class="row">
-        <div class="col-sm-12 text-center">
-            <h4>You must be friend with @fullName in order to see his posts!</h4>
+@*<div class="well">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h4>You must be friend with @fullName in order to see his posts!</h4>
+            </div>
         </div>
-    </div>
-    <div class="row">
-       
-        @if (userAccount.FriendRequestSent.Any(fr => fr.ReceiverId == id))
-        {
-            <div class="col-sm-12 text-center">
-                <a asp-controller="Friend" asp-action="Accept"
-                   asp-route-senderId="@userAccount.Id"
-                   asp-route-receiverId="@id" class="btn btn-success btn-sm">Accept Friend Request</a>
-                <a asp-controller="Friend" asp-action="Decline"
-                   asp-route-senderId="@userAccount.Id"
-                   asp-route-receiverId="@id" class="btn btn-danger btn-sm">Decline Friend Request</a>
-            </div> }
-        else if (userAccount.FriendRequestReceived.Any(fr => fr.SenderId == id))
-        {
-            <div class="col-sm-12 text-center">
-                <h4 style="color:darkolivegreen">Your friend request is @userAccount.FriendRequestReceived.FirstOrDefault(fr => fr.SenderId == id).FriendRequestStatus.ToString()</h4>
-            </div> }
-        else
-        {
-            <div class="col-sm-12 text-center">
-                <a asp-controller="Friend" asp-action="AddFriend"
-                   asp-route-senderId="@id"
-                   asp-route-receiverId="@userAccount.Id" class="btn btn-primary btn-sm">Add Friend</a>
-            </div>}
-    </div>
-</div>
+        <div class="row">
+
+            @if (userAccount.FriendRequestSent.Any(fr => fr.ReceiverId == id))
+            {
+                <div class="col-sm-12 text-center">
+                    <a asp-controller="Friend" asp-action="Accept"
+                       asp-route-senderId="@userAccount.Id"
+                       asp-route-receiverId="@id" class="btn btn-success btn-sm">Accept Friend Request</a>
+                    <a asp-controller="Friend" asp-action="Decline"
+                       asp-route-senderId="@userAccount.Id"
+                       asp-route-receiverId="@id" class="btn btn-danger btn-sm">Decline Friend Request</a>
+                </div> }
+            else if (userAccount.FriendRequestReceived.Any(fr => fr.SenderId == id))
+            {
+                <div class="col-sm-12 text-center">
+                    <h4 style="color:darkolivegreen">Your friend request is @userAccount.FriendRequestReceived.FirstOrDefault(fr => fr.SenderId == id).FriendRequestStatus.ToString()</h4>
+                </div> }
+            else
+            {
+                <div class="col-sm-12 text-center">
+                    <a asp-controller="Friend" asp-action="AddFriend"
+                       asp-route-senderId="@id"
+                       asp-route-receiverId="@userAccount.Id" class="btn btn-primary btn-sm">Add Friend</a>
+                </div>}
+        </div>
+    </div>*@
 
 
 <h4>@ViewData["Title"]</h4>
@@ -170,29 +170,29 @@
                         <td>@p.Title</td>
                         @*<td>@p.Image</td>*@
                         <td>
-                            <form method="post" asp-controller="Post" asp-action="CreateComment">
-                                    <input type="text" name="Content" />
-                                    <input type="hidden" name="PostId" value="@p.Id" />
-                                    <input type="hidden" name="UserId" value="@id" />
-                                    <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                                </form>
+                            <form method="post" asp-controller="Post" asp-action="CreateCommentProfile">
+                                <input type="text" name="Content" />
+                                <input type="hidden" name="PostId" value="@p.Id" />
+                                <input type="hidden" name="UserId" value="@id" />
+                                <button type="submit" class="btn btn-xs btn-primary">Comment</button>
+                            </form>
                             @foreach (var c in p.Comments)
                             {
-                        <div class="d-flex">
-                                <a asp-controller="User" asp-action="Profile" asp-route-id="@c.UserId">
-                                    @Html.DisplayFor(modelItem => c.User.FullName)
-                                    @if (c.User.ProfilePicture != null)
-                                    {
-                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(c.User.ProfilePicture)">
-                                    }
-                                    else
-                                    {
-                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
-                                    }
-                                </a>
-                                <p>@c.Content</p>|
-                                <p>@c.CreatedOn</p>|
-                        </div>
+                                <div class="d-flex">
+                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@c.UserId">
+                                        @Html.DisplayFor(modelItem => c.User.FullName)
+                                        @if (c.User.ProfilePicture != null)
+                                        {
+                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(c.User.ProfilePicture)">
+                                        }
+                                        else
+                                        {
+                                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
+                                        }
+                                    </a>
+                                    <p>@c.Content</p>|
+                                    <p>@c.CreatedOn</p>|
+                                </div>
                             }
                             <p class="comment-count-@(p.Id)">(@p.Comments.Count())</p>
                         </td>
@@ -207,12 +207,38 @@
                     </tr>
                 }
 
+            }
+        </tbody>
+    </table>
+
+
+</div>
+
+<script type="text/javascript">
+    function storePagePosition() {
+        var page_y = window.pageYOffset;
+        localStorage.setItem("page_y", page_y);
     }
-            </tbody>
-        </table>
 
 
-        </div>
+    window.addEventListener("scroll", storePagePosition);
+
+
+    var currentPageY;
+
+    try {
+        currentPageY = localStorage.getItem("page_y");
+
+        if (currentPageY === undefined) {
+            localStorage.setItem("page_y") = 0;
+        }
+
+        window.scrollTo(0, currentPageY);
+    } catch (e) {
+        // no localStorage available
+    }
+</script>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

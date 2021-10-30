@@ -22,37 +22,6 @@
 }
 
 
-<!--<aside class="main-sidebar d-block">
-
-    <div class="d-flex flex-column p-2">
-        <a href="/Identity/Account/Manage" class="d-flex">
-            @if (image != null)
-            {
-                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(image)">
-            }
-            else
-            {
-                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
-            }
-            @fullName
-        </a>-->
-@*</a>*@
-<!--<a class="p-1" asp-controller="Dashboard" asp-action="Index">category</a>
-        <a class="p-1">User</a>
-    </div>
-
-</aside>-->
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -110,10 +79,10 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li>
-                                    <a asp-controller="Dashboard" asp-action="Index" class="m-xl-2">Dashboard</a>
+                                    <a asp-controller="Dashboard" asp-action="Index" class="m-xl-2">Post/Comment</a>
                                 </li>
                                 <li>
-                                    <a asp-controller="Category" asp-action="Index" class="m-xl-2">Manager</a>
+                                    <a asp-controller="Category" asp-action="Index" class="m-xl-2">Category</a>
                                 </li>
                             </ul>
                         </div>
@@ -122,6 +91,12 @@
                         <a asp-controller="Role" asp-action="Index">
                             <i class="far fa-gem"></i>
                             <span>User&Role</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a asp-controller="Dashboard" asp-action="Editor">
+                            <i class="far fa-gem"></i>
+                            <span>Editor</span>
                         </a>
                     </li>
                 </ul>

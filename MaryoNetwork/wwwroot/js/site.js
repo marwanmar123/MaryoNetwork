@@ -54,3 +54,23 @@ function showPreview() {
     frame.write(htmlCode + cssCode + jsCode);
     frame.close();
 }
+
+
+
+////////// pagin filter//////////
+
+
+$(document).ready(function () {
+    $("#myTable").DataTable();
+})
+
+
+
+//////////////ShowAlert
+
+
+//$(document).ready(function () {
+//    $('.showAlert').click(function () {
+//        $('.alert').show();
+//    })
+//});

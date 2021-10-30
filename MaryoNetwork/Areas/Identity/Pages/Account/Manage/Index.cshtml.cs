@@ -60,7 +60,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Cover Picture")]
             public byte[] CoverPicture { get; set; }
 
-            [Display(Name = "Posts")]
+            [Display(Name = "UserPosts")]
             public IEnumerable<User> Users { get; set; }
 
         }
@@ -83,7 +83,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 ProfilePicture = profilePicture,
                 CoverPicture = coverPicture,
-                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync()
+                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id && p.Approved == true)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync()
                 //Posts.Include(c => c.Comments).Include(u => u.User).Where(x => x.UserId == user.Id).Include(x => x.Category).OrderByDescending(y => y.CreatedOn).ToList()
             };
         }

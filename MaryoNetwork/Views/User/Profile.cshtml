@@ -25,7 +25,7 @@
 }
 
 
-<div class="well">
+@*<div class="well">
     <div class="row">
         <div class="col-sm-12 text-center">
             <h4>You must be friend with @Model.User.FullName in order to see his posts!</h4>
@@ -55,7 +55,7 @@
                    asp-route-receiverId="@Model.User.Id" class="btn btn-primary btn-sm">Add Friend</a>
             </div>}
     </div>
-</div>
+</div>*@
 
 
 
@@ -72,7 +72,6 @@ else
 {
     <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@Model.User.FullName.Substring(0, 2).ToUpper()</p>
 }
-@*<img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(@Model.User.CoverPicture)">*@
 
 
 

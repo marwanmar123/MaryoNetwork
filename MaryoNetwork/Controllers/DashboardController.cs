@@ -1,8 +1,10 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models.Categories;
+using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Posts;
 using MaryoNetwork.Services.Posts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,11 +18,16 @@ namespace MaryoNetwork.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IPostService _postService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DashboardController(ApplicationDbContext db, IPostService postService)
+        public DashboardController(
+            ApplicationDbContext db,
+            IPostService postService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
             _postService = postService;
+            _httpContextAccessor = httpContextAccessor;
         }
         [Authorize]
         public IActionResult Index()
@@ -54,13 +61,17 @@ namespace MaryoNetwork.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult deletePost(string id)
+        public ActionResult DeletePost(string id)
         {
             
-            var resId = _db.Posts.Include(a=>a.Comments).FirstOrDefault(a=>a.Id== id);
+            var resId = _db.Posts.Include(a=>a.Comments).Include(a=>a.Images).FirstOrDefault(a=>a.Id== id);
             foreach(var a in resId.Comments)
             {
                 _db.Remove(a);
+            }
+            foreach (var m in resId.Images)
+            {
+                _db.Remove(m);
             }
             _db.Remove(resId);
             _db.SaveChanges();
@@ -70,12 +81,52 @@ namespace MaryoNetwork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> deleteComment(string id, Post post)
+        public async Task<IActionResult> CreateComment(string postId, string content, Comment comment)
         {
-            var resId = _db.Comments.FirstOrDefault(a => a.Id == id);
+            var post = await _postService.GetPostWithUserAsync(postId);
+
+
+
+            var addComment = new Comment
+            {
+                Content = content,
+                UserId = comment.UserId,
+                PostId = post.Id
+            };
+            await _db.AddAsync(addComment);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("PostCatDashboard", "Dashboard", new { id = post.CategoryId });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteComment(string id, string postId)
+        {
+            var post = await _postService.GetPostWithUserAsync(postId);
+            var resId = _db.Comments.Include(a=>a.Post).FirstOrDefault(a => a.Id == id);
             _db.Remove(resId);
             await _db.SaveChangesAsync();
-            return RedirectToAction("PostCatDashboard", "Dashboard", new {id = post.CategoryId});
+            return RedirectToAction("PostCatDashboard", "Dashboard", new { id = resId.Post.CategoryId });
+
+        }
+
+
+        public IActionResult Editor()
+        {
+            var components = _db.Editors.Include(e => e.User).ToList();
+            return View(components);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> deleteComponentEditor(string id, Post post)
+        {
+            var resId = _db.Editors.FirstOrDefault(a => a.Id == id);
+            _db.Remove(resId);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Editor", "Dashboard", new { id = post.CategoryId });
 
         }
     }

@@ -61,7 +61,7 @@
                     </td>
                     <td>
                     <td>
-                        <form id="form" method="post" asp-controller="Post" asp-action="CreateComment">
+                        <form id="form" method="post" asp-controller="Dashboard" asp-action="CreateComment">
                             <input type="text" name="Content" />
                             <input type="hidden" name="PostId" value="@item.Id" />
                             <input type="hidden" name="UserId" value="@id" />
@@ -83,7 +83,7 @@
                                 </a>
                                 <p>@i.Content</p>|
                                 <p>@i.CreatedOn</p>|
-                                <form style="display:inline;" method="post" asp-action="deleteComment">
+                                <form style="display:inline;" method="post" asp-controller="Dashboard" asp-action="DeleteComment">
                                     <input type="hidden" name="Id" value="@i.Id" />
                                     <button type="submit" class="btn btn-xs btn-danger">Delete</button>
                                 </form>
@@ -111,7 +111,7 @@
                                 <button type="submit" class="btn btn-xs btn-outline-warning">rejected</button>
                             </form>
                         }
-                        <form style="display:inline;" method="post" asp-action="deletePost">
+                        <form style="display:inline;" method="post" asp-action="DeletePost">
                             <input type="hidden" name="Id" value="@item.Id" />
                             <button type="submit" class="btn btn-xs btn-danger">Delete</button>
                         </form>
@@ -124,3 +124,33 @@
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript">
+    function storePagePosition() {
+        var page_y = window.pageYOffset;
+        localStorage.setItem("page_y", page_y);
+    }
+
+
+    window.addEventListener("scroll", storePagePosition);
+
+
+    var currentPageY;
+
+    try {
+        currentPageY = localStorage.getItem("page_y");
+
+        if (currentPageY === undefined) {
+            localStorage.setItem("page_y") = 0;
+        }
+
+        window.scrollTo(0, currentPageY);
+    } catch (e) {
+        // no localStorage available
+    }
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -17,18 +17,27 @@
 
 <body>
 
-        <div class="code-area">
-            <textarea id="htmlCode" placeholder="HTML Code" oninput="showPreview()">@Model.Html</textarea>
-            <textarea id="cssCode" placeholder="CSS Code" oninput="showPreview()">@Model.Css</textarea>
-            <textarea id="jsCode" placeholder="JavaScript Code" oninput="showPreview()">@Model.Js</textarea>
-        </div>
-        <div class="preview-area">
-            <iframe id="preview-window"></iframe>
-        </div>
+    <div class="code-area">
+        <textarea id="htmlCode" placeholder="HTML Code" oninput="showPreview()">@Model.Html</textarea>
+        <textarea id="cssCode" placeholder="CSS Code" oninput="showPreview()">@Model.Css</textarea>
+        <textarea id="jsCode" placeholder="JavaScript Code" oninput="showPreview()">@Model.Js</textarea>
+    </div>
+    <div class="preview-area">
+        <iframe id="preview-window"></iframe>
+    </div>
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
     <script src="~/js/site.js"></script>
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("plz peress any key for display result");
+            };
+    </script>
 </body>
 
 </html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
