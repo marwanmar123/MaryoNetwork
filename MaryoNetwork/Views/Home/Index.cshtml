@@ -1,8 +1,12 @@
 ﻿@model List<MaryoNetwork.Models.Categories.Category>
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer localizer
 
 @{
     ViewData["Title"] = "Home Page";
 }
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
@@ -37,3 +41,8 @@
     </div>
 
 </section>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211101144155_relat")]
+    partial class relat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,7 +232,12 @@ namespace MaryoNetwork.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SkillUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SkillUserId");
 
                     b.ToTable("Skills");
                 });
@@ -242,14 +249,12 @@ namespace MaryoNetwork.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SkillId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SkillId");
 
                     b.HasIndex("UserId");
 
@@ -540,17 +545,18 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MaryoNetwork.Models.Skills.Skill", b =>
+                {
+                    b.HasOne("MaryoNetwork.Models.Skills.SkillUser", null)
+                        .WithMany("Skill")
+                        .HasForeignKey("SkillUserId");
+                });
+
             modelBuilder.Entity("MaryoNetwork.Models.Skills.SkillUser", b =>
                 {
-                    b.HasOne("MaryoNetwork.Models.Skills.Skill", "Skill")
-                        .WithMany()
-                        .HasForeignKey("SkillId");
-
                     b.HasOne("MaryoNetwork.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Skill");
 
                     b.Navigation("User");
                 });
@@ -618,6 +624,11 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("MaryoNetwork.Models.Skills.SkillUser", b =>
+                {
+                    b.Navigation("Skill");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.User", b =>

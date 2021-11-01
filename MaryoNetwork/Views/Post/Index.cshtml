@@ -20,6 +20,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css" />
 
 <p>@ViewBag.url</p>
 <div class="text-center">
@@ -29,17 +30,18 @@
 
 
 
+
 <form asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
     <input type="text" name="Title" />
     <input type="file" name="files" multiple required />
-    <input type="text" name="Content" />
+    <input type="text" name="Content" id="emoji" class="w-25"/>
     <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
     <button type="submit" class="btn btn-xs btn-primary">Submit</button>
 </form>
 <!--<form method="post" enctype="multipart/form-data">
     <input type="file" name="files" multiple required />-->
-    @*<button type="submit" class="btn btn-primary" asp-controller="File" asp-action="UploadToFileSystem">Upload to File System</button>*@
-    <!--<button class="btn btn-success" type="submit" asp-controller="Post" asp-action="UploadToDatabase">Upload to Database</button>
+@*<button type="submit" class="btn btn-primary" asp-controller="File" asp-action="UploadToFileSystem">Upload to File System</button>*@
+<!--<button class="btn btn-success" type="submit" asp-controller="Post" asp-action="UploadToDatabase">Upload to Database</button>
 </form>-->
 
 <table class="table text-center">
@@ -60,7 +62,7 @@
         {
             <tr>
                 <td>
-                   
+
                     <a asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">
                         @Html.DisplayFor(modelItem => item.User.FullName)
                         @if (item.User.ProfilePicture != null)
@@ -76,13 +78,13 @@
                 <td>@item.Content</td>
                 <td>@item.Title</td>
                 <td>
-                    @foreach(var f in item.Images)
+                    @foreach (var f in item.Images)
                     {
                         <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
                     }
                 </td>
                 <td>
-                    <form id="form" method="post" asp-controller="Post" asp-action="CreateComment" >
+                    <form id="form" method="post" asp-controller="Post" asp-action="CreateComment">
                         <input type="text" name="Content" />
                         <input type="hidden" name="PostId" value="@item.Id" />
                         <input type="hidden" name="UserId" value="@id" />
@@ -90,21 +92,21 @@
                     </form>
                     @foreach (var i in item.Comments)
                     {
-                <div class="d-flex">
-                    <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
-                        @if (i.User.ProfilePicture != null)
-                        {
-                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
-                        }
-                        else
-                        {
-                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
-                        }
-                        @Html.DisplayFor(modelItem => i.User.FullName)
-                    </a>
-                    <p>@i.Content</p>|
-                    <p>@i.CreatedOn</p>|
-                </div>
+                        <div class="d-flex">
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
+                                @if (i.User.ProfilePicture != null)
+                                {
+                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
+                                }
+                                else
+                                {
+                                    <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
+                                }
+                                @Html.DisplayFor(modelItem => i.User.FullName)
+                            </a>
+                            <p>@i.Content</p>|
+                            <p>@i.CreatedOn</p>|
+                        </div>
                     }
                     <p>(@item.Comments.Count())</p>
                     @*<p>@item.Likes.Count()</p>*@
@@ -130,14 +132,23 @@
                     @*<p>like id = @ViewBag.count</p>*@
                 </td>
                 @*<td>
-                   
-                </td>*@
+
+                    </td>*@
             </tr>
 
         }
 
     </tbody>
 </table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
+
+<script>
+    $('#emoji').emojioneArea({
+        pickerPosition: 'bottom'
+    })
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

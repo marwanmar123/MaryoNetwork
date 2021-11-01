@@ -3,6 +3,7 @@ using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
+using MaryoNetwork.Models.Skills;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

@@ -4,8 +4,10 @@ using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Editors;
 using MaryoNetwork.Models.Friends;
+using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
+using MaryoNetwork.Models.Skills;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,6 +28,9 @@ namespace MaryoNetwork.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Editor> Editors { get; set; }
+        public DbSet<Image> Image { get; set; }
+        public DbSet<SkillUser> SkillUsers { get; set; }
+        public DbSet<Skill> Skills { get; set; }
         public DbSet<UserFriend> UserFriend { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         
