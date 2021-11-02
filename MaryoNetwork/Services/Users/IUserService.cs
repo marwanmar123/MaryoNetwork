@@ -19,9 +19,5 @@ namespace MaryoNetwork.Services.Users
         Task<IQueryable<User>> GetAllUsersExceptCurrentUser();
 
         bool UserExists(string userId);
-
-        void MakeFriends(string senderId, string receiverId);
-
-        bool CheckIfFriends(string requestUserId, string targetUserId);
     }
 }

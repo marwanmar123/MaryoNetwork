@@ -150,13 +150,5 @@ namespace MaryoNetwork.Controllers
         {
             return _context.Skills.Any(e => e.Id == id);
         }
-
-        public async Task<IActionResult> AsignSkill(SkillUser skillUser)
-        {
-            //var skills = _db
-
-            return RedirectToAction("Profile", "User");
-        }
-
     }
 }

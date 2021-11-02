@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Configurations\" />
     <Folder Include="Services\Users\" />
     <Folder Include="wwwroot\image\post\" />
   </ItemGroup>

@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211102163745_frmodifr")]
+    partial class frmodifr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,8 +102,11 @@ namespace MaryoNetwork.Data.Migrations
                     b.Property<string>("ReceiverId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RequestStatusId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("RequestSt")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SenderId")
                         .HasColumnType("nvarchar(450)");
@@ -110,25 +115,9 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.HasIndex("ReceiverId");
 
-                    b.HasIndex("RequestStatusId");
-
                     b.HasIndex("SenderId");
 
                     b.ToTable("Friends");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Friends.RequestStatus", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RequestStatus");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.Images.Image", b =>
@@ -504,17 +493,11 @@ namespace MaryoNetwork.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ReceiverId");
 
-                    b.HasOne("MaryoNetwork.Models.Friends.RequestStatus", "RequestStatus")
-                        .WithMany()
-                        .HasForeignKey("RequestStatusId");
-
                     b.HasOne("MaryoNetwork.Models.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId");
 
                     b.Navigation("Receiver");
-
-                    b.Navigation("RequestStatus");
 
                     b.Navigation("Sender");
                 });

@@ -23,15 +23,5 @@ namespace MaryoNetwork.Models
         public ICollection<Image> Images { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Like> Likes { get; set; }
-        //public List<User> FriendsUser { get; set; } = new List<User>();
-        //public IEnumerable<FriendRequest> FriendRequestSent { get; set; } = new List<FriendRequest>();
-
-        //public IEnumerable<FriendRequest> FriendRequestReceived { get; set; } = new List<FriendRequest>();
-        //public IEnumerable<UserFriend> Friends { get; set; } = new List<UserFriend>();
-
-        //public IEnumerable<UserFriend> OtherFriends { get; set; } = new List<UserFriend>();
-
-
-        
     }
 }

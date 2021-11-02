@@ -1,5 +1,4 @@
-﻿using MaryoNetwork.Configurations;
-using MaryoNetwork.Models;
+﻿using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Editors;
@@ -31,19 +30,6 @@ namespace MaryoNetwork.Data
         public DbSet<Image> Image { get; set; }
         public DbSet<SkillUser> SkillUsers { get; set; }
         public DbSet<Skill> Skills { get; set; }
-        public DbSet<UserFriend> UserFriend { get; set; }
-        public DbSet<FriendRequest> FriendRequests { get; set; }
-        
-
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new FriendRequestConfigurations());
-            
-
-            base.OnModelCreating(builder);
-        }
-
+        public DbSet<Friend> Friends { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models;
+using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Posts;
 using MaryoNetwork.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -100,15 +101,38 @@ namespace MaryoNetwork.Controllers
 
 
 
-        //public async Task<IActionResult> AddFriend(string Id)
-        //{
-        //    var friend = await _userManager.FindByIdAsync(Id);
-        //    var currentUser = await _userManager.GetUserAsync(this.User);
-        //    friend.FriendsUser.Add(currentUser);
-        //    currentUser.FriendsUser.Add(friend);
-        //    await _userManager.UpdateAsync(currentUser);
-        //    await _userManager.UpdateAsync(friend);
-        //    return View("Profile", currentUser.Friends);
-        //}
+        public async Task<IActionResult> Addfriend(Friend friend,string returnUrl)
+        {
+            var CurrentuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var addFriend = new Friend()
+            {
+                SenderId = CurrentuserId,
+                ReceiverId = friend.ReceiverId,
+                RequestStatusId = "3"
+            };
+            _db.Add(addFriend);
+            
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("profile", "User", new { id = friend.ReceiverId });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApproveFriend(string RequestStatus, string id)
+        {
+
+            var resId = _db.Friends.FirstOrDefault(a => a.Id == id);
+            resId.RequestStatusId = RequestStatus;
+            if (resId.RequestStatusId == "2")
+            {
+                _db.Remove(resId);
+            }
+            _db.SaveChanges();
+            return Redirect("/Identity/Account/Manage");
+
+        }
     }
 }

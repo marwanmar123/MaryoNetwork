@@ -24,7 +24,25 @@
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
     var profile = Model.Input.Users;
+    var friendRequest = Model.Input.FirendRequest;
 }
+
+@foreach(var fr in friendRequest)
+            {
+<div>
+    <h1>you have a request friend from : @fr.Sender.FullName</h1>
+    <form style="display:inline;" method="post" asp-controller="User" asp-action="ApproveFriend">
+        <input type="hidden" name="Id" value="@fr.Id" />
+        <input type="hidden" name="RequestStatus" value="1" />
+        <button type="submit" class="btn btn-xs btn-outline-success">Approved</button>
+    </form>
+    <form style="display:inline;" method="post" asp-controller="User" asp-action="ApproveFriend">
+        <input type="hidden" name="Id" value="@fr.Id" />
+        <input type="hidden" name="RequestStatus" value="2" />
+        <button type="submit" class="btn btn-xs btn-outline-warning">rejected</button>
+    </form>
+</div>
+            }
 
 @*<div class="well">
         <div class="row">

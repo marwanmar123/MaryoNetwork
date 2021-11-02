@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MaryoNetwork.Data;
 using MaryoNetwork.Models;
 using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
 using Microsoft.AspNetCore.Http;
@@ -63,6 +64,9 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             [Display(Name = "UserPosts")]
             public IEnumerable<User> Users { get; set; }
 
+            [Display(Name = "Request friend")]
+            public IEnumerable<Friend> FirendRequest { get; set; }
+
         }
 
         private async Task LoadAsync(User user)
@@ -83,7 +87,8 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 ProfilePicture = profilePicture,
                 CoverPicture = coverPicture,
-                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id && p.Approved == true)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync()
+                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id && p.Approved == true)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync(),
+                FirendRequest = await _db.Friends.Where(a => a.ReceiverId == user.Id).ToListAsync()
                 //Posts.Include(c => c.Comments).Include(u => u.User).Where(x => x.UserId == user.Id).Include(x => x.Category).OrderByDescending(y => y.CreatedOn).ToList()
             };
         }

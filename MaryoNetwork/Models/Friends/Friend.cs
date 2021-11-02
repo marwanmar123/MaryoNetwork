@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Models.Friends
 {
-    public class FriendRequest
+    public class Friend
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
         public string SenderId { get; set; }
 
-        //public User Sender { get; set; }
+        public User Sender { get; set; }
 
         public string ReceiverId { get; set; }
 
-        //public User Receiver { get; set; }
+        public User Receiver { get; set; }
 
-        //[Required]
-        public FriendRequestStatus FriendRequestStatus { get; set; }
+        public string RequestStatusId { get; set; }
+        public RequestStatus RequestStatus { get; set; }
     }
 }
