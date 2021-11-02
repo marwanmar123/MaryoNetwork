@@ -71,12 +71,18 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+.headerSide{
+    width:13% !important;
+}
+.content{
+    width:75% !important;
+}
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
 }
 
 .dash{
@@ -164,9 +170,7 @@ body {
         margin: 2px;
     }
 
-        .page-wrapper .theme.chiller-theme {
-            background: #1e2229;
-        }
+        
 
     /*----------------toggeled sidebar----------------*/
 

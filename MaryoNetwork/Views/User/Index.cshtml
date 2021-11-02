@@ -9,7 +9,7 @@
 
         @foreach (var item in Model)
         {
-            <div>
+            <div class="pt-5">
                 <a  class="d-flex" asp-action="Profile" asp-route-id="@item.Id">
                     <div class="p-1">
                         @if (item.ProfilePicture != null)

@@ -118,24 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Confirm password" xml:space="preserve">
-    <value>تأكيد كلمة المرور</value>
+    <value>Confirmez le mot de passe</value>
   </data>
   <data name="Create a new account." xml:space="preserve">
-    <value>انشاء حساب جديد.</value>
+    <value>Créer un nouveau compte.</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>بريد الالكتروني</value>
+    <value>E-mail</value>
   </data>
   <data name="Full Name" xml:space="preserve">
-    <value>الاسم بالكامل</value>
+    <value>Nom et prénom</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>كلمه السر</value>
+    <value>Mot de passe</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>تسجيل</value>
+    <value>S'inscrire</value>
   </data>
   <data name="Use another service to register." xml:space="preserve">
-    <value>استخدم خدمة أخرى للتسجيل.</value>
+    <value>Utilisez un autre service pour vous inscrire.</value>
   </data>
 </root>
