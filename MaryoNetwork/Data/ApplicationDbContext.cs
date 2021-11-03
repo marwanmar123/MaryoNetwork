@@ -3,6 +3,7 @@ using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Editors;
 using MaryoNetwork.Models.Friends;
+using MaryoNetwork.Models.Groups;
 using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
@@ -31,5 +32,7 @@ namespace MaryoNetwork.Data
         public DbSet<SkillUser> SkillUsers { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupMembers> GroupMembers { get; set; }
     }
 }

@@ -114,7 +114,7 @@ namespace MaryoNetwork.Controllers
 
 
 
-        public async Task<IActionResult> Addfriend(Friend friend,string returnUrl)
+        public async Task<IActionResult> Addfriend(Friend friend)
         {
             var CurrentuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
