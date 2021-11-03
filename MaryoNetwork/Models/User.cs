@@ -18,7 +18,7 @@ namespace MaryoNetwork.Models
         public string About { get; set; }
         public byte[] ProfilePicture { get; set; }
         public byte[] CoverPicture { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsOnline { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<Image> Images { get; set; }
         public ICollection<Comment> Comments { get; set; }

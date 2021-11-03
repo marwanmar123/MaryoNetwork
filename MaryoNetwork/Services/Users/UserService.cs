@@ -55,8 +55,5 @@ namespace MaryoNetwork.Services.Users
             return (IQueryable<User>)_userManager.Users.Where(u => u.Id != currentUserId);
         }
 
-
-        public bool UserExists(string userId) => _db.Users.Any(u => u.Id == userId && u.IsDeleted == false);
-
     }
 }

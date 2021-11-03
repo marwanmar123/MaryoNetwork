@@ -99,6 +99,19 @@ namespace MaryoNetwork.Controllers
             return View(user);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult IsOnline(bool online, string id)
+        {
+
+            var resId = _db.Users.FirstOrDefault(a => a.Id == id);
+            resId.IsOnline = online;
+            _db.SaveChanges();
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
 
 
         public async Task<IActionResult> Addfriend(Friend friend,string returnUrl)

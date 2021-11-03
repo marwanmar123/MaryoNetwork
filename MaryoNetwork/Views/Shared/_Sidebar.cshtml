@@ -7,6 +7,7 @@
     string fullName = null;
     string id = null;
     byte[] image = null;
+    bool isOnline = false;
     if (SignInManager.IsSignedIn(User))
     {
         User user = await UserManager.FindByEmailAsync(User.Identity.Name);
@@ -15,6 +16,7 @@
             fullName = user.FullName;
             id = user.Id;
             image = user.ProfilePicture;
+            isOnline = user.IsOnline;
         }
 
 
@@ -57,11 +59,21 @@
                             <strong>@fullName</strong>
                         </a>
                     </span>
-                    <span class="user-role">Administrator</span>
-                    <span class="user-status">
-                        <i class="fa fa-circle"></i>
-                        <span>Online</span>
-                    </span>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <span class="user-role">Administrator</span>
+                    }
+                    else
+                    {
+                        <span class="user-role">User</span>
+                    }
+                    @if (isOnline == true)
+                    {
+                        <span class="user-status">
+                            <i class="fa fa-circle"></i>
+                            <span>Online</span>
+                        </span>
+                    }
                 </div>
             </div>
 

@@ -8,6 +8,7 @@
     var userAccount = new User();
     string fullName = null;
     string id = null;
+    bool isOnline = false;
     if (SignInManager.IsSignedIn(User))
     {
         User user = await UserManager.FindByEmailAsync(User.Identity.Name);
@@ -15,6 +16,7 @@
         {
             fullName = user.FullName;
             id = user.Id;
+            isOnline = user.IsOnline;
         }
 
 
@@ -43,39 +45,6 @@
     </form>
 </div>
             }
-
-@*<div class="well">
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <h4>You must be friend with @fullName in order to see his posts!</h4>
-            </div>
-        </div>
-        <div class="row">
-
-            @if (userAccount.FriendRequestSent.Any(fr => fr.ReceiverId == id))
-            {
-                <div class="col-sm-12 text-center">
-                    <a asp-controller="Friend" asp-action="Accept"
-                       asp-route-senderId="@userAccount.Id"
-                       asp-route-receiverId="@id" class="btn btn-success btn-sm">Accept Friend Request</a>
-                    <a asp-controller="Friend" asp-action="Decline"
-                       asp-route-senderId="@userAccount.Id"
-                       asp-route-receiverId="@id" class="btn btn-danger btn-sm">Decline Friend Request</a>
-                </div> }
-            else if (userAccount.FriendRequestReceived.Any(fr => fr.SenderId == id))
-            {
-                <div class="col-sm-12 text-center">
-                    <h4 style="color:darkolivegreen">Your friend request is @userAccount.FriendRequestReceived.FirstOrDefault(fr => fr.SenderId == id).FriendRequestStatus.ToString()</h4>
-                </div> }
-            else
-            {
-                <div class="col-sm-12 text-center">
-                    <a asp-controller="Friend" asp-action="AddFriend"
-                       asp-route-senderId="@id"
-                       asp-route-receiverId="@userAccount.Id" class="btn btn-primary btn-sm">Add Friend</a>
-                </div>}
-        </div>
-    </div>*@
 
 
 <h4>@ViewData["Title"]</h4>

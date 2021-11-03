@@ -7,6 +7,7 @@
 @{
     string fullName = null;
     string id = null;
+    bool isOnligne = false;
     if (SignInManager.IsSignedIn(User))
     {
         User user = await UserManager.FindByEmailAsync(User.Identity.Name);
@@ -14,6 +15,7 @@
         {
             fullName = user.FullName;
             id = user.Id;
+            isOnligne = user.IsOnline;
         }
 
 
@@ -25,37 +27,7 @@
 }
 
 
-@*<div class="well">
-    <div class="row">
-        <div class="col-sm-12 text-center">
-            <h4>You must be friend with @Model.User.FullName in order to see his posts!</h4>
-        </div>
-    </div>
-    <div class="row">
-        @if (Model.User.FriendRequestSent.Any(fr => fr.ReceiverId == id))
-        {
-            <div class="col-sm-12 text-center">
-                <a asp-controller="Friend" asp-action="Accept"
-                   asp-route-senderId="@Model.User.Id"
-                   asp-route-receiverId="@id" class="btn btn-success btn-sm">Accept Friend Request</a>
-                <a asp-controller="Friend" asp-action="Decline"
-                   asp-route-senderId="@Model.User.Id"
-                   asp-route-receiverId="@id" class="btn btn-danger btn-sm">Decline Friend Request</a>
-            </div> }
-        else if (Model.User.FriendRequestReceived.Any(fr => fr.SenderId == id))
-        {
-            <div class="col-sm-12 text-center">
-                <h4 style="color:darkolivegreen">Your friend request is @Model.User.FriendRequestReceived.FirstOrDefault(fr => fr.SenderId == id).FriendRequestStatus.ToString()</h4>
-            </div> }
-        else
-        {
-            <div class="col-sm-12 text-center">
-                <a asp-controller="Friend" asp-action="AddFriend"
-                   asp-route-senderId="@id"
-                   asp-route-receiverId="@Model.User.Id" class="btn btn-primary btn-sm">Add Friend</a>
-            </div>}
-    </div>
-</div>*@
+
 
 <form method="post" asp-controller="User" asp-action="Addfriend">
     <input type="hidden" name="ReceiverId" value="@Model.User.Id"/>

@@ -5,12 +5,31 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 
 @inject IViewLocalizer localizer
+@{
+    string fullName = null;
+    string id = null;
+    byte[] image = null;
+    bool isOnline = true;
+    if (SignInManager.IsSignedIn(User))
+    {
+        User user = await UserManager.FindByEmailAsync(User.Identity.Name);
+        if (user != null)
+        {
+            fullName = user.FullName;
+            id = user.Id;
+            image = user.ProfilePicture;
+            isOnline = user.IsOnline;
+        }
 
+
+    }
+}
 
 
 <ul class="navbar-nav d-flex align-content-end">
     @if (SignInManager.IsSignedIn(User))
     {
+
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="navbar-toggler-icon text-light"></span>
@@ -18,8 +37,27 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <partial name="_SelectLanguagePartial" />
                 <div class="dropdown-divider"></div>
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button type="submit" class="nav-link btn btn-link text-dark">@localizer["Logout"]</button>
+                <p>Statut</p>
+                <form id="online" style="display:inline;" method="post" asp-controller="User" asp-action="IsOnline">
+                    <input type="hidden" name="Id" value="@id" />
+                    <input type="hidden" name="online" value="true" />
+                    <button type="submit" class="btn online  d-flex justify-content-center"><img style="width:25px;" src="~/image/online.png"/></button>
+                </form>
+                <form id="online" style="display:inline;" method="post" asp-controller="User" asp-action="IsOnline">
+                    <input type="hidden" name="Id" value="@id" />
+                    <input type="hidden" name="online" value="false" />
+                    <button type="submit" class="btn online d-flex justify-content-center"><img style="width:25px;"  src="~/image/inactif.png" /></button>
+                </form>
+                <div class="dropdown-divider"></div>
+                <form id="logout" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    @if (isOnline == true)
+                    {
+                        <p class="p-2">disconnect befor logout</p>
+                    }
+                    else
+                    {
+                        <button type="submit" class="nav-link btn btn-link text-dark">@localizer["Logout"]</button>
+                    }
                 </form>
             </div>
         </li>
@@ -47,4 +85,8 @@
         </li>
     }
 </ul>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 

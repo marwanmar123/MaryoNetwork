@@ -17,7 +17,5 @@ namespace MaryoNetwork.Services.Users
         Task<string> GetCurrentUserNameAsync();
 
         Task<IQueryable<User>> GetAllUsersExceptCurrentUser();
-
-        bool UserExists(string userId);
     }
 }

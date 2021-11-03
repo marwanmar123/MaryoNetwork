@@ -1,10 +1,30 @@
 ﻿@model List<MaryoNetwork.Models.Categories.Category>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @using Microsoft.AspNetCore.Mvc.Localization
 
 @inject IViewLocalizer localizer
 
 @{
     ViewData["Title"] = "Home Page";
+}
+@{
+    string fullName = null;
+    string id = null;
+    byte[] image = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        User user = await UserManager.FindByEmailAsync(User.Identity.Name);
+        if (user != null)
+        {
+            fullName = user.FullName;
+            id = user.Id;
+            image = user.ProfilePicture;
+        }
+
+
+    }
 }
 
 
@@ -40,7 +60,10 @@
 
     </div>
 
+
+
 </section>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
