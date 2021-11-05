@@ -2,8 +2,8 @@
 using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
+using MaryoNetwork.Models.Messenger;
 using MaryoNetwork.Models.Posts;
-using MaryoNetwork.Models.Skills;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -23,5 +23,7 @@ namespace MaryoNetwork.Models
         public ICollection<Image> Images { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Like> Likes { get; set; }
+        public ICollection<Room> Rooms { get; set; }
+        public ICollection<Message> Messages { get; set; }
     }
 }

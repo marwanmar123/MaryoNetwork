@@ -1,4 +1,5 @@
 using MaryoNetwork.Data;
+using MaryoNetwork.Hubs;
 using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Repository.Implement;
@@ -73,6 +74,11 @@ namespace MaryoNetwork
             services.AddScoped<ICrudRepository<Category>, CategoryRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
+
+            services.AddAutoMapper(typeof(Startup));
+            services.AddRazorPages();
+            services.AddControllers();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,6 +112,8 @@ namespace MaryoNetwork
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }

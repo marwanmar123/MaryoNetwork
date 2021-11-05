@@ -6,12 +6,13 @@ using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Groups;
 using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
+using MaryoNetwork.Models.Messenger;
 using MaryoNetwork.Models.Posts;
-using MaryoNetwork.Models.Skills;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace MaryoNetwork.Data
@@ -29,10 +30,17 @@ namespace MaryoNetwork.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Editor> Editors { get; set; }
         public DbSet<Image> Image { get; set; }
-        public DbSet<SkillUser> SkillUsers { get; set; }
-        public DbSet<Skill> Skills { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMembers> GroupMembers { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }

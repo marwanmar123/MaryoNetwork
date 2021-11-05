@@ -234,6 +234,57 @@ namespace MaryoNetwork.Data.Migrations
                     b.ToTable("Likes");
                 });
 
+            modelBuilder.Entity("MaryoNetwork.Models.Messenger.Message", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("FromUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ToRoomId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToRoomId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("MaryoNetwork.Models.Messenger.Room", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AdminId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.ToTable("Rooms");
+                });
+
             modelBuilder.Entity("MaryoNetwork.Models.Posts.Post", b =>
                 {
                     b.Property<string>("Id")
@@ -265,41 +316,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Skills.Skill", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Skills.SkillUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SkillId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SkillId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SkillUsers");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.User", b =>
@@ -616,6 +632,33 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MaryoNetwork.Models.Messenger.Message", b =>
+                {
+                    b.HasOne("MaryoNetwork.Models.User", "FromUser")
+                        .WithMany("Messages")
+                        .HasForeignKey("FromUserId");
+
+                    b.HasOne("MaryoNetwork.Models.Messenger.Room", "ToRoom")
+                        .WithMany("Messages")
+                        .HasForeignKey("ToRoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToRoom");
+                });
+
+            modelBuilder.Entity("MaryoNetwork.Models.Messenger.Room", b =>
+                {
+                    b.HasOne("MaryoNetwork.Models.User", "Admin")
+                        .WithMany("Rooms")
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+                });
+
             modelBuilder.Entity("MaryoNetwork.Models.Posts.Post", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.Categories.Category", "Category")
@@ -627,21 +670,6 @@ namespace MaryoNetwork.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Category");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Skills.SkillUser", b =>
-                {
-                    b.HasOne("MaryoNetwork.Models.Skills.Skill", "Skill")
-                        .WithMany()
-                        .HasForeignKey("SkillId");
-
-                    b.HasOne("MaryoNetwork.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Skill");
 
                     b.Navigation("User");
                 });
@@ -707,6 +735,11 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("Members");
                 });
 
+            modelBuilder.Entity("MaryoNetwork.Models.Messenger.Room", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("MaryoNetwork.Models.Posts.Post", b =>
                 {
                     b.Navigation("Comments");
@@ -724,7 +757,11 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.Navigation("Likes");
 
+                    b.Navigation("Messages");
+
                     b.Navigation("Posts");
+
+                    b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618
         }
