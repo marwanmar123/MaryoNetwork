@@ -25,8 +25,11 @@ namespace MaryoNetwork.Controllers
             var components = _db.Editors.Include(e=>e.User).ToList();
             return View(components);
         }
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id, Favorite favorite)
         {
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isExist = _db.Favorites.SingleOrDefault(a => a.UserId == currentUser && a.EditorId == id);
+            ViewBag.exist = isExist;
             if (id == null)
             {
                 return NotFound();
@@ -75,6 +78,48 @@ namespace MaryoNetwork.Controllers
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Favorites(string editorId)
+        {
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isExist = _db.Favorites.SingleOrDefault(a=>a.UserId == currentUser && a.EditorId == editorId);
+            if(isExist == null)
+            {
+                var addFavorite = new Favorite
+                {
+                    UserId = currentUser,
+                    EditorId = editorId
+                };
+                await _db.AddAsync(addFavorite);
+            }
+            
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> MyFavorites()
+        {
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var favorit = await _db.Favorites
+                .Where(a => a.UserId == currentUser)
+                .Include(a=>a.Editor.User)
+                .Include(a=>a.Editor)
+                .ToListAsync();
+            return View(favorit);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteFavorite(string id, Favorite favorite)
+        {
+            var favId = _db.Favorites.Include(a=>a.Editor).FirstOrDefault(a => a.Id == id);
+            _db.Remove(favId);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(MyFavorites));
+
         }
     }
 }

@@ -109,10 +109,20 @@
                         </a>
                     </li>
                     <li class="sidebar-dropdown">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Editor" asp-action="Index">
+                        <a href="#" class="text-light">
                             <i class="far fa-gem"></i>
-                            @localizer["MaryoCode"]
+                            <span>@localizer["MaryoCode"]</span>
                         </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a asp-controller="Editor" asp-action="Index" class="m-xl-2">Editor</a>
+                                </li>
+                                <li>
+                                    <a asp-controller="Editor" asp-action="MyFavorites" class="m-xl-2">My Favorites</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="sidebar-dropdown">
                         @if (User.IsInRole("admin"))

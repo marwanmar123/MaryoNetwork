@@ -1,4 +1,5 @@
-﻿using MaryoNetwork.Models;
+﻿using MaryoNetwork.Data.Configurations;
+using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Editors;
@@ -29,6 +30,7 @@ namespace MaryoNetwork.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Editor> Editors { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -39,6 +41,7 @@ namespace MaryoNetwork.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new FriendConfiguration());
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

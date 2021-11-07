@@ -1,6 +1,7 @@
 ﻿using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
 using System;
@@ -22,9 +23,9 @@ namespace MaryoNetwork.ViewModels
         public string RoleId { get; set; }
         public string RoleName { get; set; }
         public bool Selected { get; set; }
+        public IEnumerable<Friend> friends { get; set; }
 
 
 
-        
     }
 }

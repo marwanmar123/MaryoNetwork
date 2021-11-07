@@ -30,13 +30,13 @@
         <div class="headerSide d-flex flex-row">
             @if (SignInManager.IsSignedIn(User))
             {
-                <partial name="_Navbar" />            
+                <partial name="_Navbar" />
             }
         </div>
         <div class="content p-3 pt-5">
             <nav class="navbar fixed-top navbar-expand-lg navbar-light">
                 <div class="container">
-                    
+
                     <a href="#" class="navbar-brand">MaryoNet</a>
                     <a href="/messenger" class="navbar-brand">Messenger</a>
 
@@ -64,6 +64,30 @@
             &copy; 2021 - MaryoNetwork - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script type="text/javascript">
+        function storePagePosition() {
+            var page_y = window.pageYOffset;
+            localStorage.setItem("page_y", page_y);
+        }
+
+
+        window.addEventListener("scroll", storePagePosition);
+
+
+        var currentPageY;
+
+        try {
+            currentPageY = localStorage.getItem("page_y");
+
+            if (currentPageY === undefined) {
+                localStorage.setItem("page_y") = 0;
+            }
+
+            window.scrollTo(0, currentPageY);
+        } catch (e) {
+            // no localStorage available
+        }
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

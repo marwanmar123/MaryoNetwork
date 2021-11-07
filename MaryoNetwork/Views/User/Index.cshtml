@@ -26,40 +26,71 @@
 }
 
 
-@foreach (var item in Model)
-{
-    <div class="pt-5">
-        <a class="d-flex" asp-action="Profile" asp-route-id="@item.Id">
-            <div class="p-1">
-                @if (item.ProfilePicture != null)
-                {
-                    if (isOnline == true)
+<div class="d-flex">
+    <div>
+        @foreach (var item in Model)
+        {
+        <div class="pt-5 d-flex">
+            <a class="d-flex" asp-action="Profile" asp-route-id="@item.Id">
+                <div class="p-1">
+                    @if (item.ProfilePicture != null)
                     {
-                        <img class="profile-actif" src="data:image/*;base64,@Convert.ToBase64String(item.ProfilePicture)">
+                        if (isOnline == true)
+                        {
+                            <img class="profile-actif" src="data:image/*;base64,@Convert.ToBase64String(item.ProfilePicture)">
+                        }
+                        else
+                        {
+                            <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(item.ProfilePicture)">
+
+                        }
                     }
                     else
                     {
-                        <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(item.ProfilePicture)">
+                        if (isOnline == true)
+                        {
+                            <p class="profile-actif">@item.FullName.Substring(0, 2).ToUpper()</p>
+
+                        }
+                        else
+                        {
+                            <p>@item.FullName.Substring(0, 2).ToUpper()</p>
+                        }
 
                     }
-                }
-                else
-                {
-                    if (isOnline == true)
-                    {
-                        <p class="profile-actif">@item.FullName.Substring(0, 2).ToUpper()</p>
-
-                    }
-                    else
-                    {
-                        <p>@item.FullName.Substring(0, 2).ToUpper()</p>
-                    }
-
-                }
-            </div>
-            <p class="p-1">
-                @Html.DisplayFor(modelItem => item.FullName)
-            </p>
-        </a>
+                </div>
+                <p class="p-1">
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </p>
+            </a>
+        </div>
+        }
     </div>
-}
+    <div>
+    <h3>Friends</h3>
+    @foreach (var item in Model)
+    {
+        <div class="d-flex flex-row justify-content-between">
+            <div>
+                @if (item.FriendRequestSent != null)
+                {
+                    @foreach (var friendSenders in item.FriendRequestSent)
+                    {
+                        <p>@friendSenders.Sender.FullName</p>
+                    }
+                }
+
+            </div>
+            <div>
+                @if (item.FriendRequestReceived != null)
+                {
+                    @foreach (var friendreceived in item.FriendRequestReceived)
+                    {
+                        <p>@friendreceived.Receiver.FullName</p>
+                    }
+                }
+
+            </div>
+        </div>
+    }
+</div>

@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211107162726_members")]
+    partial class members
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,7 +192,9 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupId")
+                        .IsUnique()
+                        .HasFilter("[GroupId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -628,8 +632,8 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Groups.GroupMembers", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.Groups.Group", "Group")
-                        .WithMany("Members")
-                        .HasForeignKey("GroupId");
+                        .WithOne("Members")
+                        .HasForeignKey("MaryoNetwork.Models.Groups.GroupMembers", "GroupId");
 
                     b.HasOne("MaryoNetwork.Models.User", "User")
                         .WithMany()

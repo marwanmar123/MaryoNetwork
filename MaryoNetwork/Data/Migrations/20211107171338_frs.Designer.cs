@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211107171338_frs")]
+    partial class frs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,6 +131,9 @@ namespace MaryoNetwork.Data.Migrations
                     b.Property<string>("SenderId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ReceiverId");
@@ -136,6 +141,8 @@ namespace MaryoNetwork.Data.Migrations
                     b.HasIndex("RequestStatusId");
 
                     b.HasIndex("SenderId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Friends");
                 });
@@ -609,6 +616,10 @@ namespace MaryoNetwork.Data.Migrations
                         .WithMany("FriendRequestSent")
                         .HasForeignKey("SenderId");
 
+                    b.HasOne("MaryoNetwork.Models.User", null)
+                        .WithMany("Friends")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Receiver");
 
                     b.Navigation("RequestStatus");
@@ -799,6 +810,8 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("FriendRequestReceived");
 
                     b.Navigation("FriendRequestSent");
+
+                    b.Navigation("Friends");
 
                     b.Navigation("Images");
 

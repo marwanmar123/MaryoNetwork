@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211106165905_collectionFriends")]
+    partial class collectionFriends
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,29 +91,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Editors");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Editors.Favorite", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("EditorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EditorId")
-                        .IsUnique()
-                        .HasFilter("[EditorId] IS NOT NULL");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.Friends.Friend", b =>
@@ -580,21 +559,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MaryoNetwork.Models.Editors.Favorite", b =>
-                {
-                    b.HasOne("MaryoNetwork.Models.Editors.Editor", "Editor")
-                        .WithOne("Favorite")
-                        .HasForeignKey("MaryoNetwork.Models.Editors.Favorite", "EditorId");
-
-                    b.HasOne("MaryoNetwork.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Editor");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("MaryoNetwork.Models.Friends.Friend", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.User", "Receiver")
@@ -766,11 +730,6 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Categories.Category", b =>
                 {
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Editors.Editor", b =>
-                {
-                    b.Navigation("Favorite");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.Groups.Group", b =>

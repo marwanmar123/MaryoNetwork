@@ -19,15 +19,15 @@ namespace MaryoNetwork.Controllers
     [ApiController]
     public class RoomsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public RoomsController(ApplicationDbContext context,
+        public RoomsController(ApplicationDbContext db,
             IMapper mapper,
             IHubContext<ChatHub> hubContext)
         {
-            _context = context;
+            _db = db;
             _mapper = mapper;
             _hubContext = hubContext;
         }
@@ -35,7 +35,7 @@ namespace MaryoNetwork.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RoomViewModel>>> Get()
         {
-            var rooms = await _context.Rooms.ToListAsync();
+            var rooms = await _db.Rooms.ToListAsync();
 
             var roomsViewModel = _mapper.Map<IEnumerable<Room>, IEnumerable<RoomViewModel>>(rooms);
 
@@ -45,7 +45,7 @@ namespace MaryoNetwork.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Room>> Get(string id)
         {
-            var room = await _context.Rooms.FindAsync(id);
+            var room = await _db.Rooms.FindAsync(id);
             if (room == null)
                 return NotFound();
 
@@ -56,18 +56,18 @@ namespace MaryoNetwork.Controllers
         [HttpPost]
         public async Task<ActionResult<Room>> Create(RoomViewModel roomViewModel)
         {
-            if (_context.Rooms.Any(r => r.Name == roomViewModel.Name))
+            if (_db.Rooms.Any(r => r.Name == roomViewModel.Name))
                 return BadRequest("Invalid room name or room already exists");
 
-            var user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var user = _db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var room = new Room()
             {
                 Name = roomViewModel.Name,
                 Admin = user
             };
 
-            _context.Rooms.Add(room);
-            await _context.SaveChangesAsync();
+            _db.Rooms.Add(room);
+            await _db.SaveChangesAsync();
 
             await _hubContext.Clients.All.SendAsync("addChatRoom", new { id = room.Id, name = room.Name });
 
@@ -77,10 +77,10 @@ namespace MaryoNetwork.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(string id, RoomViewModel roomViewModel)
         {
-            if (_context.Rooms.Any(r => r.Name == roomViewModel.Name))
+            if (_db.Rooms.Any(r => r.Name == roomViewModel.Name))
                 return BadRequest("Invalid room name or room already exists");
 
-            var room = await _context.Rooms
+            var room = await _db.Rooms
                 .Include(r => r.Admin)
                 .Where(r => r.Id == id && r.Admin.UserName == User.Identity.Name)
                 .FirstOrDefaultAsync();
@@ -89,7 +89,7 @@ namespace MaryoNetwork.Controllers
                 return NotFound();
 
             room.Name = roomViewModel.Name;
-            await _context.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
             await _hubContext.Clients.All.SendAsync("updateChatRoom", new { id = room.Id, room.Name });
 
@@ -99,7 +99,7 @@ namespace MaryoNetwork.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var room = await _context.Rooms
+            var room = await _db.Rooms
                 .Include(r => r.Admin)
                 .Where(r => r.Id == id && r.Admin.UserName == User.Identity.Name)
                 .FirstOrDefaultAsync();
@@ -107,8 +107,8 @@ namespace MaryoNetwork.Controllers
             if (room == null)
                 return NotFound();
 
-            _context.Rooms.Remove(room);
-            await _context.SaveChangesAsync();
+            _db.Rooms.Remove(room);
+            await _db.SaveChangesAsync();
 
             await _hubContext.Clients.All.SendAsync("removeChatRoom", room.Id);
             await _hubContext.Clients.Group(room.Name).SendAsync("onRoomDeleted", string.Format("Room {0} has been deleted.\nYou are moved to the first available room!", room.Name));

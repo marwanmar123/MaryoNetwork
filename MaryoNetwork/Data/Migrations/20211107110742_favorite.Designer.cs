@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211107110742_favorite")]
+    partial class favorite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,9 +107,7 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EditorId")
-                        .IsUnique()
-                        .HasFilter("[EditorId] IS NOT NULL");
+                    b.HasIndex("EditorId");
 
                     b.HasIndex("UserId");
 
@@ -583,8 +583,8 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Editors.Favorite", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.Editors.Editor", "Editor")
-                        .WithOne("Favorite")
-                        .HasForeignKey("MaryoNetwork.Models.Editors.Favorite", "EditorId");
+                        .WithMany()
+                        .HasForeignKey("EditorId");
 
                     b.HasOne("MaryoNetwork.Models.User", "User")
                         .WithMany()
@@ -766,11 +766,6 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Categories.Category", b =>
                 {
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("MaryoNetwork.Models.Editors.Editor", b =>
-                {
-                    b.Navigation("Favorite");
                 });
 
             modelBuilder.Entity("MaryoNetwork.Models.Groups.Group", b =>

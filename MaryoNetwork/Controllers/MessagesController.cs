@@ -20,15 +20,15 @@ namespace MaryoNetwork.Controllers
     [ApiController]
     public class MessagesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public MessagesController(ApplicationDbContext context,
+        public MessagesController(ApplicationDbContext db,
             IMapper mapper,
             IHubContext<ChatHub> hubContext)
         {
-            _context = context;
+            _db = db;
             _mapper = mapper;
             _hubContext = hubContext;
         }
@@ -36,7 +36,7 @@ namespace MaryoNetwork.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Room>> Get(string id)
         {
-            var message = await _context.Messages.FindAsync(id);
+            var message = await _db.Messages.FindAsync(id);
             if (message == null)
                 return NotFound();
 
@@ -47,11 +47,11 @@ namespace MaryoNetwork.Controllers
         [HttpGet("Room/{roomName}")]
         public IActionResult GetMessages(string roomName)
         {
-            var room = _context.Rooms.FirstOrDefault(r => r.Name == roomName);
+            var room = _db.Rooms.FirstOrDefault(r => r.Name == roomName);
             if (room == null)
                 return BadRequest();
 
-            var messages = _context.Messages.Where(m => m.ToRoomId == room.Id)
+            var messages = _db.Messages.Where(m => m.ToRoomId == room.Id)
                 .Include(m => m.FromUser)
                 .Include(m => m.ToRoom)
                 .OrderByDescending(m => m.Timestamp)
@@ -68,8 +68,8 @@ namespace MaryoNetwork.Controllers
         [HttpPost]
         public async Task<ActionResult<Message>> Create(MessageViewModel messageViewModel)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            var room = _context.Rooms.FirstOrDefault(r => r.Name == messageViewModel.Room);
+            var user = _db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var room = _db.Rooms.FirstOrDefault(r => r.Name == messageViewModel.Room);
             if (room == null)
                 return BadRequest();
 
@@ -81,8 +81,8 @@ namespace MaryoNetwork.Controllers
                 Timestamp = DateTime.Now
             };
 
-            _context.Messages.Add(msg);
-            await _context.SaveChangesAsync();
+            _db.Messages.Add(msg);
+            await _db.SaveChangesAsync();
 
             // Broadcast the message
             var createdMessage = _mapper.Map<Message, MessageViewModel>(msg);
@@ -94,7 +94,7 @@ namespace MaryoNetwork.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var message = await _context.Messages
+            var message = await _db.Messages
                 .Include(u => u.FromUser)
                 .Where(m => m.Id == id && m.FromUser.UserName == User.Identity.Name)
                 .FirstOrDefaultAsync();
@@ -102,8 +102,8 @@ namespace MaryoNetwork.Controllers
             if (message == null)
                 return NotFound();
 
-            _context.Messages.Remove(message);
-            await _context.SaveChangesAsync();
+            _db.Messages.Remove(message);
+            await _db.SaveChangesAsync();
 
             return NoContent();
         }

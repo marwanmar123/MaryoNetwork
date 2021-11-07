@@ -29,7 +29,12 @@ namespace MaryoNetwork.Controllers
         public IActionResult Index()
         {
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View(_db.Users.Where(a=>a.Id != currentUser).ToList());
+            var usersList = _db.Users
+                .Where(a => a.Id != currentUser )
+                .Include(a=>a.FriendRequestSent)
+                .Include(a=>a.FriendRequestReceived)
+                .ToList();
+            return View(usersList);
         }
 
         public async Task<IActionResult> Profile(User user, string id)
@@ -40,7 +45,14 @@ namespace MaryoNetwork.Controllers
             }
             var data = new ProfileViewModel
             {
-                Users = await _db.Users.Include(p => p.Images).Include(p => p.Posts.Where(p => p.UserId == user.Id)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync(),
+                Users = await _db.Users
+                .Include(p => p.Images)
+                .Include(p => p.Posts
+                .Where(p => p.UserId == user.Id))
+                .ThenInclude(p => p.Comments)
+                .Include(a => a.Posts)
+                .ThenInclude(x => x.Category)
+                .ToListAsync(),
                 User = _db.Users.FirstOrDefault(a => a.Id == id)
             };
 
@@ -116,6 +128,7 @@ namespace MaryoNetwork.Controllers
 
         public async Task<IActionResult> Addfriend(Friend friend)
         {
+            
             var CurrentuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var addFriend = new Friend()
@@ -127,10 +140,9 @@ namespace MaryoNetwork.Controllers
             _db.Add(addFriend);
             
             await _db.SaveChangesAsync();
-
             return RedirectToAction("profile", "User", new { id = friend.ReceiverId });
         }
-
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -147,5 +159,7 @@ namespace MaryoNetwork.Controllers
             return Redirect("/Identity/Account/Manage");
 
         }
+
+       
     }
 }

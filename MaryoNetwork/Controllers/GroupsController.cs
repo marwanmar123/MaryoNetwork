@@ -21,13 +21,16 @@ namespace MaryoNetwork.Controllers
         {
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string id)
         {
-            var applicationDbContext = _db.Groups.Include(a => a.User);
+            var applicationDbContext = _db.Groups.Include(a=>a.Members).Include(a => a.User);
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> Details(string id)
         {
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isFollower = _db.GroupMembers.SingleOrDefault(a => a.UserId == currentUser && a.GroupId == id);
+            ViewBag.isfollow = isFollower;
             if (id == null)
             {
                 return NotFound();
@@ -86,6 +89,17 @@ namespace MaryoNetwork.Controllers
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
             await _db.AddAsync(addFollow);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Quitter(string id)
+        {
+            var favId = _db.GroupMembers.Include(a=>a.Group).FirstOrDefault(a => a.Id == id);
+            _db.Remove(favId);
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

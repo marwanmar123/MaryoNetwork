@@ -6,17 +6,13 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Models.Editors
 {
-    public class Editor
+    public class Favorite
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
-        public string Title { get; set; }
-        public byte[] Image { get; set; }
-        public string Html { get; set; }
-        public string Css { get; set; }
-        public string Js { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public Favorite Favorite { get; set; }
+        public string EditorId { get; set; }
+        public Editor Editor { get; set; }
     }
 }

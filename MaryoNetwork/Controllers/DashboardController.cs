@@ -64,10 +64,14 @@ namespace MaryoNetwork.Controllers
         public ActionResult DeletePost(string id)
         {
             
-            var resId = _db.Posts.Include(a=>a.Comments).Include(a=>a.Images).FirstOrDefault(a=>a.Id== id);
+            var resId = _db.Posts.Include(a=>a.Comments).Include(a=>a.Likes).Include(a=>a.Images).FirstOrDefault(a=>a.Id== id);
             foreach(var a in resId.Comments)
             {
                 _db.Remove(a);
+            }
+            foreach (var l in resId.Likes)
+            {
+                _db.Remove(l);
             }
             foreach (var m in resId.Images)
             {

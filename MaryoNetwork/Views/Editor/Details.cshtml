@@ -27,6 +27,21 @@
     </div>
     <div>
         <a asp-action="Index">Back to List</a>
+        @if(ViewBag.exist == null)
+            {
+    <form method="post" asp-controller="Editor" asp-action="Favorites">
+        <input type="hidden" name="editorId" value="@Model.Id" />
+        <button type="submit" class="btn btn-xs btn-primary">add favorite</button>>
+    </form>
+            }
+            else
+            {
+    <form style="display:inline;" method="post" asp-action="DeleteFavorite">
+        <input type="hidden" name="Id" value="@Model.Favorite.Id" />
+        <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+    </form>
+            }
+        
     </div>
     <script src="~/js/site.js"></script>
     <script type="text/javascript">

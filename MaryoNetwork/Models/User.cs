@@ -7,6 +7,7 @@ using MaryoNetwork.Models.Posts;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,5 +26,7 @@ namespace MaryoNetwork.Models
         public ICollection<Like> Likes { get; set; }
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Message> Messages { get; set; }
+        public ICollection<Friend> FriendRequestSent { get; set; }
+        public ICollection<Friend> FriendRequestReceived { get; set; }
     }
 }
