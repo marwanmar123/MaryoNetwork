@@ -60,6 +60,7 @@ namespace MaryoNetwork.Controllers
             var createGroup = new Group
             {
                 Name = group.Name,
+                Description = group.Description,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
 

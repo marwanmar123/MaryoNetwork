@@ -133,5 +133,27 @@ namespace MaryoNetwork.Controllers
             return RedirectToAction("Editor", "Dashboard", new { id = post.CategoryId });
 
         }
+
+        public async Task<IActionResult> groups()
+        {
+            var applicationDbContext = _db.Groups.Include(a => a.Members).Include(a => a.User);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteGroup(string id)
+        {
+
+            var resId = _db.Groups.Include(a => a.Members).FirstOrDefault(a => a.Id == id);
+            foreach (var a in resId.Members)
+            {
+                _db.Remove(a);
+            }
+            _db.Remove(resId);
+           await _db.SaveChangesAsync();
+            return RedirectToAction("Groups", "Dashboard");
+
+        }
     }
 }
