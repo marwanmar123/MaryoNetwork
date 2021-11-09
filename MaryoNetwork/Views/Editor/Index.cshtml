@@ -10,7 +10,11 @@
     <a asp-controller="Editor" asp-action="Create">Create New</a>
 </p>
 
-
+<form asp-controller="Editor" asp-action="Index">
+    <input type="text" name="search" />
+    <button class="btn btn-primary" id="searchBtn">search</button>
+    <a class="btn btn-primary" id="searchBtn" asp-action="Index">*</a>
+</form>
 <div class="d-flex flex-wrap justify-content-center">
     @foreach (var item in Model)
      {

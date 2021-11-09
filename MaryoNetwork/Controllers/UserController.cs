@@ -26,15 +26,28 @@ namespace MaryoNetwork.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Index(string search = null)
         {
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var usersList = _db.Users
-                .Where(a => a.Id != currentUser )
-                .Include(a=>a.FriendRequestSent)
-                .Include(a=>a.FriendRequestReceived)
-                .ToList();
-            return View(usersList);
+            IEnumerable<User> users;
+            if (!string.IsNullOrEmpty(search))
+            {
+                users = _db.Users.Include(a => a.FriendRequestSent)
+                .Include(a => a.FriendRequestReceived).Where(s => s.FullName.ToLower().Contains(search.ToLower()) && s.Id != currentUser);
+            }
+            else
+            {
+                users = _db.Users
+                .Where(a => a.Id != currentUser)
+                .Include(a => a.FriendRequestSent)
+                .Include(a => a.FriendRequestReceived).ToList();
+            }
+            //var usersList = _db.Users
+            //    .Where(a => a.Id != currentUser )
+            //    .Include(a=>a.FriendRequestSent)
+            //    .Include(a=>a.FriendRequestReceived)
+            //    .ToList();
+            return View(users);
         }
 
         public async Task<IActionResult> Profile(User user, string id)

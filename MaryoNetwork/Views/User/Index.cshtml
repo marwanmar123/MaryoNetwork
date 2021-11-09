@@ -24,7 +24,11 @@
 
     }
 }
-
+<form asp-controller="User" asp-action="Index">
+    <input type="text" name="search" />
+    <button class="btn btn-primary" id="searchBtn">search</button>
+    <a class="btn btn-primary" id="searchBtn" asp-action="Index">*</a>
+</form>
 
 <div class="d-flex">
     <div>
@@ -93,4 +97,5 @@
             </div>
         </div>
     }
+    </div>
 </div>

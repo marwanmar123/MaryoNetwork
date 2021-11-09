@@ -28,6 +28,11 @@
 
 <h1>Index</h1>
 
+<form asp-controller="Groups" asp-action="Index">
+    <input type="text" name="search" />
+    <button class="btn btn-primary" id="searchBtn">search</button>
+    <a class="btn btn-primary" id="searchBtn" asp-action="Index">*</a>
+</form>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -52,48 +57,48 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <img class="w-25 h-25" src="data:image/*;base64,@Convert.ToBase64String(item.Image)">
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
-            <td>
-                @if (item.Members.SingleOrDefault(a => a.GroupId == item.Id && a.UserId == id) == null)
-                {
-                    <form method="post" asp-controller="Groups" asp-action="Follow">
-                        <input type="hidden" name="GroupId" value="@item.Id" />
-                        <button type="submit" class="btn btn-xs btn-primary">Follow</button>
-                    </form>
-                }
-                else
-                {
-                    @foreach (var member in item.Members)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <img class="w-25 h-25" src="data:image/*;base64,@Convert.ToBase64String(item.Image)">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    @if (item.Members.SingleOrDefault(a => a.GroupId == item.Id && a.UserId == id) == null)
                     {
-                        <form method="post" asp-controller="Groups" asp-action="Quitter">
-                            <input type="hidden" name="Id" value="@member.Id" />
-                            <button type="submit" class="btn btn-xs btn-danger">Quiiter le groupe</button>
+                        <form method="post" asp-controller="Groups" asp-action="Follow">
+                            <input type="hidden" name="GroupId" value="@item.Id" />
+                            <button type="submit" class="btn btn-xs btn-primary">Follow</button>
                         </form>
                     }
-                }
+                    else
+                    {
+                        @foreach (var member in item.Members)
+                        {
+                            <form method="post" asp-controller="Groups" asp-action="Quitter">
+                                <input type="hidden" name="Id" value="@member.Id" />
+                                <button type="submit" class="btn btn-xs btn-danger">Quiiter le groupe</button>
+                            </form>
+                        }
+                    }
 
 
 
-            </td>
+                </td>
 
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-            </td>
-        </tr>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                </td>
+            </tr>
         }
     </tbody>
 </table>

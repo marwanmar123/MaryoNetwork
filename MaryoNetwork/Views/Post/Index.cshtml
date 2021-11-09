@@ -28,7 +28,11 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
-
+<form asp-controller="Post" asp-action="Index">
+    <input type="text" name="search" />
+    <button class="btn btn-primary" id="searchBtn">search</button>
+    <a class="btn btn-primary" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">*</a>
+</form>
 
 
 <form asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
@@ -38,11 +42,6 @@
     <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
     <button type="submit" class="btn btn-xs btn-primary">Submit</button>
 </form>
-<!--<form method="post" enctype="multipart/form-data">
-    <input type="file" name="files" multiple required />-->
-@*<button type="submit" class="btn btn-primary" asp-controller="File" asp-action="UploadToFileSystem">Upload to File System</button>*@
-<!--<button class="btn btn-success" type="submit" asp-controller="Post" asp-action="UploadToDatabase">Upload to Database</button>
-</form>-->
 
 <table class="table text-center">
     <thead>
@@ -54,7 +53,6 @@
             <td>image</td>
             <td>Comment</td>
             <td>Like</td>
-            @*<td>ProfilePicture</td>*@
         </tr>
     </thead>
     <tbody>
@@ -109,7 +107,6 @@
                         </div>
                     }
                     <p>(@item.Comments.Count())</p>
-                    @*<p>@item.Likes.Count()</p>*@
 
                 </td>
                 <td>
@@ -117,23 +114,8 @@
                         <input type="hidden" name="PostId" value="@item.Id" />
                         <button type="submit" class="btn btn-xs btn-primary">like</button>
                     </form>
-                    <p> like= @ViewBag.likeCount</p>
-                    @*@foreach(var l in item.Likes)
-                        {
-                        }*@
-                    @*@if(item.Likes.Where(l=>l.PostId == item.Id).Count() != 0)
-                        {
-                            <p>@item.Likes.Count()</p>
-                        }
-                        else
-                        {
-                            <p> 0 like</p>
-                        }*@
-                    @*<p>like id = @ViewBag.count</p>*@
+                    @item.Likes.Count()
                 </td>
-                @*<td>
-
-                    </td>*@
             </tr>
 
         }

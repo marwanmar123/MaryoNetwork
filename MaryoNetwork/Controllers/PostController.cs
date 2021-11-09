@@ -46,17 +46,39 @@ namespace MaryoNetwork.Controllers
 
         [Route("Post/cat/{id?}")]
         [Authorize]
-        public IActionResult Index(string id)
+        public IActionResult Index(string id, string search = null)
         {
-            var list = _db.Posts
-                .Include(i=>i.Images)
-                .Include(c => c.Comments
-                .Where(c=>c.PostId == c.Post.Id))
+            IEnumerable<Post> posts;
+            if (!string.IsNullOrEmpty(search))
+            {
+                posts = _db.Posts.Include(u => u.User).Include(i => i.Images)
+                .Include(c => c.Comments)
+                .Include(l => l.Likes).Where(s => s.Content.ToLower().Contains(search.ToLower()))
+                .Include(i => i.Images)
+                .Include(c => c.Comments)
+                .Include(l => l.Likes);
+
+            }
+            else
+            {
+                posts = _db.Posts
+                .Include(i => i.Images)
+                .Include(c => c.Comments)
+                .Include(l => l.Likes)
                 .Include(u => u.User)
                 .Where(x => x.CategoryId == id && x.Approved == true)
                 .OrderByDescending(y => y.CreatedOn)
                 .ToList();
-            return View(list);
+            }
+            //var list = _db.Posts
+            //    .Include(i=>i.Images)
+            //    .Include(c => c.Comments)
+            //    .Include(l=>l.Likes)
+            //    .Include(u => u.User)
+            //    .Where(x => x.CategoryId == id && x.Approved == true)
+            //    .OrderByDescending(y => y.CreatedOn)
+            //    .ToList();
+            return View(posts);
         }
 
         public IActionResult Privacy()

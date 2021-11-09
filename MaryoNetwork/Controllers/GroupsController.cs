@@ -21,10 +21,19 @@ namespace MaryoNetwork.Controllers
         {
             _db = db;
         }
-        public async Task<IActionResult> Index(string id)
+        public IActionResult Index(string search = null)
         {
-            var applicationDbContext = _db.Groups.Include(a=>a.Members).Include(a => a.User);
-            return View(await applicationDbContext.ToListAsync());
+            IEnumerable<Group> groups;
+            if (!string.IsNullOrEmpty(search))
+            {
+                groups = _db.Groups.Include(e => e.Members).Include(a => a.User).Where(s => s.Name.ToLower().Contains(search.ToLower()));
+            }
+            else
+            {
+                groups = _db.Groups.Include(a => a.Members).Include(a => a.User);
+            }
+                //var applicationDbContext = _db.Groups.Include(a=>a.Members).Include(a => a.User);
+            return View(groups);
         }
         public async Task<IActionResult> Details(string id)
         {

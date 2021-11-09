@@ -20,10 +20,19 @@ namespace MaryoNetwork.Controllers
         {
             _db = db;
         }
-        public IActionResult Index()
+        public IActionResult Index(string search = null)
         {
-            var components = _db.Editors.Include(e=>e.User).ToList();
-            return View(components);
+            IEnumerable<Editor> editors;
+            if (!string.IsNullOrEmpty(search))
+            {
+                editors = _db.Editors.Include(e => e.User).Where(s => s.Title.ToLower().Contains(search.ToLower()));
+            }
+            else
+            {
+                editors = _db.Editors.Include(e => e.User).ToList();
+            }
+                //var components = _db.Editors.Include(e=>e.User).ToList();
+            return View(editors);
         }
         public async Task<IActionResult> Details(string id, Favorite favorite)
         {
