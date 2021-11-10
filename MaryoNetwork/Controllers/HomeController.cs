@@ -1,8 +1,10 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models;
 using MaryoNetwork.Models.Categories;
+using MaryoNetwork.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -25,8 +28,12 @@ namespace MaryoNetwork.Controllers
         //[Authorize]
         public IActionResult Index()
         {
-
-            return View(_db.Categories.ToList());
+            var homeData = new HomeViewModel()
+            {
+                Category = _db.Categories.ToList(),
+                Post = _db.Posts.Include(a => a.User).Include(a => a.Comments).Include(a => a.Likes).Include(a => a.Images).ToList()
+            };
+            return View(homeData);
         }
 
         public IActionResult Privacy()

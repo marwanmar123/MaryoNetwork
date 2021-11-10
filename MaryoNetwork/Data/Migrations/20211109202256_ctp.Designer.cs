@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211109202256_ctp")]
+    partial class ctp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,7 +339,9 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .IsUnique()
+                        .HasFilter("[CategoryId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -703,8 +707,8 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Posts.Post", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.Categories.Category", "Category")
-                        .WithMany("Post")
-                        .HasForeignKey("CategoryId");
+                        .WithOne("Post")
+                        .HasForeignKey("MaryoNetwork.Models.Posts.Post", "CategoryId");
 
                     b.HasOne("MaryoNetwork.Models.User", "User")
                         .WithMany("Posts")

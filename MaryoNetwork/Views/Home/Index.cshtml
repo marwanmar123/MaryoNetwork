@@ -1,4 +1,4 @@
-﻿@model List<MaryoNetwork.Models.Categories.Category>
+﻿@model MaryoNetwork.ViewModels.HomeViewModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
@@ -28,37 +28,140 @@
 }
 
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+
+<div class="wrapper center-block">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading active" role="tab" id="headingOne">
+                <h4 class="panel-title sidebar-dropdown">
+                    <a role="button" data-toggle="collapse" class="nav-link text-light border rounded-pill" data-parent="#accordion" href="#collapseOne" aria-expanded="true">
+                        Rooms Categories
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="main-part p-3">
+                        @foreach (var category in Model.Category)
+                        {
+                            <div class="cpanel">
+                                <div class="icon-part">
+                                    <i class="fa fa-users" aria-hidden="true"></i><br>
+                                    <h3>@category.Name</h3>
+                                </div>
+                                <div class="card-content-part">
+                                    <a asp-controller="Post" asp-action="Index" asp-route-id="@category.Id" class="m-xl-2">More Details </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 
 
-<section id="featured-services" class="featured-services">
-    <div class="container" data-aos="fade-up">
-        <div class="row">
-            @foreach (var item in Model)
+<div class="container mt-5 mb-5">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-md-6">
+            @foreach (var post in Model.Post)
             {
-                <a asp-controller="Post" asp-action="Index" asp-route-id="@item.Id" class="m-xl-2">
-                    @item.Name
-                    <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                        <div class="icon-box" style="width:100%;" data-aos="fade-up" data-aos-delay="100">
-                            <div class="icon"><i class="icofont-heart-beat"></i></div>
+                <div class="card">
+                    <div class="d-flex justify-content-between p-2 px-3">
+                        <div class="d-flex flex-row align-items-center">
+                            @if (post.User.ProfilePicture != null)
+                            {
+                                <img class="rounded-circle" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
+                            }
+                            else
+                            {
+                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@post.User.FullName.Substring(0, 2).ToUpper()</p>
+                            }
+                            <div class="d-flex flex-column ml-2">
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold">@post.User.FullName</a>
+                                @*@if (post.User.In)
+                                {
+                                    <small class="text-primary">Admin</small>
+                                }
+                                else
+                                {
+                                    <small class="text-primary">User</small>
+                                }*@
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">@post.CreatedOn</small> <i class="fa fa-ellipsis-h"></i> </div>
+                    </div>
+                    <div>
+                        <p class="text-justify">@post.Content</p>
+                    </div>
+                    <img src="https://i.imgur.com/xhzhaGA.jpg" class="img-fluid">
+                    <div class="p-2">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row align-items-center muted-color">
+                                <img src="~/image/like.png" />
+                                <span>@post.Likes.Count()</span>
+                            </div>
+                            <div class="d-flex flex-row muted-color">
+                                <a asp-controller="Post" asp-action="Index" asp-route-id="@post.CategoryId">@post.Category.Name</a>
+                            </div>
+                            <div class="d-flex flex-row muted-color">
+                                <img src="~/image/comment.png" />
+                                <span>@post.Comments.Count() comments</span>
+                            </div>
+                        </div>
+                        @*<hr>*@
+                        @*<div class="comment-input">
+                                <input type="text" class="form-control" placeholder="Write a comment...">
+                                <div class="fonts"> <i class="fa fa-camera"></i> </div>
+                            </div>*@
+                        <hr>
+                        <div class="comments">
+                            @foreach (var i in post.Comments)
+                            {
+                                <div class="d-flex flex-row mb-2">
+                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId">
+                                        @if (i.User.ProfilePicture != null)
+                                        {
+                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
+                                        }
+                                        else
+                                        {
+                                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
+                                        }
+                                    </a>
+                                    <div class="d-flex flex-column ml-2">
+                                        <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="name">@i.User.FullName</a> <small class="comment-text">@i.Content</small>
+                                        <div class="d-flex align-items-center muted-color"> <small>@i.CreatedOn</small></div>
+                                    </div>
+                                </div>
+                            }
 
                         </div>
                     </div>
-                </a>
+                </div>
+                <hr>
             }
         </div>
-
     </div>
+</div>
 
 
 
-</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
 
+<script>
+    $('#emoji').emojioneArea({
+        pickerPosition: 'bottom'
+    })
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

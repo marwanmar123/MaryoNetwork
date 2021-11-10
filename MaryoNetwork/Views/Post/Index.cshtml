@@ -28,6 +28,8 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
+
+
 <form asp-controller="Post" asp-action="Index">
     <input type="text" name="search" />
     <button class="btn btn-primary" id="searchBtn">search</button>
@@ -38,7 +40,7 @@
 <form asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
     <input type="text" name="Title" />
     <input type="file" name="files" multiple required />
-    <input type="text" name="Content" id="emoji" class="w-25"/>
+    <input type="text" name="Content" id="emoji" class="w-25" />
     <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
     <button type="submit" class="btn btn-xs btn-primary">Submit</button>
 </form>
@@ -58,6 +60,7 @@
     <tbody>
         @foreach (var item in Model)
         {
+
             <tr>
                 <td>
 
@@ -116,6 +119,7 @@
                     </form>
                     @item.Likes.Count()
                 </td>
+
             </tr>
 
         }

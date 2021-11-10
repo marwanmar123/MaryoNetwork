@@ -30,7 +30,7 @@ form {
         padding: 10px;
         background-color: #262727;
         color: #a5a0a0;
-        font-family: inherit;
+        font-family: "Courier 10 Pitch",Courier,monospace;
     }
 
 .preview-area {

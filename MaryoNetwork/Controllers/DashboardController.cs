@@ -39,8 +39,8 @@ namespace MaryoNetwork.Controllers
             Category ctgr = _db.Categories.Find(id);
             var list = _db.Posts
                 .Include(u=> u.Images)
-                .Include(c => c.Comments
-                .Where(c => c.PostId == c.Post.Id))
+                .Include(c => c.Comments)
+                .Include(c => c.Likes)
                 .Include(u => u.User)
                 .Where(x => x.CategoryId == id)
                 .OrderByDescending(y => y.CreatedOn)

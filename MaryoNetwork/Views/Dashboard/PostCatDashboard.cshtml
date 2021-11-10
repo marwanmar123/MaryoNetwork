@@ -31,6 +31,7 @@
                 <td>image</td>
                 <td>Comment</td>
                 <td>Like</td>
+                <td>Category</td>
             </tr>
         </thead>
         <tbody>
@@ -89,8 +90,8 @@
                                 </form>
                             </div>
                         }
-                        <p>(@item.Comments.Count())</p>
-                        @*<p>@item.Likes.Count()</p>*@
+                        <p>( comments : @item.Comments.Count())</p>
+                        <p>( likes : @item.Likes.Count())</p>
 
                     </td>
 
@@ -115,6 +116,9 @@
                             <input type="hidden" name="Id" value="@item.Id" />
                             <button type="submit" class="btn btn-xs btn-danger">Delete</button>
                         </form>
+                    </td>
+                    <td>
+                        <p>@item.Category.Name</p>
                     </td>
 
                 </tr>
