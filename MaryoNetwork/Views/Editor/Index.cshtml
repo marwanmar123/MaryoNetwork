@@ -18,7 +18,7 @@
 <div class="d-flex flex-wrap justify-content-center">
     @foreach (var item in Model)
      {
-        <div class="card w-25 bg-dark m-4">
+        <div class="cardEditor bg-dark m-4">
             @if (item.Image != null)
             {
 
@@ -28,7 +28,7 @@
             {
                 <img class="img img-responsive" src="">
             }
-            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary showAlert">code</a>
+            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary showAlert w-100">code</a>
             <div class="card-body">
                 <h5 class="card-title">@item.Title</h5>
                 <a class="d-flex" asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">

@@ -31,6 +31,7 @@
 
 
 
+
 <div class="wrapper center-block">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default">
@@ -71,82 +72,92 @@
         <div class="col-md-6">
             @foreach (var post in Model.Post)
             {
-                <div class="card">
-                    <div class="d-flex justify-content-between p-2 px-3">
-                        <div class="d-flex flex-row align-items-center">
-                            @if (post.User.ProfilePicture != null)
-                            {
-                                <img class="rounded-circle" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
-                            }
-                            else
-                            {
-                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@post.User.FullName.Substring(0, 2).ToUpper()</p>
-                            }
-                            <div class="d-flex flex-column ml-2">
-                                <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold">@post.User.FullName</a>
-                                @*@if (post.User.In)
-                                {
-                                    <small class="text-primary">Admin</small>
-                                }
-                                else
-                                {
-                                    <small class="text-primary">User</small>
-                                }*@
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">@post.CreatedOn</small> <i class="fa fa-ellipsis-h"></i> </div>
-                    </div>
-                    <div>
-                        <p class="text-justify">@post.Content</p>
-                    </div>
-                    <img src="https://i.imgur.com/xhzhaGA.jpg" class="img-fluid">
-                    <div class="p-2">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex flex-row align-items-center muted-color">
-                                <img src="~/image/like.png" />
-                                <span>@post.Likes.Count()</span>
-                            </div>
-                            <div class="d-flex flex-row muted-color">
-                                <a asp-controller="Post" asp-action="Index" asp-route-id="@post.CategoryId">@post.Category.Name</a>
-                            </div>
-                            <div class="d-flex flex-row muted-color">
-                                <img src="~/image/comment.png" />
-                                <span>@post.Comments.Count() comments</span>
-                            </div>
-                        </div>
-                        @*<hr>*@
-                        @*<div class="comment-input">
-                                <input type="text" class="form-control" placeholder="Write a comment...">
-                                <div class="fonts"> <i class="fa fa-camera"></i> </div>
-                            </div>*@
-                        <hr>
-                        <div class="comments">
-                            @foreach (var i in post.Comments)
-                            {
-                                <div class="d-flex flex-row mb-2">
-                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId">
-                                        @if (i.User.ProfilePicture != null)
-                                        {
-                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
-                                        }
-                                        else
-                                        {
-                                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
-                                        }
-                                    </a>
-                                    <div class="d-flex flex-column ml-2">
-                                        <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="name">@i.User.FullName</a> <small class="comment-text">@i.Content</small>
-                                        <div class="d-flex align-items-center muted-color"> <small>@i.CreatedOn</small></div>
-                                    </div>
-                                </div>
-                            }
-
+            <div class="card pb-2">
+                <div class="d-flex justify-content-between p-2 px-3">
+                    <div class="d-flex flex-row align-items-center">
+                        @if (post.User.ProfilePicture != null)
+                        {
+                            <img class="rounded-circle" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
+                        }
+                        else
+                        {
+                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@post.User.FullName.Substring(0, 2).ToUpper()</p>
+                        }
+                        <div class="d-flex flex-column ml-2">
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold text-light">@post.User.FullName</a>
+                            <small class="mr-2 muted-color">@post.CreatedOn</small>
                         </div>
                     </div>
                 </div>
-                <hr>
+                <div>
+                    <p class="text-justify">@post.Content</p>
+                </div>
+                <p>@post.Images.Count</p>
+                <div class="contentImg">
+                    @if (post.Images.Count == 1)
+                    {
+                        @foreach (var f in post.Images)
+                        {
+                            <img class="w-100" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                        }
+
+
+
+                    }
+                    else
+                    {
+                        @foreach (var f in post.Images)
+                        {
+                            <img class="imgPost" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                        }
+                    }
+
+                </div>
+                <div class="p-2">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-row align-items-center muted-color">
+                            <img src="~/image/like.png" />
+                            <span>@post.Likes.Count()</span>
+                        </div>
+                        <div class="d-flex flex-row muted-color">
+                            <a asp-controller="Post" asp-action="Index" asp-route-id="@post.CategoryId">@post.Category.Name</a>
+                        </div>
+                        <div class="d-flex flex-row muted-color">
+                            <img src="~/image/comment.png" />
+                            <span>@post.Comments.Count() comments</span>
+                        </div>
+                    </div>
+                    @*<hr>*@
+                    @*<div class="comment-input">
+                <input type="text" class="form-control" placeholder="Write a comment...">
+                <div class="fonts"> <i class="fa fa-camera"></i> </div>
+            </div>*@
+                    <hr style="background-color: rgb(58, 46, 224);">
+                    <div class="comments">
+                        @foreach (var i in post.Comments)
+                        {
+                            <div class="d-flex flex-row mb-2">
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId">
+                                    @if (i.User.ProfilePicture != null)
+                                    {
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
+                                    }
+                                    else
+                                    {
+                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
+                                    }
+                                </a>
+                                <div class="d-flex flex-column ml-2">
+                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="name">@i.User.FullName</a> <small class="comment-text">@i.Content</small>
+                                    <div class="d-flex align-items-center muted-color"> <small>@i.CreatedOn</small></div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
             }
         </div>
     </div>
@@ -154,14 +165,8 @@
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
 
-<script>
-    $('#emoji').emojioneArea({
-        pickerPosition: 'bottom'
-    })
-</script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -22,110 +22,226 @@
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css" />
 
-<p>@ViewBag.url</p>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-md-6">
+            <form asp-controller="Post" asp-action="Index" class="d-flex justify-content-around ml-3">
+                <input type="text" name="search" class="w-75" placeholder="search post" />
+                <button class="d-none" id="searchBtn">search</button>
+                <a class="btn btn-primary" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">*</a>
+            </form>
+
+
+            <form class="" asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
+                <textarea type="text" name="Content" id="emoji" class="w-100 m-3" placeholder="Write Content Post"></textarea>
+                <input type="file" class="ml-3 btn btn-outline-info" name="files" multiple required />
+                <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
+                <button type="submit" class="btn btn-xs btn-primary d-none">Submit</button>
+            </form>
+            @foreach (var post in Model)
+            {
+                <div class="card">
+                    <div class="d-flex justify-content-between p-2 px-3">
+                        <div class="d-flex flex-row align-items-center">
+                            @if (post.User.ProfilePicture != null)
+                            {
+                                <img class="rounded-circle" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
+                            }
+                            else
+                            {
+                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@post.User.FullName.Substring(0, 2).ToUpper()</p>
+                            }
+                            <div class="d-flex flex-column ml-2">
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold">@post.User.FullName</a>
+                                <small class="mr-2 muted-color">@post.CreatedOn</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-justify">@post.Content</p>
+                    </div>
+                    <p>@post.Images.Count</p>
+                    <div class="contentImg">
+                        @if (post.Images.Count == 1)
+                        {
+                            @foreach (var f in post.Images)
+                            {
+                                <img class="w-100" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                            }
+
+
+
+                        }
+                        else
+                        {
+                            @foreach (var f in post.Images)
+                            {
+                                <img class="imgPost" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                            }
+                        }
+
+                    </div>
+                    <div class="p-2">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row align-items-center muted-color">
+                                <form method="post" asp-controller="Post" asp-action="LikePost">
+                                    <input type="hidden" name="PostId" value="@post.Id" />
+                                    <button type="submit" class="btn btn-outline-light"><img src="~/image/like.png" /></button>
+                                </form>
+                                <span class="p-2">@post.Likes.Count()</span>
+                            </div>
+                            <div class="d-flex flex-row muted-color">
+                                <img src="~/image/comment.png" />
+                                <span>@post.Comments.Count() comments</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <form class="comment-input" id="form" method="post" asp-controller="Post" asp-action="CreateComment">
+                            <input type="text" name="Content" class="form-control" placeholder="Write a comment..." />
+                            <input type="hidden" name="PostId" value="@post.Id" />
+                            <input type="hidden" name="UserId" value="@id" />
+                            <button type="submit" class="btn btn-xs btn-primary d-none">Comment</button>
+                        </form>
+                        @*<div class="comment-input">
+                                <input type="text" class="form-control" placeholder="Write a comment...">
+                                <div class="fonts"> <i class="fa fa-camera"></i> </div>
+                            </div>*@
+                        <hr>
+                        <div class="comments">
+                            @foreach (var i in post.Comments)
+                            {
+                                <div class="d-flex flex-row mb-2">
+                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId">
+                                        @if (i.User.ProfilePicture != null)
+                                        {
+                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
+                                        }
+                                        else
+                                        {
+                                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
+                                        }
+                                    </a>
+                                    <div class="d-flex flex-column ml-2">
+                                        <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="name">@i.User.FullName</a> <small class="comment-text">@i.Content</small>
+                                        <div class="d-flex align-items-center muted-color"> <small>@i.CreatedOn</small></div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            }
+        </div>
+    </div>
 </div>
 
 
 
-<form asp-controller="Post" asp-action="Index">
-    <input type="text" name="search" />
-    <button class="btn btn-primary" id="searchBtn">search</button>
-    <a class="btn btn-primary" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">*</a>
-</form>
 
 
-<form asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
-    <input type="text" name="Title" />
-    <input type="file" name="files" multiple required />
-    <input type="text" name="Content" id="emoji" class="w-25" />
-    <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
-    <button type="submit" class="btn btn-xs btn-primary">Submit</button>
-</form>
 
-<table class="table text-center">
-    <thead>
 
-        <tr>
-            <td>User</td>
-            <td>content</td>
-            <td>title</td>
-            <td>image</td>
-            <td>Comment</td>
-            <td>Like</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@*<form asp-controller="Post" asp-action="Index">
+        <input type="text" name="search" />
+        <button class="btn btn-primary" id="searchBtn">search</button>
+        <a class="btn btn-primary" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">*</a>
+    </form>
+
+
+    <form asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
+        <input type="file" name="files" multiple required />
+        <input type="text" name="Content" id="emoji" class="w-25" />
+        <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
+        <button type="submit" class="btn btn-xs btn-primary">Submit</button>
+    </form>
+
+    <table class="table text-center">
+        <thead>
 
             <tr>
-                <td>
-
-                    <a asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">
-                        @Html.DisplayFor(modelItem => item.User.FullName)
-                        @if (item.User.ProfilePicture != null)
-                        {
-                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.User.ProfilePicture)">
-                        }
-                        else
-                        {
-                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@item.User.FullName.Substring(0, 2).ToUpper()</p>
-                        }
-                    </a>
-                </td>
-                <td>@item.Content</td>
-                <td>@item.Title</td>
-                <td>
-                    @foreach (var f in item.Images)
-                    {
-                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
-                    }
-                </td>
-                <td>
-                    <form id="form" method="post" asp-controller="Post" asp-action="CreateComment">
-                        <input type="text" name="Content" />
-                        <input type="hidden" name="PostId" value="@item.Id" />
-                        <input type="hidden" name="UserId" value="@id" />
-                        <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                    </form>
-                    @foreach (var i in item.Comments)
-                    {
-                        <div class="d-flex">
-                            <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
-                                @if (i.User.ProfilePicture != null)
-                                {
-                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
-                                }
-                                else
-                                {
-                                    <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
-                                }
-                                @Html.DisplayFor(modelItem => i.User.FullName)
-                            </a>
-                            <p>@i.Content</p>|
-                            <p>@i.CreatedOn</p>|
-                        </div>
-                    }
-                    <p>(@item.Comments.Count())</p>
-
-                </td>
-                <td>
-                    <form method="post" asp-controller="Post" asp-action="LikePost">
-                        <input type="hidden" name="PostId" value="@item.Id" />
-                        <button type="submit" class="btn btn-xs btn-primary">like</button>
-                    </form>
-                    @item.Likes.Count()
-                </td>
-
+                <td>User</td>
+                <td>content</td>
+                <td>title</td>
+                <td>image</td>
+                <td>Comment</td>
+                <td>Like</td>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
 
-        }
+                <tr>
+                    <td>
 
-    </tbody>
-</table>
+                        <a asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">
+                            @Html.DisplayFor(modelItem => item.User.FullName)
+                            @if (item.User.ProfilePicture != null)
+                            {
+                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.User.ProfilePicture)">
+                            }
+                            else
+                            {
+                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@item.User.FullName.Substring(0, 2).ToUpper()</p>
+                            }
+                        </a>
+                    </td>
+                    <td>@item.Content</td>
+                    <td>
+                        @foreach (var f in item.Images)
+                        {
+                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                        }
+                    </td>
+                    <td>
+                        <form id="form" method="post" asp-controller="Post" asp-action="CreateComment">
+                            <input type="text" name="Content" />
+                            <input type="hidden" name="PostId" value="@item.Id" />
+                            <input type="hidden" name="UserId" value="@id" />
+                            <button type="submit" class="btn btn-xs btn-primary">Comment</button>
+                        </form>
+                        @foreach (var i in item.Comments)
+                        {
+                            <div class="d-flex">
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
+                                    @if (i.User.ProfilePicture != null)
+                                    {
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
+                                    }
+                                    else
+                                    {
+                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
+                                    }
+                                    @Html.DisplayFor(modelItem => i.User.FullName)
+                                </a>
+                                <p>@i.Content</p>|
+                                <p>@i.CreatedOn</p>|
+                            </div>
+                        }
+                        <p>(@item.Comments.Count())</p>
+
+                    </td>
+                    <td>
+                        <form method="post" asp-controller="Post" asp-action="LikePost">
+                            <input type="hidden" name="PostId" value="@item.Id" />
+                            <button type="submit" class="btn btn-xs btn-primary">like</button>
+                        </form>
+                        @item.Likes.Count()
+                    </td>
+
+                </tr>
+
+            }
+
+        </tbody>
+    </table>*@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>

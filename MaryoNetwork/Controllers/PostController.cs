@@ -51,12 +51,15 @@ namespace MaryoNetwork.Controllers
             IEnumerable<Post> posts;
             if (!string.IsNullOrEmpty(search))
             {
-                posts = _db.Posts.Include(u => u.User).Include(i => i.Images)
-                .Include(c => c.Comments)
-                .Include(l => l.Likes).Where(s => s.Content.ToLower().Contains(search.ToLower()))
+                posts = _db.Posts
+                .Include(u => u.User)
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
-                .Include(l => l.Likes);
+                .Include(i => i.Images)
+                .Include(c => c.Comments)
+                .Include(l => l.Likes)
+                .Where(s => s.Content.ToLower().Contains(search.ToLower()))
+                .ToList();
 
             }
             else
@@ -97,7 +100,6 @@ namespace MaryoNetwork.Controllers
 
             var addPost = new Post
             {
-                Title = post.Title,
                 Content = post.Content,
                 UserId = await _userService.GetCurrentUserIdAsync(),
                 CategoryId = post.CategoryId,

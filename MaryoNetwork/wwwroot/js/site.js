@@ -81,3 +81,13 @@ $(document).ready(function () {
 //});
 
 
+
+
+//////////////slide
+
+
+
+
+
+
+//////////////Endslide

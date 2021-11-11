@@ -3,7 +3,8 @@ for details on configuring this project to bundle and minify static web assets. 
 
 
 .container{
-    max-width:1890px;
+    max-width:1280px;
+    display:flex;
 }
 .wrapper {
     width: 100%;
@@ -55,7 +56,17 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /*/////////////////////:post*/
 .card {
-    border: none
+    border: none;
+    border-radius:10px;
+    width: 830px !important;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+    background-color: #1A275B;
+}
+.cardEditor{
+    width:340px;
+    height:620px;
 }
 
 .ellipsis {
@@ -103,10 +114,10 @@ hr {
 .name {
     font-weight: 600
 }
-.comments{
-    background-color:#e6e5e5;
-    padding:10px;
-    border-radius:5px;
+.comments {
+    background-color: #0E1436;
+    padding: 10px;
+    border-radius: 5px;
 }
 .comment-text {
     font-size: 12px
@@ -139,16 +150,16 @@ hr {
     outline: 0;
     box-shadow: none
 }
+.contentImg{
+    max-width:100% !important;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+}
+.imgPost {
+    width: 50%;
+}
 /*/////////////////////:end post*/
-
-
-
-
-
-
-
-
-
 .main-part {
     width: 80%;
     margin: 0 auto;
@@ -281,8 +292,10 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: #0E1436;
+    color: #ffffff;
 }
 .headerSide{
     width:13% !important;
@@ -719,7 +732,7 @@ body {
 /*-----------------------------chiller-theme-------------------------------------------------*/
 
 .chiller-theme .sidebar-wrapper {
-    background: #31353D;
+    background: #1A275B;
 }
 
     .chiller-theme .sidebar-wrapper .sidebar-header,
@@ -837,3 +850,11 @@ body {
         text-decoration: none;
         cursor: pointer;
     }
+
+
+
+
+    /*/////////slide*//**/
+
+
+    /*///////// end slide*//**/

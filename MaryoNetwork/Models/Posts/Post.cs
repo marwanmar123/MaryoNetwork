@@ -14,7 +14,6 @@ namespace MaryoNetwork.Models.Posts
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
-        public string Title { get; set; }
         public string Content { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public ICollection<Image> Images { get; set; }
