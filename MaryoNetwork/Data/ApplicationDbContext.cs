@@ -33,6 +33,7 @@ namespace MaryoNetwork.Data
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<RequestStatus> RequestStatus { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMembers> GroupMembers { get; set; }
         public DbSet<Room> Rooms { get; set; }

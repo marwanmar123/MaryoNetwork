@@ -27,55 +27,29 @@
 }
 
 <h1>Index</h1>
-
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <form asp-controller="Groups" asp-action="Index">
     <input type="text" name="search" />
     <button class="btn btn-primary" id="searchBtn">search</button>
     <a class="btn btn-primary" id="searchBtn" asp-action="Index">*</a>
 </form>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    <img class="w-25 h-25" src="data:image/*;base64,@Convert.ToBase64String(item.Image)">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.FullName)
-                </td>
-                <td>
+
+<div class="d-flex flex-wrap justify-content-around">
+    @foreach (var item in Model)
+    {
+        <div class="card m-2" style="width:18em !important; height:28em;">
+            <img class="w-100 h-25" src="data:image/*;base64,@Convert.ToBase64String(item.Image)">
+            <div class="card-body">
+                <h5 class="card-title">@item.Name</h5>
+                <p class="card-text d-flex" id="Limit-description">@item.Description</p>
+                <div class="d-flex flex-row justify-content-center">
                     @if (item.Members.SingleOrDefault(a => a.GroupId == item.Id && a.UserId == id) == null)
                     {
                         <form method="post" asp-controller="Groups" asp-action="Follow">
                             <input type="hidden" name="GroupId" value="@item.Id" />
-                            <button type="submit" class="btn btn-xs btn-primary">Follow</button>
+                            <button type="submit" class="btn btn-xs btn-primary m-2">Follow</button>
                         </form>
                     }
                     else
@@ -84,23 +58,19 @@
                         {
                             <form method="post" asp-controller="Groups" asp-action="Quitter">
                                 <input type="hidden" name="Id" value="@member.Id" />
-                                <button type="submit" class="btn btn-xs btn-danger">Quiiter le groupe</button>
+                                <button type="submit" class="btn btn-xs btn-danger m-2">Quiiter</button>
                             </form>
                         }
                     }
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary m-2">Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 
 
-                </td>
-
-                <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
+    
+    
+  

@@ -87,7 +87,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 ProfilePicture = profilePicture,
                 CoverPicture = coverPicture,
-                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id && p.Approved == true)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).ToListAsync(),
+                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id && p.Approved == true)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).Include(a => a.Posts).ThenInclude(x => x.Likes).ToListAsync(),
                 FirendRequest = await _db.Friends.Where(a => a.ReceiverId == user.Id).ToListAsync()
                 //Posts.Include(c => c.Comments).Include(u => u.User).Where(x => x.UserId == user.Id).Include(x => x.Category).OrderByDescending(y => y.CreatedOn).ToList()
             };

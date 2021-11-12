@@ -33,13 +33,13 @@
                 <h5 class="card-title">@item.Title</h5>
                 <a class="d-flex" asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">
                     @if (item.User.ProfilePicture != null)
-                     {
+                    {
                         <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.User.ProfilePicture)">
-                     }
-                     else
-                     {
-                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@item.User.FullName.Substring(0, 2).ToUpper()</p>
-                     }
+                    }
+                    else
+                    {
+                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
+                    }
                     <p class="card-text">@item.User.FullName</p>
                 </a>
             </div>

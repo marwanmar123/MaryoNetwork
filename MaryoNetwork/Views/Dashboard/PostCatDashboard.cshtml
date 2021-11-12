@@ -21,106 +21,106 @@
 
     @*@await Component.InvokeAsync("SideBar")*@
 
-    <table class="table text-center">
+    <table class="table text-center text-light">
         <thead>
 
             <tr>
                 <td>User</td>
                 <td>content</td>
-                <td>title</td>
                 <td>image</td>
                 <td>Comment</td>
                 <td>Like</td>
                 <td>Category</td>
+                <td>Action</td>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
+            <tr>
+                <td>
 
-                        <a asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">
-                            @Html.DisplayFor(modelItem => item.User.FullName)
-                            @if (item.User.ProfilePicture != null)
-                            {
-                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.User.ProfilePicture)">
-                            }
-                            else
-                            {
-                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@item.User.FullName.Substring(0, 2).ToUpper()</p>
-                            }
-                        </a>
-                    </td>
-                    <td>@item.Content</td>
-                    <td>
-                        @foreach (var f in item.Images)
+                    <a asp-controller="User" asp-action="Profile" asp-route-id="@item.UserId">
+                        @Html.DisplayFor(modelItem => item.User.FullName)
+                        @if (item.User.ProfilePicture != null)
                         {
-                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(item.User.ProfilePicture)">
                         }
-                    </td>
-                    <td>
-                    <td>
-                        <form id="form" method="post" asp-controller="Dashboard" asp-action="CreateComment">
-                            <input type="text" name="Content" />
-                            <input type="hidden" name="PostId" value="@item.Id" />
-                            <input type="hidden" name="UserId" value="@id" />
-                            <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                        </form>
-                        @foreach (var i in item.Comments)
+                        else
                         {
-                            <div class="d-flex">
-                                <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
-                                    @if (i.User.ProfilePicture != null)
-                                    {
-                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
-                                    }
-                                    else
-                                    {
-                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
-                                    }
-                                    @Html.DisplayFor(modelItem => i.User.FullName)
-                                </a>
-                                <p>@i.Content</p>|
-                                <p>@i.CreatedOn</p>|
-                                <form style="display:inline;" method="post" asp-controller="Dashboard" asp-action="DeleteComment">
-                                    <input type="hidden" name="Id" value="@i.Id" />
-                                    <button type="submit" class="btn btn-xs btn-danger">Delete</button>
-                                </form>
-                            </div>
+                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
                         }
-                        <p>( comments : @item.Comments.Count())</p>
-                        <p>( likes : @item.Likes.Count())</p>
-
-                    </td>
-
-                    <td>
-                        @if (item.Approved == false)
-                        {
-                            <form style="display:inline;" method="post" asp-action="Approve">
-                                <input type="hidden" name="Id" value="@item.Id" />
-                                <input type="hidden" name="approved" value="true" />
-                                <button type="submit" class="btn btn-xs btn-outline-success">Approved</button>
+                    </a>
+                </td>
+                <td>@item.Content</td>
+                <td>
+                    @foreach (var f in item.Images)
+                    {
+                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                    }
+                </td>
+                <td>
+                    <form id="form" method="post" asp-controller="Dashboard" asp-action="CreateComment">
+                        <input type="text" name="Content" />
+                        <input type="hidden" name="PostId" value="@item.Id" />
+                        <input type="hidden" name="UserId" value="@id" />
+                        <button type="submit" class="btn btn-xs btn-primary">Comment</button>
+                    </form>
+                    @foreach (var i in item.Comments)
+                    {
+                        <div class="d-flex">
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
+                                @if (i.User.ProfilePicture != null)
+                                {
+                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
+                                }
+                                else
+                                {
+                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
+                                }
+                                @Html.DisplayFor(modelItem => i.User.FullName)
+                            </a>
+                            <p>@i.Content</p>|
+                            <p>@i.CreatedOn</p>|
+                            <form style="display:inline;" method="post" asp-controller="Dashboard" asp-action="DeleteComment">
+                                <input type="hidden" name="Id" value="@i.Id" />
+                                <button type="submit" class="btn btn-xs btn-danger">Delete</button>
                             </form>
-                        }
-                        else if (item.Approved == true)
-                        {
-                            <form style="display:inline;" method="post" asp-action="Approve">
-                                <input type="hidden" name="Id" value="@item.Id" />
-                                <input type="hidden" name="approved" value="false" />
-                                <button type="submit" class="btn btn-xs btn-outline-warning">rejected</button>
-                            </form>
-                        }
-                        <form style="display:inline;" method="post" asp-action="DeletePost">
+                        </div>
+                    }
+                    <p>( comments : @item.Comments.Count())</p>
+                </td>
+                <td>
+                    @item.Likes.Count()
+                </td>
+                <td>
+                    <p>@item.Category.Name</p>
+                </td>
+                <td>
+                    @if (item.Approved == false)
+                    {
+                        <form style="display:inline;" method="post" asp-action="Approve">
                             <input type="hidden" name="Id" value="@item.Id" />
-                            <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+                            <input type="hidden" name="approved" value="true" />
+                            <button type="submit" class="btn btn-xs btn-outline-success">Approved</button>
                         </form>
-                    </td>
-                    <td>
-                        <p>@item.Category.Name</p>
-                    </td>
+                    }
+                    else if (item.Approved == true)
+                    {
+                        <form style="display:inline;" method="post" asp-action="Approve">
+                            <input type="hidden" name="Id" value="@item.Id" />
+                            <input type="hidden" name="approved" value="false" />
+                            <button type="submit" class="btn btn-xs btn-outline-warning">rejected</button>
+                        </form>
+                    }
+                    <form style="display:inline;" method="post" asp-action="DeletePost">
+                        <input type="hidden" name="Id" value="@item.Id" />
+                        <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+                    </form>
+                </td>
 
-                </tr>
+
+            </tr>
 
             }
 

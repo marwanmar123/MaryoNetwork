@@ -65,14 +65,21 @@ for details on configuring this project to bundle and minify static web assets. 
     background-color: #1A275B;
 }
 .cardEditor{
-    width:340px;
-    height:620px;
+    width:25%;
+    width:25%;
 }
 
 .ellipsis {
     color: #a09c9c
 }
-
+#Limit-description {
+    display: block; /* or inline-block */
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 9em;
+}
 hr {
     color: #a09c9c;
     margin-top: 4px;
@@ -268,10 +275,10 @@ html {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 .profile-actif {
-    width: 100px;
-    height: 100px;
-    max-width: 100px;
-    max-height: 100px;
+    width: 50px;
+    height:50px;
+    max-width: 50px;
+    max-height: 50px;
     border: solid 2px #52dd12;
     box-shadow: 10px -10px #52dd12;
     -moz-box-shadow: 0px 5px 5px 5px #52dd12;
@@ -850,6 +857,32 @@ body {
         text-decoration: none;
         cursor: pointer;
     }
+
+
+/*return stop top*/
+
+
+
+    #myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+#myBtn:hover {
+  background-color: #555;
+}
+/*    //return stop top*/
 
 
 

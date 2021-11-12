@@ -33,7 +33,7 @@
     <input type="hidden" name="ReceiverId" value="@Model.User.Id" />
     <button type="submit" class="btn btn-xs btn-primary">Add Friend</button>
 </form>
-            
+
 
 
 
@@ -46,7 +46,7 @@
 }
 else
 {
-    <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@Model.User.FullName.Substring(0, 2).ToUpper()</p>
+    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
 }
 
 
@@ -66,14 +66,14 @@ else
         </tr>
     </thead>
     <tbody>
-            <h1>Image</h1>
+        <h1>Image</h1>
         @foreach (var u in Model.Users)
         {
             @foreach (var img in u.Images)
             {
-               
-                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(img.Data)">
-                
+
+                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(img.Data)" >
+
             }
 
             @foreach (var p in u.Posts)
@@ -87,7 +87,7 @@ else
                             }
                             else
                             {
-                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@p.User.FullName.Substring(0, 2).ToUpper()</p>
+                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
                             }
                             @Html.DisplayFor(modelItem => u.FullName)
                         </a>
@@ -102,11 +102,11 @@ else
                     </td>
                     <td>
                         @*<form method="post" asp-controller="Post" asp-action="CreateComment">
-                            <input type="text" name="Content" />
-                            <input type="hidden" name="PostId" value="@item.Id" />
-                            <input type="hidden" name="UserId" value="@id" />
-                            <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                        </form>*@
+                                <input type="text" name="Content" />
+                                <input type="hidden" name="PostId" value="@item.Id" />
+                                <input type="hidden" name="UserId" value="@id" />
+                                <button type="submit" class="btn btn-xs btn-primary">Comment</button>
+                            </form>*@
                         @foreach (var c in p.Comments)
                         {
                             <div class="d-flex">
@@ -118,7 +118,7 @@ else
                                     }
                                     else
                                     {
-                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@c.User.FullName.Substring(0, 2).ToUpper()</p>
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
                                     }
                                 </a>
                                 <p>@c.Content</p>|

@@ -72,16 +72,34 @@
         <div class="col-md-6">
             @foreach (var post in Model.Post)
             {
-            <div class="card pb-2">
+            <div class="card pb-2 m-2">
                 <div class="d-flex justify-content-between p-2 px-3">
                     <div class="d-flex flex-row align-items-center">
                         @if (post.User.ProfilePicture != null)
                         {
-                            <img class="rounded-circle" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
+                            if (post.User.IsOnline == true)
+                            {
+                                <img class="profile-actif" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
+
+                            }
+                            else
+                            {
+                                <img class="rounded-circle" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
+
+                            }
                         }
                         else
                         {
-                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@post.User.FullName.Substring(0, 2).ToUpper()</p>
+                            if (post.User.IsOnline == true)
+                            {
+                                <img class="profile-actif" src="~/image/defaultProfile.png">
+
+                            }
+                            else
+                            {
+
+                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
+                            }
                         }
                         <div class="d-flex flex-column ml-2">
                             <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold text-light">@post.User.FullName</a>
@@ -90,9 +108,8 @@
                     </div>
                 </div>
                 <div>
-                    <p class="text-justify">@post.Content</p>
+                    <p class="text-justify ml-5">@post.Content</p>
                 </div>
-                <p>@post.Images.Count</p>
                 <div class="contentImg">
                     @if (post.Images.Count == 1)
                     {
@@ -138,18 +155,18 @@
                         @foreach (var i in post.Comments)
                         {
                             <div class="d-flex flex-row mb-2">
-                                <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId">
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
                                     @if (i.User.ProfilePicture != null)
                                     {
                                         <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(i.User.ProfilePicture)">
                                     }
                                     else
                                     {
-                                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@i.User.FullName.Substring(0, 2).ToUpper()</p>
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
                                     }
                                 </a>
                                 <div class="d-flex flex-column ml-2">
-                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="name">@i.User.FullName</a> <small class="comment-text">@i.Content</small>
+                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId" class="name">@i.User.FullName</a> <small class="comment-text">@i.Content</small>
                                     <div class="d-flex align-items-center muted-color"> <small>@i.CreatedOn</small></div>
                                 </div>
                             </div>

@@ -85,8 +85,8 @@
                     }
                     else
                     {
-                        <img id="profilePicture" style="width:250px;height:250px; object-fit:cover" src="~/image/58417f6ba6515b1e0ad75a2b.png">
-                        <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@Model.Input.FullName.Substring(0, 2).ToUpper()</p>
+                        <img id="profilePicture" style="width:250px;height:250px; object-fit:cover" src="~/image/defaultProfile.png">
+                        @*<p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@Model.Input.FullName.Substring(0, 2).ToUpper()</p>*@
                     }
                     <input type="file"
                            accept=".png,.jpg,.jpeg,.gif,.tif"
@@ -122,13 +122,12 @@
         </form>
     </div>
 
-    <table class="table text-center">
+    <table class="table text-center text-light">
         <thead>
 
             <tr>
                 <td>User</td>
                 <td>content</td>
-                <td>title</td>
                 <td>image</td>
                 <td>Comment</td>
                 <td>Like</td>
@@ -142,18 +141,19 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => u.FullName)
+                            <p class="text-light">@p.User.FullName</p>
                             @if (p.User.ProfilePicture != null)
                             {
                                 <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(p.User.ProfilePicture)">
                             }
                             else
                             {
-                                <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
+                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
+                                @*<p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>*@
                             }
                         </td>
-                        <td>@p.Category.Name</td>
-                        <td>@p.Content</td>
+                        <td class="text-light">@p.Category.Name</td>
+                        <td class="text-light">@p.Content</td>
                         <td>
                             <form method="post" asp-controller="Post" asp-action="CreateCommentProfile">
                                 <input type="text" name="Content" />
@@ -172,19 +172,20 @@
                                         }
                                         else
                                         {
-                                            <p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>
+                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
+                                            @*<p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>*@
                                         }
                                     </a>
-                                    <p>@c.Content</p>|
-                                    <p>@c.CreatedOn</p>|
+                                    <p class="text-light">@c.Content</p>|
+                                    <p class="text-light">@c.CreatedOn</p>|
                                 </div>
                             }
-                            <p class="comment-count-@(p.Id)">(@p.Comments.Count())</p>
+                            <p>(@p.Comments.Count())</p>
                         </td>
                         <td>
                             <form method="post" asp-controller="Post" asp-action="LikePost">
                                 <input type="hidden" name="PostId" value="@p.Id" />
-                                <button type="submit" class="btn btn-xs btn-primary">like</button>
+                                <button type="submit" class="btn btn-xs btn-primary">like @p.Likes.Count()</button>
                             </form>
                             @*<p class="comment-count-@(item.Id)">@item.Likes.Count(null)</p>*@
                         </td>

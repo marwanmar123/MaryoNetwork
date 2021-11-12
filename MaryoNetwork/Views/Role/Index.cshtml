@@ -4,11 +4,11 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <h1>User Roles</h1>
 <div class="container">
     <partial name="_Sidebar" />
-    <h1>User Roles</h1>
-    <div class="d-flex">
-        <table class="table table-striped">
+    <div class="d-flex justify-content-center">
+        <table class="table table-striped  text-light">
             <thead>
                 <tr>
                     <th>FullName</th>
@@ -40,7 +40,7 @@
         <div>
             <div class="row">
                 <div class="col-6">
-                    <h2 class="text-black-50">Roles</h2>
+                    <h2 class="text-light">Roles</h2>
                 </div>
                 <div class="col-6 text-right">
                     <a asp-action="Create" class="btn btn-info">New Role</a>
