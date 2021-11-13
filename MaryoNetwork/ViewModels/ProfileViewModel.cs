@@ -23,9 +23,5 @@ namespace MaryoNetwork.ViewModels
         public string RoleId { get; set; }
         public string RoleName { get; set; }
         public bool Selected { get; set; }
-        public IEnumerable<Friend> friends { get; set; }
-
-
-
     }
 }

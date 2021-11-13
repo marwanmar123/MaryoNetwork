@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211112202911_infiProfile")]
+    partial class infiProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,9 +377,6 @@ namespace MaryoNetwork.Data.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Github")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsOnline")
                         .HasColumnType("bit");
 
@@ -631,7 +630,7 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Groups.Group", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.User", "User")
-                        .WithMany("Groups")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -644,7 +643,7 @@ namespace MaryoNetwork.Data.Migrations
                         .HasForeignKey("GroupId");
 
                     b.HasOne("MaryoNetwork.Models.User", "User")
-                        .WithMany("Members")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("Group");
@@ -812,13 +811,9 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.Navigation("FriendRequestSent");
 
-                    b.Navigation("Groups");
-
                     b.Navigation("Images");
 
                     b.Navigation("Likes");
-
-                    b.Navigation("Members");
 
                     b.Navigation("Messages");
 

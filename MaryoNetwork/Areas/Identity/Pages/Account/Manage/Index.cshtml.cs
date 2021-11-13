@@ -55,6 +55,18 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             [MaxLength(400)]
             public string About { get; set; }
 
+            [Display(Name = "Linkedin")]
+            public string Linkedin { get; set; }
+
+            [Display(Name = "Facebook")]
+            public string Facebook { get; set; }
+
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+
+            [Display(Name = "Github")]
+            public string Github { get; set; }
+
             [Display(Name = "Profile Picture")]
             public byte[] ProfilePicture { get; set; }
 
@@ -75,6 +87,10 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var fullName = user.FullName;
             var about = user.About;
+            var linkedin = user.Linkedin;
+            var country = user.Country;
+            var facebbok = user.Facebook;
+            var github = user.Github;
             var profilePicture = user.ProfilePicture;
             var coverPicture = user.CoverPicture;
             Username = userName;
@@ -84,10 +100,26 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             {
                 FullName = fullName,
                 About = about,
+                Linkedin = linkedin,
+                Facebook = facebbok,
+                Country = country,
+                Github = github,
                 PhoneNumber = phoneNumber,
                 ProfilePicture = profilePicture,
                 CoverPicture = coverPicture,
-                Users = await _db.Users.Include(p => p.Posts.Where(p => p.UserId == user.Id && p.Approved == true)).ThenInclude(p => p.Comments).Include(a => a.Posts).ThenInclude(x => x.Category).Include(a => a.Posts).ThenInclude(x => x.Likes).ToListAsync(),
+                Users = await _db.Users
+                .Include(p => p.Posts
+                .Where(p => p.UserId == user.Id && p.Approved == true))
+                .ThenInclude(p => p.Comments).Include(a => a.Posts)
+                .ThenInclude(x => x.Category)
+                .Include(a => a.Posts)
+                .ThenInclude(x => x.Likes)
+                .Include(p => p.FriendRequestReceived)
+                .Include(p => p.FriendRequestSent)
+                .Include(p => p.Groups)
+                .Include(p => p.Members)
+                .Include(p => p.Images)
+                .ToListAsync(),
                 FirendRequest = await _db.Friends.Where(a => a.ReceiverId == user.Id).ToListAsync()
                 //Posts.Include(c => c.Comments).Include(u => u.User).Where(x => x.UserId == user.Id).Include(x => x.Category).OrderByDescending(y => y.CreatedOn).ToList()
             };
@@ -110,6 +142,10 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             var fullName = user.FullName;
             var about = user.About;
+            var linkedin = user.Linkedin;
+            var country = user.Country;
+            var github = user.Github;
+            var facebook = user.Facebook;
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -139,6 +175,26 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
             if (Input.About != about)
             {
                 user.About = Input.About;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.Linkedin != linkedin)
+            {
+                user.Linkedin = Input.Linkedin;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.Facebook != facebook)
+            {
+                user.Facebook = Input.Facebook;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.Github != github)
+            {
+                user.Github = Input.Github;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.Country != country)
+            {
+                user.Country = Input.Country;
                 await _userManager.UpdateAsync(user);
             }
 

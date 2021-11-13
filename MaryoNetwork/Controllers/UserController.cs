@@ -60,11 +60,17 @@ namespace MaryoNetwork.Controllers
             {
                 Users = await _db.Users
                 .Include(p => p.Images)
+                .Include(p => p.Members)
+                .Include(p => p.FriendRequestReceived)
+                .Include(p => p.FriendRequestSent)
+                .Include(p => p.Groups)
                 .Include(p => p.Posts
                 .Where(p => p.UserId == user.Id))
                 .ThenInclude(p => p.Comments)
                 .Include(a => a.Posts)
                 .ThenInclude(x => x.Category)
+                .Include(a => a.Posts)
+                .ThenInclude(x => x.Likes)
                 .ToListAsync(),
                 User = _db.Users.FirstOrDefault(a => a.Id == id)
             };

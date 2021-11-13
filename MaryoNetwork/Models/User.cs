@@ -1,5 +1,6 @@
 ﻿using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Friends;
+using MaryoNetwork.Models.Groups;
 using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Messenger;
@@ -17,6 +18,10 @@ namespace MaryoNetwork.Models
     {
         public string FullName { get; set; }
         public string About { get; set; }
+        public string Linkedin { get; set; }
+        public string Facebook { get; set; }
+        public string Country { get; set; }
+        public string Github { get; set; }
         public byte[] ProfilePicture { get; set; }
         public byte[] CoverPicture { get; set; }
         public bool IsOnline { get; set; }
@@ -27,6 +32,8 @@ namespace MaryoNetwork.Models
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Message> Messages { get; set; }
         public ICollection<Friend> FriendRequestSent { get; set; }
+        public ICollection<Group> Groups { get; set; }
+        public ICollection<GroupMembers> Members { get; set; }
         public ICollection<Friend> FriendRequestReceived { get; set; }
     }
 }

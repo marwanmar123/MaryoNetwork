@@ -54,7 +54,7 @@
                     }
                     else
                     {
-                        @foreach (var member in item.Members)
+                        @foreach (var member in item.Members.Where(a=>a.UserId == id))
                         {
                             <form method="post" asp-controller="Groups" asp-action="Quitter">
                                 <input type="hidden" name="Id" value="@member.Id" />
