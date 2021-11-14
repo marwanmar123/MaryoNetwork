@@ -68,15 +68,15 @@
                     </span>
                     @if (User.IsInRole("admin"))
                     {
-                        <span class="user-role">Administrator</span>
+                        <span class="user-role text-dark">Administrator</span>
                     }
                     else
                     {
-                        <span class="user-role">User</span>
+                        <span class="user-role text-dark">User</span>
                     }
                     @if (isOnline == true)
                     {
-                        <span class="user-status">
+                        <span class="user-status text-dark">
                             <i class="fa fa-circle" style="color:greenyellow;"></i>
                             <span>Online</span>
                         </span>
@@ -92,35 +92,35 @@
                     </li>
 
                     <li class="sidebar-dropdown">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
                             <i class="far fa-gem"></i>
                             @localizer["Home"]
                         </a>
                     </li>
                     <li class="sidebar-dropdown">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">
                             <i class="far fa-gem"></i>
                             @localizer["Privacy"]
                         </a>
                     </li>
                     <li class="sidebar-dropdown">
-                        <a class="nav-link text-light" asp-area="" asp-controller="User" asp-action="Index">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">
                             <i class="far fa-gem"></i>
                             @localizer["Users"]
                         </a>
                     </li>
                     <li class="sidebar-dropdown">
-                        <a href="#" class="text-light">
+                        <a href="#" class="text-dark">
                             <i class="far fa-gem"></i>
                             <span>@localizer["MaryoCode"]</span>
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
                                 <li>
-                                    <a asp-controller="Editor" asp-action="Index" class="m-xl-2">Editor</a>
+                                    <a asp-controller="Editor" asp-action="Index" class="m-xl-2 text-dark">Editor</a>
                                 </li>
                                 <li>
-                                    <a asp-controller="Editor" asp-action="MyFavorites" class="m-xl-2">My Favorites</a>
+                                    <a asp-controller="Editor" asp-action="MyFavorites" class="m-xl-2 text-dark">My Favorites</a>
                                 </li>
                             </ul>
                         </div>
@@ -128,14 +128,14 @@
                     <li class="sidebar-dropdown">
                         @if (User.IsInRole("admin"))
                         {
-                            <a class="nav-link text-light" asp-area="" asp-controller="Dashboard" asp-action="Index">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">
                                 <i class="far fa-gem"></i>
                                 Dashboard
                             </a>
                         }
                     </li>
                     <li class="sidebar-dropdown">
-                        <a class="nav-link text-light" asp-controller="Groups" asp-action="Index">
+                        <a class="nav-link text-dark" asp-controller="Groups" asp-action="Index">
                             <i class="far fa-gem"></i>
                             Groups
                         </a>

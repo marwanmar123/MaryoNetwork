@@ -37,7 +37,7 @@
         <div class="panel panel-default">
             <div class="panel-heading active" role="tab" id="headingOne">
                 <h4 class="panel-title sidebar-dropdown">
-                    <a role="button" data-toggle="collapse" class="nav-link text-light border rounded-pill" data-parent="#accordion" href="#collapseOne" aria-expanded="true">
+                    <a role="button" data-toggle="collapse" class="nav-link text-dark border rounded-pill" data-parent="#accordion" href="#collapseOne" aria-expanded="true">
                         Rooms Categories
                     </a>
                 </h4>
@@ -102,13 +102,13 @@
                             }
                         }
                         <div class="d-flex flex-column ml-2">
-                            <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold text-light">@post.User.FullName</a>
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold">@post.User.FullName</a>
                             <small class="mr-2 text-dark">@post.CreatedOn</small>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <p class="text-justify ml-5">@post.Content</p>
+                    <p class="text-justify ml-3 text-dark">@post.Content</p>
                 </div>
                 <div class="contentImg">
                     @if (post.Images.Count == 1)
