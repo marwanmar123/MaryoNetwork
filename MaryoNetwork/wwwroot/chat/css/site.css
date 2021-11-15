@@ -1,8 +1,9 @@
 ﻿.sidebar {
-  display: flex;
-  flex-direction: column;
-  background: #157cce;
-  color: white; }
+    display: flex;
+    flex-direction: column;
+    background: #f4f2f2;
+    color: gray;
+}
   .sidebar a {
     color: white; }
   .sidebar i {
@@ -36,14 +37,15 @@
     .sidebar ul li a:before {
       content: "#";
       margin-right: 2px; }
-  .sidebar .profile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 48px;
-    padding: 10px;
-    background: #1a6baa;
-    margin-top: auto; }
+    .sidebar .profile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 48px;
+        padding: 10px;
+        background: #f4f2f2;
+        margin-top: auto;
+    }
     .sidebar .profile div {
       display: flex;
       align-items: center;
@@ -60,7 +62,9 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 120px; }
+        max-width: 120px; 
+        color:gray;
+      }
     .sidebar .profile .btn-sign-out {
       background: none;
       border: none; }

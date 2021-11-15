@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _db;

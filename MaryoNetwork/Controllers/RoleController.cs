@@ -1,6 +1,7 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models;
 using MaryoNetwork.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RoleController : Controller
     {
         RoleManager<IdentityRole> _roleManager;
