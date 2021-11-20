@@ -47,75 +47,42 @@
                             <span class="profile-name">@Model.User.FullName</span>
                         </div>
                         <div class="d-none d-md-block">
-                            <button class="btn btn-primary btn-icon-text btn-edit-profile">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg> Edit profile
-                            </button>
+                            @if (ViewBag.requestFriend == null)
+                            {
+                                <form method="post" asp-controller="User" asp-action="Addfriend">
+                                    <input type="hidden" name="ReceiverId" value="@Model.User.Id" />
+                                    <button type="submit" class="btn btn-xs btn-outline-primary">Add Friend</button>
+                                </form>
+                            }else if (ViewBag.waitFriend == true)
+                            {
+                                <p>waiting approving friendly</p>
+                            }else if (ViewBag.isFriend == true)
+                            {
+                                <p>isfriend</p>
+                            }
+
                         </div>
                     </div>
-                </div>
-                <div class="header-links">
-                    <ul class="links d-flex align-items-center mt-3 mt-md-0">
-                        <li class="header-link-item d-flex align-items-center active">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-columns mr-1 icon-md">
-                                <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"></path>
-                            </svg>
-                            <a class="pt-1px d-none d-md-block" href="#">Timeline</a>
-                        </li>
-                        <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user mr-1 icon-md">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            <a class="pt-1px d-none d-md-block" href="#">About</a>
-                        </li>
-                        <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users mr-1 icon-md">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                            <a class="pt-1px d-none d-md-block" href="#">Friends <span class="text-muted tx-12">3,765</span></a>
-                        </li>
-                        <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image mr-1 icon-md">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <a class="pt-1px d-none d-md-block" href="#">Photos</a>
-                        </li>
-                        <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video mr-1 icon-md">
-                                <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                            </svg>
-                            <a class="pt-1px d-none d-md-block" href="#">Videos</a>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
     <div class="d-flex flex-row justify-content-between">
         <div class="card pb-2 m-2">
-            <h4>About : </h4>
-            <p>@Model.User.About</p>
-            <h4>Email : </h4>
-            <p>@Model.User.Email</p>
-            <h4>Phone : </h4>
-            <p>@Model.User.PhoneNumber</p>
-            <h4>Country : </h4>
-            <p>@Model.User.Country</p>
-            <h4>Linkedin : </h4>
-            <a href="@Model.User.Linkedin" target="_blank">@Model.User.Linkedin</a>
-            <h4>Facebook : </h4>
-            <a href="@Model.User.Facebook" target="_blank">@Model.User.Facebook</a>
-            <h4>Github : </h4>
-            <a href="@Model.User.Github" target="_blank">@Model.User.Github</a>
+            <h5>About : </h5>
+            <p style="background-color: #f4f2f2; border-radius:10px;" class="p-2" >@Model.User.About</p>
+            <h5>Email : </h5>
+            <p style="background-color: #f4f2f2; border-radius: 10px;" class="p-2" >@Model.User.Email</p>
+            <h5>Phone : </h5>
+            <p style="background-color: #f4f2f2; border-radius: 10px;" class="p-2" >@Model.User.PhoneNumber</p>
+            <h5>Country : </h5>
+            <p style="background-color: #f4f2f2; border-radius: 10px;" class="p-2" >@Model.User.Country</p>
+            <h5>Linkedin : </h5>
+            <a style="background-color: #f4f2f2; border-radius: 10px;" class="p-2"  href="@Model.User.Linkedin" target="_blank">@Model.User.Linkedin</a>
+            <h5>Facebook : </h5>
+            <a style="background-color: #f4f2f2; border-radius: 10px;" class="p-2" href="@Model.User.Facebook" target="_blank">@Model.User.Facebook</a>
+            <h5>Github : </h5>
+            <a style="background-color: #f4f2f2; border-radius: 10px;" class="p-2"  href="@Model.User.Github" target="_blank">@Model.User.Github</a>
         </div>
         <div>
             @foreach (var user in Model.Users)
@@ -195,11 +162,6 @@
                                     <span>@post.Comments.Count() comments</span>
                                 </div>
                             </div>
-                            @*<hr>*@
-                            @*<div class="comment-input">
-                            <input type="text" class="form-control" placeholder="Write a comment...">
-                            <div class="fonts"> <i class="fa fa-camera"></i> </div>
-                        </div>*@
                             <hr style="background-color: gray">
                             <div class="comments">
                                 @foreach (var i in post.Comments)
@@ -239,27 +201,63 @@
             <hr />
             <h3>Friends</h3>
             <div>
-                @foreach (var item in Model.Users)
+                @foreach (var item in Model.User.FriendRequestReceived)
                 {
-                    <div class="d-flex flex-row justify-content-between">
-                        <div>
-                            @if (item.FriendRequestSent != null)
-                            {
-                                @foreach (var friendSenders in item.FriendRequestSent)
-                                {
-                                    <p> @friendSenders.Sender.FullName ==></p>
-                                }
-                            }
-                            @if (item.FriendRequestReceived != null)
-                            {
-                                @foreach (var friendreceived in item.FriendRequestReceived)
-                                {
-                                    <p>==> @friendreceived.Receiver.FullName</p>
-                                }
-                            }
-
-                        </div>
-                    </div>
+                <div class="d-flex">
+                    @if (item != null && item.RequestStatusId == "1" && item.SenderId == Model.User.Id)
+                    {
+                        @if (item.Receiver.ProfilePicture != null)
+                        {
+                            <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(item.Receiver.ProfilePicture)">
+                        }
+                        else
+                        {
+                            <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                        }
+                        <p>==> @item.Receiver.FullName</p>
+                    }
+                    @if (item != null && item.RequestStatusId == "1" && item.ReceiverId == Model.User.Id)
+                    {
+                        @if (item.Sender.ProfilePicture != null)
+                        {
+                            <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(item.Sender.ProfilePicture)">
+                        }
+                        else
+                        {
+                            <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                        }
+                        <p>@item.Sender.FullName ==></p>
+                    }
+                </div>
+                }
+                @foreach (var item in Model.User.FriendRequestSent)
+                {
+            <div class="d-flex">
+                @if (item != null && item.RequestStatusId == "1" && item.SenderId == Model.User.Id)
+                {
+                    @if (item.Receiver.ProfilePicture != null)
+                    {
+                        <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(item.Receiver.ProfilePicture)">
+                    }
+                    else
+                    {
+                        <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                    }
+                    <p>==> @item.Receiver.FullName</p>
+                }
+                @if (item != null && item.RequestStatusId == "1" && item.ReceiverId == Model.User.Id)
+                {
+                    @if (item.Sender.ProfilePicture != null)
+                    {
+                        <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(item.Sender.ProfilePicture)">
+                    }
+                    else
+                    {
+                        <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                    }
+                    <p>@item.Sender.FullName ==></p>
+                }
+            </div>
                 }
             </div>
             <hr />
@@ -309,115 +307,7 @@
 
 
 
-            <form method="post" asp-controller="User" asp-action="Addfriend">
-                <input type="hidden" name="ReceiverId" value="@Model.User.Id" />
-                <button type="submit" class="btn btn-xs btn-primary">Add Friend</button>
-            </form>
+            
 
 
 
-
-            <h1>Profile</h1>
-
-            <h1>@Model.User.FullName</h1>
-            @if (Model.User.ProfilePicture != null)
-            {
-                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(Model.User.ProfilePicture)">
-            }
-            else
-            {
-                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
-            }
-
-
-
-
-
-            <table class="table text-center">
-                <thead>
-
-                    <tr>
-                        <td>User</td>
-                        <td>content</td>
-                        <td>title</td>
-                        <td>image</td>
-                        <td>Comment</td>
-                        <td>Like</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <h1>Image</h1>
-                    @foreach (var u in Model.Users)
-                    {
-                        @foreach (var img in u.Images)
-                        {
-
-                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(img.Data)">
-
-                        }
-
-                        @foreach (var p in u.Posts)
-                        {
-                            <tr>
-                                <td>
-                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@p.UserId">
-                                        @if (p.User.ProfilePicture != null)
-                                        {
-                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(p.User.ProfilePicture)">
-                                        }
-                                        else
-                                        {
-                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
-                                        }
-                                        @Html.DisplayFor(modelItem => u.FullName)
-                                    </a>
-                                </td>
-                                <td>@p.Category.Name</td>
-                                <td>@p.Content</td>
-                                <td>
-                                    @foreach (var f in p.Images)
-                                    {
-                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
-                                    }
-                                </td>
-                                <td>
-                                    @*<form method="post" asp-controller="Post" asp-action="CreateComment">
-                                            <input type="text" name="Content" />
-                                            <input type="hidden" name="PostId" value="@item.Id" />
-                                            <input type="hidden" name="UserId" value="@id" />
-                                            <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                                        </form>*@
-                                    @foreach (var c in p.Comments)
-                                    {
-                                        <div class="d-flex">
-                                            <a asp-controller="User" asp-action="Profile" asp-route-id="@c.UserId">
-                                                @Html.DisplayFor(modelItem => c.User.FullName)
-                                                @if (c.User.ProfilePicture != null)
-                                                {
-                                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(c.User.ProfilePicture)">
-                                                }
-                                                else
-                                                {
-                                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
-                                                }
-                                            </a>
-                                            <p>@c.Content</p>|
-                                            <p>@c.CreatedOn</p>|
-                                        </div>
-                                    }
-                                    <p class="comment-count-@(p.Id)">(@p.Comments.Count())</p>
-                                </td>
-                                <td>
-                                    <form method="post" asp-controller="Post" asp-action="LikePost">
-                                        <input type="hidden" name="PostId" value="@p.Id" />
-                                        <button type="submit" class="btn btn-xs btn-primary">like</button>
-                                    </form>
-                                    @*<p class="comment-count-@(p.Id)">@p.Likes.Count(null)</p>*@
-                                </td>
-
-                            </tr>
-                        }
-
-                    }
-                </tbody>
-            </table>

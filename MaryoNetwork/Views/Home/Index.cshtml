@@ -53,7 +53,7 @@
                                     <h3>@category.Name</h3>
                                 </div>
                                 <div class="card-content-part">
-                                    <a asp-controller="Post" asp-action="Index" asp-route-id="@category.Id" class="m-xl-2">More Details </a>
+                                    <a asp-controller="Post" asp-action="Index" asp-route-id="@category.Id" class="m-xl-2">newsletter</a>
                                 </div>
                             </div>
                         }
@@ -145,11 +145,6 @@
                             <span>@post.Comments.Count() comments</span>
                         </div>
                     </div>
-                    @*<hr>*@
-                    @*<div class="comment-input">
-                <input type="text" class="form-control" placeholder="Write a comment...">
-                <div class="fonts"> <i class="fa fa-camera"></i> </div>
-            </div>*@
                     <hr style="background-color: rgb(58, 46, 224);">
                     <div class="comments">
                         @foreach (var i in post.Comments)

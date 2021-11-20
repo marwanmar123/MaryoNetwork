@@ -8,10 +8,10 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@localizer["Register"]</h1>
 
-<div class="row">
-    <div class="col-md-4">
+<div class="container">
+    <div class="w-50">
+        <h1>@localizer["Register"]</h1>
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>@localizer["Create a new account."]</h4>
             <hr />
@@ -39,7 +39,7 @@
             <button type="submit" class="btn btn-primary">@localizer["Register"]</button>
         </form>
     </div>
-    <div class="col-md-6 col-md-offset-2">
+    @*<div class="col-md-6 col-md-offset-2">
         <section>
             <h4>@localizer["Use another service to register."]</h4>
             <hr />
@@ -68,7 +68,7 @@
                 }
             }
         </section>
-    </div>
+    </div>*@
 </div>
 
 @section Scripts {

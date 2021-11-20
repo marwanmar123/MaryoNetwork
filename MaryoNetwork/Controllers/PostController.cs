@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
 {
+    [Authorize]
     public class PostController : Controller
     {
         private readonly ApplicationDbContext _db;

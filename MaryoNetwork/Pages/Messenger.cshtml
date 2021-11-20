@@ -21,7 +21,7 @@
     <div class="sidebar">
         <div class="header">
             <h5>Chat Rooms</h5>
-            <a href="#" id="create-room" data-toggle="modal" data-target="#create-room-modal">
+            <a href="#" class="text-dark" id="create-room" data-toggle="modal" data-target="#create-room-modal">
                 <i class="fas fa-plus text-dark"></i>
             </a>
         </div>
@@ -32,9 +32,7 @@
             <div>
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" data-bind="text: myName"></a>
             </div>
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post">
-                <button type="submit" class="btn-sign-out"><i class="fas fa-sign-out-alt text-dark"></i></button>
-            </form>
+            <a asp-controller="home" asp-action="index"><i class="fas fa-sign-out-alt text-dark"></i></a>
         </div>
     </div>
     <div class="main-content" data-bind="visible: joinedRoom().length == 0">

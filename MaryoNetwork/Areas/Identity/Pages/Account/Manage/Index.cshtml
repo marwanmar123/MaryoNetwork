@@ -31,21 +31,24 @@
 
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 @foreach(var fr in friendRequest)
-            {
-<div>
-    <h1>you have a request friend from : @fr.Sender.FullName</h1>
-    <form style="display:inline;" method="post" asp-controller="User" asp-action="ApproveFriend">
-        <input type="hidden" name="Id" value="@fr.Id" />
-        <input type="hidden" name="RequestStatus" value="1" />
-        <button type="submit" class="btn btn-xs btn-outline-success">Approved</button>
-    </form>
-    <form style="display:inline;" method="post" asp-controller="User" asp-action="ApproveFriend">
-        <input type="hidden" name="Id" value="@fr.Id" />
-        <input type="hidden" name="RequestStatus" value="2" />
-        <button type="submit" class="btn btn-xs btn-outline-warning">rejected</button>
-    </form>
-</div>
-            }
+{
+    if(fr.RequestStatusId == "3")
+    {
+        <div>
+            <h1>you have a request friend from : @fr.Sender.FullName</h1>
+            <form style="display:inline;" method="post" asp-controller="User" asp-action="ApproveFriend">
+                <input type="hidden" name="Id" value="@fr.Id" />
+                <input type="hidden" name="RequestStatus" value="1" />
+                <button type="submit" class="btn btn-xs btn-outline-success">Approved</button>
+            </form>
+            <form style="display:inline;" method="post" asp-controller="User" asp-action="ApproveFriend">
+                <input type="hidden" name="Id" value="@fr.Id" />
+                <input type="hidden" name="RequestStatus" value="2" />
+                <button type="submit" class="btn btn-xs btn-outline-warning">rejected</button>
+            </form>
+        </div>
+    }
+}
 
 
 <form id="profile-form" method="post" enctype="multipart/form-data">
@@ -74,7 +77,7 @@
                                     <input type="file"
                                            accept=".png,.jpg,.jpeg,.gif,.tif"
                                            asp-for="Input.ProfilePicture"
-                                           class="w-25"
+                                           class="w-100"
                                            style="border:0px!important;padding: 0px;padding-top: 10px;padding-bottom: 30px;"
                                            onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0])" />
                                     <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
@@ -100,26 +103,26 @@
             </div>
             <div class="d-flex flex-row justify-content-between mw-100">
                 <div class="card p-2 m-1">
-                    <h4>About : </h4>
-                    <textarea asp-for="Input.About" class="form-control border-0 bg-transparent"></textarea>
+                    <h5>About : </h5>
+                    <textarea asp-for="Input.About" class="form-control border-0 " style="height: 220px; background-color: #f4f2f2;"></textarea>
                     <span asp-validation-for="Input.About" class="text-danger"></span>
-                    <h4>Email : </h4>
-                    <input asp-for="Username" class="form-control border-0 bg-transparent" />
+                    <h5>Email : </h5>
+                    <input asp-for="Username" class="form-control border-0" style="background-color: #f4f2f2;" disabled/>
                     <span asp-validation-for="Username" class="text-danger"></span>
-                    <h4>Phone : </h4>
-                    <input asp-for="Input.PhoneNumber" class="form-control border-0 bg-transparent" />
+                    <h5>Phone : </h5>
+                    <input asp-for="Input.PhoneNumber" class="form-control border-0" style="background-color: #f4f2f2;" />
                     <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                    <h4>Country : </h4>
-                    <input asp-for="Input.Country" class="form-control border-0 bg-transparent" />
+                    <h5>Country : </h5>
+                    <input asp-for="Input.Country" class="form-control border-0 " style="background-color: #f4f2f2;" />
                     <span asp-validation-for="Input.Country" class="text-danger"></span>
-                    <h4>Linkedin : </h4>
-                    <input asp-for="Input.Linkedin" class="form-control border-0 bg-transparent" />
+                    <h5>Linkedin : </h5>
+                    <input asp-for="Input.Linkedin" class="form-control border-0 " style="background-color: #f4f2f2;" />
                     <span asp-validation-for="Input.Linkedin" class="text-danger"></span>
-                    <h4>Facebook : </h4>
-                    <input asp-for="Input.Facebook" class="form-control border-0 bg-transparent" />
+                    <h5>Facebook : </h5>
+                    <input asp-for="Input.Facebook" class="form-control border-0 " style="background-color: #f4f2f2;" />
                     <span asp-validation-for="Input.Facebook" class="text-danger"></span>
-                    <h4>Github : </h4>
-                    <input asp-for="Input.Github" class="form-control border-0 bg-transparent" />
+                    <h5>Github : </h5>
+                    <input asp-for="Input.Github" class="form-control border-0 " style="background-color: #f4f2f2;" />
                     <span asp-validation-for="Input.Github" class="text-danger"></span>
                 </div>
                 <div>
@@ -148,7 +151,6 @@
                                             if (post.User.IsOnline == true)
                                             {
                                                 <img class="profile-actif" src="~/image/defaultProfile.png">
-
                                             }
                                             else
                                             {
@@ -157,7 +159,7 @@
                                             }
                                         }
                                         <div class="d-flex flex-column ml-2">
-                                            <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold text-light">@post.User.FullName</a>
+                                            <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold">@post.User.FullName</a>
                                             <small class="mr-2 text-dark">@post.CreatedOn</small>
                                         </div>
                                     </div>
@@ -172,9 +174,6 @@
                                         {
                                             <img class="w-100" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
                                         }
-
-
-
                                     }
                                     else
                                     {
@@ -244,27 +243,21 @@
                     <hr />
                     <h3>Friends</h3>
                     <div>
-                        @foreach (var item in profile)
+                        @foreach (var user in profile)
                         {
-                            <div class="d-flex flex-row justify-content-between">
-                                <div>
-                                    @if (item.FriendRequestSent != null)
-                                    {
-                                        @foreach (var friendSenders in item.FriendRequestSent)
+                            @foreach (var item in user.FriendRequestReceived)
+                            {
+                                <div class="d-flex">
+                                        @if (item != null && item.SenderId == id && item.RequestStatusId== "1")
                                         {
-                                            <p> @friendSenders.Sender.FullName ==></p>
+                                            <p>==> @item.Receiver.FullName</p>
                                         }
-                                    }
-                                    @if (item.FriendRequestReceived != null)
-                                    {
-                                        @foreach (var friendreceived in item.FriendRequestReceived)
+                                        @if (item != null && item.ReceiverId == id && item.RequestStatusId == "1")
                                         {
-                                            <p>==> @friendreceived.Receiver.FullName</p>
+                                            <p>@item.Sender.FullName ==> </p>
                                         }
-                                    }
-
                                 </div>
-                            </div>
+                            }
                         }
                     </div>
                     <hr />
@@ -289,22 +282,6 @@
                                 <p>Nothings</p>
                             }
                         }
-                        @*@if (Model.User.Members.Where(a => a.UserId == Model.User.Id) != null)
-        {
-            <div class="d-flex flex-wrap justify-content-center" style="max-width:100%;">
-                @foreach (var group in Model.User.Members)
-                {
-                    <div class="p-1 m-1" style="background-color: #B6B6B6;">
-                        <img style="max-width:100px; max-height:75px;" class="rounded" src="data:image/*;base64,@Convert.ToBase64String(group.Group.Image)">
-                        <p class="text-dark">@group.Group.Name</p>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p>Nothings</p>
-        }*@
                     </div>
                 </div>
             </div>
@@ -312,83 +289,7 @@
     </div>       
 </form>
 
-    <table class="table text-center text-light">
-        <thead>
-
-            <tr>
-                <td>User</td>
-                <td>content</td>
-                <td>image</td>
-                <td>Comment</td>
-                <td>Like</td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var u in profile)
-            {
-
-                @foreach (var p in u.Posts)
-                {
-                    <tr>
-                        <td>
-                            <p class="text-light">@p.User.FullName</p>
-                            @if (p.User.ProfilePicture != null)
-                            {
-                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(p.User.ProfilePicture)">
-                            }
-                            else
-                            {
-                                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
-                                @*<p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>*@
-                            }
-                        </td>
-                        <td class="text-light">@p.Category.Name</td>
-                        <td class="text-light">@p.Content</td>
-                        <td>
-                            <form method="post" asp-controller="Post" asp-action="CreateCommentProfile">
-                                <input type="text" name="Content" />
-                                <input type="hidden" name="PostId" value="@p.Id" />
-                                <input type="hidden" name="UserId" value="@id" />
-                                <button type="submit" class="btn btn-xs btn-primary">Comment</button>
-                            </form>
-                            @foreach (var c in p.Comments)
-                            {
-                                <div class="d-flex">
-                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@c.UserId">
-                                        @Html.DisplayFor(modelItem => c.User.FullName)
-                                        @if (c.User.ProfilePicture != null)
-                                        {
-                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@Convert.ToBase64String(c.User.ProfilePicture)">
-                                        }
-                                        else
-                                        {
-                                            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="~/image/defaultProfile.png">
-                                            @*<p class="text-center" style="width:40px;height:40px; background-color:forestgreen; font-weight:bold; object-fit:cover; border-radius:30px">@fullName.Substring(0, 2).ToUpper()</p>*@
-                                        }
-                                    </a>
-                                    <p class="text-light">@c.Content</p>|
-                                    <p class="text-light">@c.CreatedOn</p>|
-                                </div>
-                            }
-                            <p>(@p.Comments.Count())</p>
-                        </td>
-                        <td>
-                            <form method="post" asp-controller="Post" asp-action="LikePost">
-                                <input type="hidden" name="PostId" value="@p.Id" />
-                                <button type="submit" class="btn btn-xs btn-primary">like @p.Likes.Count()</button>
-                            </form>
-                            @*<p class="comment-count-@(item.Id)">@item.Likes.Count(null)</p>*@
-                        </td>
-
-                    </tr>
-                }
-
-            }
-        </tbody>
-    </table>
-
-
-
+    
 <script type="text/javascript">
     function storePagePosition() {
         var page_y = window.pageYOffset;

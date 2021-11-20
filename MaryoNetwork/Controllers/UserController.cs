@@ -3,6 +3,7 @@ using MaryoNetwork.Models;
 using MaryoNetwork.Models.Friends;
 using MaryoNetwork.Models.Posts;
 using MaryoNetwork.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -32,8 +34,10 @@ namespace MaryoNetwork.Controllers
             IEnumerable<User> users;
             if (!string.IsNullOrEmpty(search))
             {
-                users = _db.Users.Include(a => a.FriendRequestSent)
-                .Include(a => a.FriendRequestReceived).Where(s => s.FullName.ToLower().Contains(search.ToLower()) && s.Id != currentUser);
+                users = _db.Users
+                .Include(a => a.FriendRequestSent)
+                .Include(a => a.FriendRequestReceived)
+                .Where(s => s.FullName.ToLower().Contains(search.ToLower()) && s.Id != currentUser);
             }
             else
             {
@@ -52,6 +56,7 @@ namespace MaryoNetwork.Controllers
 
         public async Task<IActionResult> Profile(User user, string id)
         {
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (user == null)
             {
                 return NotFound();
@@ -74,7 +79,14 @@ namespace MaryoNetwork.Controllers
                 .ToListAsync(),
                 User = _db.Users.FirstOrDefault(a => a.Id == id)
             };
-
+            var requestFriend = _db.Friends.SingleOrDefault(a => a.ReceiverId == currentUser && a.SenderId == id || a.SenderId == currentUser && a.ReceiverId == id);
+            
+            ViewBag.requestFriend = requestFriend;
+            if (requestFriend != null)
+            {
+                ViewBag.waitFriend = requestFriend.RequestStatusId == "3";
+                ViewBag.isFriend = requestFriend.RequestStatusId == "1";
+            }
             return View(data);
         }
 
@@ -143,11 +155,9 @@ namespace MaryoNetwork.Controllers
         }
 
 
-
-
         public async Task<IActionResult> Addfriend(Friend friend)
         {
-            
+
             var CurrentuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var addFriend = new Friend()
@@ -176,9 +186,6 @@ namespace MaryoNetwork.Controllers
             }
             _db.SaveChanges();
             return Redirect("/Identity/Account/Manage");
-
         }
-
-       
     }
 }

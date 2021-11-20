@@ -1,5 +1,6 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models.Editors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
 {
+    [Authorize]
     public class EditorController : Controller
     {
         private readonly ApplicationDbContext _db;
