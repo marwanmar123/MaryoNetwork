@@ -83,30 +83,66 @@
             <td>
                 @foreach (var item in Model)
                 {
-                    <div class="d-flex flex-row justify-content-between">
-                        <div>
-                            @if (item.FriendRequestSent != null)
+                    foreach (var receive in item.FriendRequestReceived)
+                    {
+                        <div class="d-flex">
+                            @if (receive != null && receive.RequestStatusId == "1" && receive.SenderId == id)
                             {
-                                @foreach (var friendSenders in item.FriendRequestSent)
+                                @if (receive.Receiver.ProfilePicture != null)
                                 {
-                            <p> @friendSenders.Sender.FullName ==></p>
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(receive.Receiver.ProfilePicture)">
                                 }
+                                else
+                                {
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                                }
+                                <p>==> @receive.Receiver.FullName</p>
                             }
-
-                        </div>
-                        <div>
-                            @if (item.FriendRequestReceived != null)
+                            @if (receive != null && receive.RequestStatusId == "1" && receive.ReceiverId == id)
                             {
-                                @foreach (var friendreceived in item.FriendRequestReceived)
+                                @if (receive.Sender.ProfilePicture != null)
                                 {
-                                    <p>==> @friendreceived.Receiver.FullName</p>
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(receive.Sender.ProfilePicture)">
                                 }
+                                else
+                                {
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                                }
+                                <p>@receive.Sender.FullName ==></p>
                             }
-
                         </div>
-                    </div>
+                    }
+                    @foreach (var send in item.FriendRequestSent)
+                    {
+                        <div class="d-flex">
+                            @if (send != null && send.RequestStatusId == "1" && send.SenderId == id)
+                            {
+                                @if (send.Receiver.ProfilePicture != null)
+                                {
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(send.Receiver.ProfilePicture)">
+                                }
+                                else
+                                {
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                                }
+                                <p>==> @send.Receiver.FullName</p>
+                            }
+                            @if (send != null && send.RequestStatusId == "1" && send.ReceiverId == id)
+                            {
+                                @if (send.Sender.ProfilePicture != null)
+                                {
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="data:image/*;base64,@Convert.ToBase64String(send.Sender.ProfilePicture)">
+                                }
+                                else
+                                {
+                                    <img class="rounded-circle" style="width: 40px; height: 40px;" src="~/image/defaultProfile.png">
+                                }
+                                <p>@send.Sender.FullName ==></p>
+                            }
+                        </div>
+                    }
                 }
-            </td>
+                </td>
         </tr>
     </tbody>
 </table>
