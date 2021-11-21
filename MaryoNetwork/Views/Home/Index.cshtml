@@ -64,12 +64,46 @@
     </div>
 </div>
 
+<form class="d-flex justify-content-center" asp-controller="Home" asp-action="Index">
+    <input type="text" name="search" class="w-100 p-2 rounded border-0" placeholder="search post" />
+    <button class="d-none" id="searchBtn">search</button>
+    <a class="rounded bg-secondary p-1 text-light text-decoration-none" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">&times;</a>
+</form>
 
 
+<div class="mt-5 mb-2">
+    <div class="d-flex flex-row justify-content-between w-100">
+        <div class="bg-light rounded mt-2 p-3">
+            <div class="border rounded p-2">
+                <h4>Send a request to the administrator</h4>
+                <form method="post" asp-controller="home" asp-action="CreateRequest">
+                    <input type="text" class="rounded-pill" name="Content" />
+                </form>
+            </div>
+            <div class="p-1 pt-3">
+                @foreach (var req in Model.Request)
+                {
+                    <div class="d-flex">
+                        <form method="post" asp-controller="home" asp-action="voteIncremment">
+                            <input type="hidden" class="rounded-pill" name="add" value="1" />
+                            <input type="hidden" class="rounded-pill" name="Id" value="@req.Id" />
+                            <button type="submit">@req.Like ^ </button>
+                        </form>
 
-<div class="container mt-5 mb-5">
-    <div class="row d-flex align-items-center justify-content-center">
-        <div class="col-md-6">
+                        <p class="p-1">@req.Content</p>
+                        <hr />
+                        @if (User.IsInRole("admin"))
+                        {
+                            <form method="post" asp-controller="home" asp-action="DeleteRequest">
+                                <input type="hidden" class="rounded-pill" name="Id" value="@req.Id" />
+                                <button type="submit" class="btn btn-danger">delete</button>
+                            </form>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-auto">
             @foreach (var post in Model.Post)
             {
             <div class="card pb-2 m-2">
@@ -115,11 +149,8 @@
                     {
                         @foreach (var f in post.Images)
                         {
-                            <img class="w-100" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
+                            <img class="w-100" style="max-height:40em;" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
                         }
-
-
-
                     }
                     else
                     {
@@ -170,6 +201,35 @@
                     </div>
                 </div>
             </div>
+            }
+        </div>
+        <div class="bg-light rounded mt-2 p-2">
+            @foreach (var item in Model.Group.Take(5))
+            {
+                <div class="d-flex border rounded p-2 mb-1">
+                    <img class="w-25 p-2" src="data:image/*;base64,@Convert.ToBase64String(item.Image)">
+                    <div>
+                        <a class="text-decoration-none font-weight-bold" asp-controller="Groups" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                        <p id="Limit-description">@item.Description</p>
+                        @if (item.Members.SingleOrDefault(a => a.GroupId == item.Id && a.UserId == id) == null)
+                        {
+                            <form method="post" asp-controller="Groups" asp-action="Follow">
+                                <input type="hidden" name="GroupId" value="@item.Id" />
+                                <button type="submit" class="btn btn-primary">Follow</button>
+                            </form>
+                        }
+                        else
+                        {
+                            @foreach (var member in item.Members.Where(a => a.UserId == id))
+                            {
+                                <form method="post" asp-controller="Groups" asp-action="Quitter">
+                                    <input type="hidden" name="Id" value="@member.Id" />
+                                    <button type="submit" class="btn btn-danger">Quiiter</button>
+                                </form>
+                            }
+                        }
+                    </div>
+                </div>
             }
         </div>
     </div>

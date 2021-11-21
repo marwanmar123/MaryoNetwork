@@ -9,6 +9,7 @@ using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Messenger;
 using MaryoNetwork.Models.Posts;
+using MaryoNetwork.Models.Requests;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -38,6 +39,7 @@ namespace MaryoNetwork.Data
         public DbSet<GroupMembers> GroupMembers { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Request> Requests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

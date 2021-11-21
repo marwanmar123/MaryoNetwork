@@ -52,7 +52,7 @@
                 <form id="logout" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                     @if (isOnline == true)
                     {
-                        <p class="p-2 text-dark">disconnect befor logout</p>
+                        <p class="nav-link btn btn-link text-dark"><abbr title="plz desconnected before">@localizer["Logout"]</abbr></p>
                     }
                     else
                     {

@@ -1,5 +1,6 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Extensions;
+using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
@@ -59,7 +60,8 @@ namespace MaryoNetwork.Controllers
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
                 .Include(l => l.Likes)
-                .Where(s => s.Content.ToLower().Contains(search.ToLower()))
+                .Include(u => u.Category)
+                .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
                 .ToList();
 
             }
@@ -83,6 +85,8 @@ namespace MaryoNetwork.Controllers
             //    .Where(x => x.CategoryId == id && x.Approved == true)
             //    .OrderByDescending(y => y.CreatedOn)
             //    .ToList();
+            Category ctgr = _db.Categories.Find(id);
+            ViewBag.nameCat = ctgr.Name;
             return View(posts);
         }
 

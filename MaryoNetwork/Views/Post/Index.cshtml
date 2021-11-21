@@ -23,24 +23,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css" />
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <div>
+        <h4>Welcome to</h4>
+        <h1 class="font-weight-bolder">@ViewBag.nameCat</h1>
+    </div>
+    <div class="ml-4">
+        <form asp-controller="Post" asp-action="Index">
+            <input type="text" name="search" class="w-50 p-2 rounded-pill border-0" placeholder="search post" />
+            <button class="d-none" id="searchBtn">search</button>
+            <a class="rounded-circle bg-secondary p-1 text-light text-decoration-none" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">&times;</a>
+        </form>
+    </div>
 </div>
 
-<div class="container mt-5 mb-5">
+<div class="text-center">
     <div class="row d-flex align-items-center justify-content-center">
-        <div class="col-md-6">
-            <form asp-controller="Post" asp-action="Index" class="d-flex justify-content-around ml-3">
-                <input type="text" name="search" class="w-75" placeholder="search post" />
-                <button class="d-none" id="searchBtn">search</button>
-                <a class="btn btn-primary" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">*</a>
-            </form>
-
-
-            <form class="" asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
-                <textarea type="text" name="Content" id="emoji" class="w-100 m-3" placeholder="Write Content Post"></textarea>
-                <input type="file" class="ml-3 btn btn-outline-info" name="files" multiple required />
-                <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
-                <button type="submit" class="btn btn-xs btn-primary">Submit</button>
+        <div>
+            <form class="w-100 m-2 p-2 border border-secondary rounded-lg" asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
+                <textarea type="text" name="Content" id="emoji" class="w-100 h-25" placeholder="Write Content Post" required></textarea>
+                <div class="d-flex justify-content-between pt-2 pb-2">
+                    <input type="file" class="btn btn-outline-info" name="files" multiple required />
+                    <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
+                    <button type="submit" class="btn btn-xs btn-primary">Submit</button>
+                </div>
             </form>
             @foreach (var post in Model)
             {
