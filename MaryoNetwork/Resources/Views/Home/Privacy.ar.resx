@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Privacy Policy" xml:space="preserve">
-    <value>سياسة خاصة</value>
+    <value>سياسة الخصوصيات</value>
   </data>
   <data name="Use this page to detail your site's privacy policy." xml:space="preserve">
     <value>استخدم هذه الصفحة لتفاصيل سياسة الخصوصية الخاصة بموقعك.</value>

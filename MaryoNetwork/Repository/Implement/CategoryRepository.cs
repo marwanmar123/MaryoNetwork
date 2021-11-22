@@ -27,7 +27,30 @@ namespace MaryoNetwork.Repository.Implement
 
         public async Task<int> DeleteItem(string id)
         {
-            var user = await _db.Categories.FirstOrDefaultAsync(i => i.Id == id);
+            var user = await _db.Categories
+                .Include(a=>a.Post)
+                .ThenInclude(a=>a.Comments)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Likes)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Images)
+                .FirstOrDefaultAsync(i => i.Id == id);
+            foreach(var p in user.Post)
+            {
+                _db.Remove(p);
+                foreach (var i in p.Images)
+                {
+                    _db.Remove(i);
+                }
+                foreach (var c in p.Comments)
+                {
+                    _db.Remove(c);
+                }
+                foreach (var l in p.Likes)
+                {
+                    _db.Remove(l);
+                }
+            }
             _db.Categories.Remove(user);
             var save = await _db.SaveChangesAsync();
             return save;

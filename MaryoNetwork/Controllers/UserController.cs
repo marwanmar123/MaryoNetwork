@@ -76,6 +76,8 @@ namespace MaryoNetwork.Controllers
                 .ThenInclude(x => x.Category)
                 .Include(a => a.Posts)
                 .ThenInclude(x => x.Likes)
+                .Include(a => a.Posts)
+                .ThenInclude(x => x.Images)
                 .ToListAsync(),
                 User = _db.Users.FirstOrDefault(a => a.Id == id)
             };

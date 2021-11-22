@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaryoNetwork.Models.Posts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace MaryoNetwork.Models.Groups
         public string UserId { get; set; }
         public User User { get; set; }
         public IEnumerable<GroupMembers> Members { get; set; }
+        public ICollection<Post> Post { get; set; }
     }
 }

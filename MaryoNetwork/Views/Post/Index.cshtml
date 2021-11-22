@@ -39,7 +39,7 @@
 <div class="text-center">
     <div class="row d-flex align-items-center justify-content-center">
         <div>
-            <form class="w-100 m-2 p-2 border border-secondary rounded-lg" asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
+            <form class="w-100 mt-1 mb-1 p-2 border border-secondary rounded-lg" asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
                 <textarea type="text" name="Content" id="emoji" class="w-100 h-25" placeholder="Write Content Post" required></textarea>
                 <div class="d-flex justify-content-between pt-2 pb-2">
                     <input type="file" class="btn btn-outline-info" name="files" multiple required />
@@ -85,7 +85,6 @@
                     <div>
                         <p class="text-justify text-dark">@post.Content</p>
                     </div>
-                    <p>@post.Images.Count</p>
                     <div class="contentImg">
                         @if (post.Images.Count == 1)
                         {

@@ -11,6 +11,12 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using MaryoNetwork.Models.Posts;
+using MaryoNetwork.Services.Posts;
+using MaryoNetwork.Models.Images;
+using MaryoNetwork.Services.Users;
+using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Likes;
 
 namespace MaryoNetwork.Controllers
 {
@@ -18,10 +24,17 @@ namespace MaryoNetwork.Controllers
     public class GroupsController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly IPostService _postService;
+        private readonly IUserService _userService;
 
-        public GroupsController(ApplicationDbContext db)
+        public GroupsController(
+            ApplicationDbContext db,
+            IPostService postService,
+            IUserService userService)
         {
             _db = db;
+            _postService = postService;
+            _userService = userService;
         }
         public IActionResult Index(string search = null)
         {
@@ -50,6 +63,15 @@ namespace MaryoNetwork.Controllers
             var group = await _db.Groups
                 .Include(a => a.User)
                 .Include(a=>a.Members)
+                .ThenInclude(a=>a.User)
+                .Include(a=>a.Post)
+                    .ThenInclude(a=>a.Images)
+                .Include(a => a.Post)
+                    .ThenInclude(a => a.Comments)
+                .Include(a => a.Post)
+                    .ThenInclude(a => a.Likes)
+                .Include(a => a.Post)
+                    .ThenInclude(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (group == null)
             {
@@ -87,7 +109,7 @@ namespace MaryoNetwork.Controllers
 
             await _db.AddAsync(createGroup);
             await _db.SaveChangesAsync();
-            return View();
+            return RedirectToAction("index");
         }
 
 
@@ -115,6 +137,112 @@ namespace MaryoNetwork.Controllers
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateGroupPost(Post post, List<IFormFile> files, string postId, string groupId)
+        {
+            var group = await _db.Groups.FirstOrDefaultAsync(m => m.Id == groupId);
+            var postt = await _postService.GetPostWithUserAsync(postId);
+            var totalLike = _db.Likes.Where(l => l.PostId == postId);
+
+            var addPost = new Post
+            {
+                Content = post.Content,
+                UserId = await _userService.GetCurrentUserIdAsync(),
+                GroupId = post.GroupId,
+                Approved = false
+            };
+
+            _db.Add(addPost);
+
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                var extension = Path.GetExtension(file.FileName);
+                var fileModel = new Image
+                {
+                    CreatedOn = DateTime.UtcNow,
+                    FileType = file.ContentType,
+                    Extension = extension,
+                    Name = fileName,
+                    UploadedById = await _userService.GetCurrentUserIdAsync(),
+                    PostId = addPost.Id
+                };
+                using (var dataStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(dataStream);
+                    fileModel.Data = dataStream.ToArray();
+                }
+                await _db.AddAsync(fileModel);
+                await _db.SaveChangesAsync();
+            }
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Groups", new { id = groupId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateGroupComment(string postId, string content, Comment comment)
+        {
+            var post = await _postService.GetPostWithUserAsync(postId);
+
+            var addComment = new Comment
+            {
+                Content = content,
+                UserId = comment.UserId,
+                PostId = post.Id
+            };
+            await _db.AddAsync(addComment);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Groups", new { id = post.GroupId });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LikeGroupPost(string postId)
+        {
+            var post = await _postService.GetPostWithUserAsync(postId);
+            var userId = await _userService.GetCurrentUserIdAsync();
+
+            var like = _db.Likes.FirstOrDefault(l => l.PostId == postId && l.UserId == userId);
+
+
+            if (like == null)
+            {
+                like = new Like
+                {
+                    UserId = userId,
+                    PostId = post.Id
+                };
+                await _db.AddAsync(like);
+            }
+            else
+            {
+                _db.Likes.Remove(like);
+            }
+            await _db.SaveChangesAsync();
+            var likeCount = _db.Likes.Where(l => l.PostId == postId).CountAsync();
+            ViewBag.likeCount = likeCount;
+
+            return RedirectToAction("Details", "Groups", new { id = post.GroupId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditGroupName(string groupId, string nameGroup)
+        {
+            var group = await _db.Groups.FirstOrDefaultAsync(m => m.Id == groupId);
+            group.Name = nameGroup;
+            _db.SaveChanges();
+
+            return RedirectToAction("Details", "Groups", new { id = groupId });
         }
 
     }

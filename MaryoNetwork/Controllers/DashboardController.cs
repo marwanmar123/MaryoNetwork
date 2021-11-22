@@ -145,14 +145,38 @@ namespace MaryoNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteGroup(string id)
         {
-
-            var resId = _db.Groups.Include(a => a.Members).FirstOrDefault(a => a.Id == id);
+            var resId = _db.Groups
+                .Include(a => a.Members)
+                .Include(a=>a.Post)
+                .ThenInclude(a=>a.Comments)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Images)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Likes)
+                .FirstOrDefault(a => a.Id == id);
             foreach (var a in resId.Members)
             {
                 _db.Remove(a);
             }
+            foreach (var p in resId.Post)
+            {
+                _db.Remove(p);
+                foreach (var i in p.Images)
+                {
+                    _db.Remove(i);
+                }
+                foreach (var c in p.Comments)
+                {
+                    _db.Remove(c);
+                }
+                foreach (var l in p.Likes)
+                {
+                    _db.Remove(l);
+                }
+            }
+
             _db.Remove(resId);
-           await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
             return RedirectToAction("Groups", "Dashboard");
 
         }

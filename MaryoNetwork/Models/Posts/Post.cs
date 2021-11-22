@@ -1,5 +1,6 @@
 ﻿using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
+using MaryoNetwork.Models.Groups;
 using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using System;
@@ -24,5 +25,7 @@ namespace MaryoNetwork.Models.Posts
         public IEnumerable<Like> Likes { get; set; }
         public string CategoryId { get; set; }
         public Category Category { get; set; }
+        public string GroupId { get; set; }
+        public Group Group { get; set; }
     }
 }

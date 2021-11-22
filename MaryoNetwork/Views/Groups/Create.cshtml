@@ -8,18 +8,16 @@
 
 <h4>Group</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Groups" asp-action="Create" enctype="multipart/form-data">
-            <input type="file" name="Image" required />
+    <div class="d-flex justify-content-center">
+        <form class="d-flex flex-column w-50" asp-controller="Groups" asp-action="Create" enctype="multipart/form-data">
             <label>Name</label>
-            <input type="text" name="Name" />
+            <input type="text" name="Name" required/>
             <label>Description</label>
-            <textarea type="text" name="Description" ></textarea>
-            <button type="submit" class="btn btn-xs btn-primary">Submit</button>
+            <textarea type="text" name="Description" required></textarea>
+            <input type="file" class="w-100 p-2" name="Image" required />
+            <button type="submit" class="btn btn-xs btn-primary mt-1">Submit</button>
         </form>
     </div>
-</div>
 
 <div>
     <a asp-action="Index">Back to List</a>

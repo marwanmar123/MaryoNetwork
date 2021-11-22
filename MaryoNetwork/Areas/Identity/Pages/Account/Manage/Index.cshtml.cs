@@ -109,7 +109,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
                 CoverPicture = coverPicture,
                 Users = await _db.Users
                 .Include(p => p.Posts
-                .Where(p => p.UserId == user.Id && p.Approved == true))
+                .Where(p => p.UserId == user.Id))
                 .ThenInclude(p => p.Comments).Include(a => a.Posts)
                 .ThenInclude(x => x.Category)
                 .Include(a => a.Posts)

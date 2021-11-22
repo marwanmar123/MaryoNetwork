@@ -57,8 +57,6 @@ namespace MaryoNetwork.Controllers
                 .Include(u => u.User)
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
-                .Include(i => i.Images)
-                .Include(c => c.Comments)
                 .Include(l => l.Likes)
                 .Include(u => u.Category)
                 .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)

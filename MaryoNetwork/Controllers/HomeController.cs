@@ -54,7 +54,6 @@ namespace MaryoNetwork.Controllers
                 .Include(l => l.Likes)
                 .Include(u => u.User)
                 .Include(u => u.Category)
-                .Where(x => x.Approved == true)
                 .OrderByDescending(y => y.CreatedOn)
                 .ToList();
             }

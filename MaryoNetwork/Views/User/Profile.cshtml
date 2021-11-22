@@ -119,7 +119,7 @@
                                     }
                                 }
                                 <div class="d-flex flex-column ml-2">
-                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold text-light">@post.User.FullName</a>
+                                    <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold">@post.User.FullName</a>
                                     <small class="mr-2 text-dark">@post.CreatedOn</small>
                                 </div>
                             </div>
@@ -145,7 +145,6 @@
                                     <img class="imgPost" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
                                 }
                             }
-
                         </div>
                         <div class="p-2">
 
@@ -155,7 +154,15 @@
                                     <span>@post.Likes.Count()</span>
                                 </div>
                                 <div class="d-flex flex-row muted-color">
-                                    <a asp-controller="Post" asp-action="Index" asp-route-id="@post.CategoryId">@post.Category.Name</a>
+                                    @if (post.CategoryId != null)
+                                    {
+                                        <a asp-controller="Post" asp-action="Index" asp-route-id="@post.CategoryId">category : @post.Category.Name</a>
+                                    }
+                                    else if (post.GroupId != null)
+                                    {
+                                        <a asp-controller="Groups" asp-action="Details" asp-route-id="@post.GroupId">group : @post.Group.Name</a>
+                                    }
+
                                 </div>
                                 <div class="d-flex flex-row muted-color">
                                     <img src="~/image/comment.png" />
