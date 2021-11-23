@@ -4,14 +4,16 @@ using MaryoNetwork.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MaryoNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211123080632_favoritpost")]
+    partial class favoritpost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,7 +327,9 @@ namespace MaryoNetwork.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("PostId")
+                        .IsUnique()
+                        .HasFilter("[PostId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -760,8 +764,8 @@ namespace MaryoNetwork.Data.Migrations
             modelBuilder.Entity("MaryoNetwork.Models.Posts.FavoritePost", b =>
                 {
                     b.HasOne("MaryoNetwork.Models.Posts.Post", "Post")
-                        .WithMany("FavoritePost")
-                        .HasForeignKey("PostId");
+                        .WithOne("FavoritePost")
+                        .HasForeignKey("MaryoNetwork.Models.Posts.FavoritePost", "PostId");
 
                     b.HasOne("MaryoNetwork.Models.User", "User")
                         .WithMany()

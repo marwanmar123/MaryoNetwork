@@ -27,5 +27,6 @@ namespace MaryoNetwork.Models.Posts
         public Category Category { get; set; }
         public string GroupId { get; set; }
         public Group Group { get; set; }
+        public ICollection<FavoritePost> FavoritePost { get; set; }
     }
 }

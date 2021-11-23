@@ -40,6 +40,7 @@ namespace MaryoNetwork.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<FavoritePost> FavoritePosts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

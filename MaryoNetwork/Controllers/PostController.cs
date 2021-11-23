@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
@@ -50,6 +51,7 @@ namespace MaryoNetwork.Controllers
         [Authorize]
         public IActionResult Index(string id, string search = null)
         {
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             IEnumerable<Post> posts;
             if (!string.IsNullOrEmpty(search))
             {
@@ -59,6 +61,8 @@ namespace MaryoNetwork.Controllers
                 .Include(c => c.Comments)
                 .Include(l => l.Likes)
                 .Include(u => u.Category)
+                .Include(u => u.FavoritePost)
+                .ThenInclude(a=>a.User)
                 .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
                 .ToList();
 
@@ -71,6 +75,8 @@ namespace MaryoNetwork.Controllers
                 .Include(l => l.Likes)
                 .Include(u => u.User)
                 .Include(u => u.Category)
+                .Include(u => u.FavoritePost)
+                .ThenInclude(a => a.User)
                 .Where(x => x.CategoryId == id && x.Approved == true)
                 .OrderByDescending(y => y.CreatedOn)
                 .ToList();
@@ -140,6 +146,59 @@ namespace MaryoNetwork.Controllers
             return RedirectToAction("index", "post", new { id = post.CategoryId });
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FavoritePost(string postId)
+        {
+            var post = await _postService.GetPostWithUserAsync(postId);
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isExist = _db.FavoritePosts.SingleOrDefault(a => a.UserId == currentUser && a.PostId == postId);
+            if (isExist == null)
+            {
+                var addFavorite = new FavoritePost
+                {
+                    UserId = currentUser,
+                    PostId = postId
+                };
+                await _db.AddAsync(addFavorite);
+            }
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction("MyFavorites");
+        }
+
+        public async Task<IActionResult> MyFavorites()
+        {
+            var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var favorit = await _db.FavoritePosts
+                .Where(a => a.UserId == currentUser)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.User)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Comments)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Likes)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Images)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Group)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Category)
+                .ToListAsync();
+            return View(favorit);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteFavorite(string id)
+        {
+            var favId = _db.FavoritePosts.FirstOrDefault(a => a.Id == id);
+            _db.Remove(favId);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("MyFavorites");
+        }
 
 
         [HttpPost]

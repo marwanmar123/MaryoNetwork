@@ -72,6 +72,10 @@ namespace MaryoNetwork.Controllers
                     .ThenInclude(a => a.Likes)
                 .Include(a => a.Post)
                     .ThenInclude(a => a.User)
+                .Include(a => a.Post)
+                    .ThenInclude(a => a.FavoritePost)
+                 //.Include(a => a.Post)
+                 //   .ThenInclude(a => a.FavoritePost.)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (group == null)
             {

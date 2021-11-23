@@ -140,6 +140,25 @@
                             <small class="mr-2 text-dark">@post.CreatedOn</small>
                         </div>
                     </div>
+                    <div>
+                        @if (post.FavoritePost.SingleOrDefault(a => a.UserId == id && a.PostId == post.Id) == null)
+                        {
+                            <form method="post" asp-controller="Post" asp-action="FavoritePost">
+                                <input type="hidden" name="postId" value="@post.Id" />
+                                <button type="submit" class="btn btn-xs"><img src="~/image/not.png" /></button>
+                            </form>
+                        }
+                        else
+                        {
+                            @foreach (var fPost in post.FavoritePost.Where(a => a.UserId == id))
+                            {
+                                <form style="display:inline;" method="post" asp-controller="Post" asp-action="DeleteFavorite">
+                                    <input type="hidden" name="Id" value="@fPost.Id" />
+                                    <button type="submit" class="btn btn-xs"><img src="~/image/isSaved.png" /></button>
+                                </form>
+                            }
+                        }
+                    </div>
                 </div>
                 <div>
                     <p class="text-justify ml-3 text-dark">@post.Content</p>

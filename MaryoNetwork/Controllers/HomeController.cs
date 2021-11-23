@@ -38,10 +38,10 @@ namespace MaryoNetwork.Controllers
                 .Include(u => u.User)
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
-                .Include(i => i.Images)
-                .Include(c => c.Comments)
                 .Include(l => l.Likes)
                 .Include(u => u.Category)
+                .Include(u => u.FavoritePost)
+                .ThenInclude(u => u.User)
                 .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
                 .ToList();
 
@@ -54,6 +54,8 @@ namespace MaryoNetwork.Controllers
                 .Include(l => l.Likes)
                 .Include(u => u.User)
                 .Include(u => u.Category)
+                .Include(u => u.FavoritePost)
+                .ThenInclude(u => u.User)
                 .OrderByDescending(y => y.CreatedOn)
                 .ToList();
             }

@@ -92,6 +92,7 @@ namespace MaryoNetwork.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Favorites(string editorId)
         {
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MaryoNetwork.Models.Posts.Post>
+﻿@model IEnumerable<MaryoNetwork.Models.Posts.FavoritePost>
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
@@ -17,37 +17,13 @@
     }
 
 }
-@{
-    ViewData["Title"] = "Home Page";
-}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css" />
 
-<div class="text-center">
-    <div>
-        <h4>Welcome to</h4>
-        <h1 class="font-weight-bolder">@ViewBag.nameCat</h1>
-    </div>
-    <div class="ml-4">
-        <form asp-controller="Post" asp-action="Index">
-            <input type="text" name="search" class="w-50 p-2 rounded-pill border-0" placeholder="search post" />
-            <button class="d-none" id="searchBtn">search</button>
-            <a class="rounded-circle bg-secondary p-1 text-light text-decoration-none" id="searchBtn" asp-action="Index" asp-route-id="@Context.Request.RouteValues["id"]">&times;</a>
-        </form>
-    </div>
-</div>
+
 
 <div>
     <div class="row d-flex align-items-center justify-content-center">
         <div>
-            <form class="w-100 mt-1 mb-1 p-2 border border-secondary rounded-lg" asp-controller="Post" asp-action="CreatePost" enctype="multipart/form-data">
-                <textarea type="text" name="Content" id="emoji" class="w-100 h-25" placeholder="Write Content Post" required></textarea>
-                <div class="d-flex justify-content-between pt-2 pb-2">
-                    <input type="file" class="btn btn-outline-info" name="files" multiple required />
-                    <input type="hidden" name="CategoryId" value="@Context.Request.RouteValues["id"]" />
-                    <button type="submit" class="btn btn-xs btn-primary">Submit</button>
-                </div>
-            </form>
-            @foreach (var post in Model)
+            @foreach (var post in Model.OrderByDescending(a=>a.Post.CreatedOn))
             {
                 <div class="card">
                     <div class="d-flex justify-content-between p-2 px-3">
@@ -63,7 +39,8 @@
                                 {
                                     <img class="rounded-circle" style="width:50px;" src="data:image/*;base64,@Convert.ToBase64String(post.User.ProfilePicture)">
                                 }
-                            }else
+                            }
+                            else
                             {
                                 if (post.User.IsOnline == true)
                                 {
@@ -78,35 +55,27 @@
                             }
                             <div class="d-flex flex-column ml-2">
                                 <a asp-controller="User" asp-action="Profile" asp-route-id="@post.UserId" class="font-weight-bold">@post.User.FullName</a>
-                                <small class="mr-2 muted-color">@post.CreatedOn</small>
+                                <small class="mr-2 muted-color">@post.Post.CreatedOn</small>
                             </div>
                         </div>
                         <div>
-                            @if (post.FavoritePost.SingleOrDefault(a=>a.UserId == id && a.PostId == post.Id) == null)
+                            @foreach (var fPost in Model.Where(a => a.UserId == id && a.PostId == post.Post.Id))
                             {
-                                <form method="post" asp-controller="Post" asp-action="FavoritePost">
-                                    <input type="hidden" name="postId" value="@post.Id" />
-                                    <button type="submit" class="btn btn-xs"><img src="~/image/not.png" /></button>
+                                <form style="display:inline;" method="post" asp-action="DeleteFavorite">
+                                    <input type="hidden" name="Id" value="@fPost.Id" />
+                                    <input type="hidden" name="postId" value="@post.Post.Id" />
+                                    <button type="submit" class="btn btn-xs"><img src="~/image/isSaved.png" /></button>
                                 </form>
-                            }else
-                            {
-                                @foreach(var fPost in post.FavoritePost.Where(a=>a.UserId == id))
-                                {
-                                    <form style="display:inline;" method="post" asp-action="DeleteFavorite">
-                                        <input type="hidden" name="Id" value="@fPost.Id" />
-                                        <button type="submit" class="btn btn-xs"><img src="~/image/isSaved.png" /></button>
-                                    </form>
-                                }
                             }
                         </div>
                     </div>
                     <div>
-                        <p class="text-justify text-dark ml-5">@post.Content</p>
+                        <p class="text-justify text-dark ml-5">@post.Post.Content</p>
                     </div>
                     <div class="contentImg">
-                        @if (post.Images.Count == 1)
+                        @if (post.Post.Images.Count == 1)
                         {
-                            @foreach (var f in post.Images)
+                            @foreach (var f in post.Post.Images)
                             {
                                 <img class="w-100" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
                             }
@@ -116,7 +85,7 @@
                         }
                         else
                         {
-                            @foreach (var f in post.Images)
+                            @foreach (var f in post.Post.Images)
                             {
                                 <img class="imgPost" src="data:image/*;base64,@Convert.ToBase64String(f.Data)">
                             }
@@ -127,31 +96,28 @@
 
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex flex-row align-items-center muted-color">
-                                <form method="post" asp-controller="Post" asp-action="LikePost">
-                                    <input type="hidden" name="PostId" value="@post.Id" />
-                                    <button type="submit" class="btn btn-outline-light"><img src="~/image/like.png" /></button>
-                                </form>
-                                <span class="p-2">@post.Likes.Count()</span>
+                                <img src="~/image/like.png" />
+                                <span class="p-2">@post.Post.Likes.Count()</span>
+                            </div>
+                            <div class="d-flex flex-row muted-color">
+                                @if (post.Post.CategoryId != null)
+                                {
+                                    <a asp-controller="Post" asp-action="Index" asp-route-id="@post.Post.CategoryId">category : @post.Post.Category.Name</a>
+                                }
+                                else if (post.Post.GroupId != null)
+                                {
+                                    <a asp-controller="Groups" asp-action="Details" asp-route-id="@post.Post.GroupId">group : @post.Post.Group.Name</a>
+                                }
                             </div>
                             <div class="d-flex flex-row muted-color">
                                 <img src="~/image/comment.png" />
-                                <span>@post.Comments.Count() comments</span>
+                                <span>@post.Post.Comments.Count() comments</span>
                             </div>
                         </div>
                         <hr>
-                        <form class="comment-input" id="form" method="post" asp-controller="Post" asp-action="CreateComment">
-                            <input type="text" name="Content" class="form-control" placeholder="Write a comment..." />
-                            <input type="hidden" name="PostId" value="@post.Id" />
-                            <input type="hidden" name="UserId" value="@id" />
-                            <button type="submit" class="btn btn-xs btn-primary d-none">Comment</button>
-                        </form>
-                        @*<div class="comment-input">
-                                <input type="text" class="form-control" placeholder="Write a comment...">
-                                <div class="fonts"> <i class="fa fa-camera"></i> </div>
-                            </div>*@
                         <hr>
                         <div class="comments">
-                            @foreach (var i in post.Comments)
+                            @foreach (var i in post.Post.Comments)
                             {
                                 <div class="d-flex flex-row mb-2">
                                     <a asp-controller="User" asp-action="Profile" asp-route-id="@i.UserId">
@@ -179,21 +145,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
-
-<script>
-    $('#emoji').emojioneArea({
-        pickerPosition: 'bottom'
-    })
-</script>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-

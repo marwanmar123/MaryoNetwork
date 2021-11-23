@@ -104,6 +104,12 @@
                         </a>
                     </li>
                     <li class="sidebar-dropdown">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="MyFavorites">
+                            <i class="far fa-gem"></i>
+                            @localizer["Favorites"]
+                        </a>
+                    </li>
+                    <li class="sidebar-dropdown">
                         <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">
                             <i class="far fa-gem"></i>
                             @localizer["Users"]
@@ -128,7 +134,7 @@
                     <li class="sidebar-dropdown">
                         <a class="nav-link text-dark" asp-controller="Groups" asp-action="Index">
                             <i class="far fa-gem"></i>
-                            Groups
+                            @localizer["Groupe"]
                         </a>
                     </li>
                     <li class="sidebar-dropdown">
