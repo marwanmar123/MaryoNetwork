@@ -13,6 +13,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MaryoNetwork</title>
+    <link href="~/image/logo.png"  rel="shortcut icon"/>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://kit.fontawesome.com/3cfa8bb33f.js" crossorigin="anonymous"></script>
@@ -38,7 +39,10 @@
             <nav class="navbar fixed-top navbar-expand-lg bg-white">
                 <div class="text-center container justify-content-between">
 
-                    <a asp-controller="home" asp-action="index" class="navbar-brand text-dark">MaryoNet</a>
+                    <a asp-controller="home" asp-action="index" class="navbar-brand text-dark font-weight-bold">
+                        <img src="~/image/logo.png" />
+                        MaryoNet
+                    </a>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <a href="/messenger" class="navbar-brand text-dark" target="_blank">

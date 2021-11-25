@@ -29,9 +29,6 @@
 
 
 
-
-
-
 <div class="wrapper center-block">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default">
@@ -81,7 +78,7 @@
                 </form>
             </div>
             <div class="p-1 pt-3">
-                @foreach (var req in Model.Request)
+                @foreach (var req in Model.Request.OrderByDescending(a=>a.Like))
                 {
                     <div class="d-flex">
                         <form method="post" asp-controller="home" asp-action="voteIncremment">
