@@ -1001,3 +1001,12 @@ body {
             }
 
     /*/////////end profile*//**/
+
+/*    darkmode//////////////:::::*/
+
+[data-theme="dark"] {
+    background-color: #111 !important;
+    color: white !important;
+}
+
+/*    darkmode//////////////:::::*/

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,7 +32,7 @@ namespace MaryoNetwork.Controllers
             {
                 editors = _db.Editors.Include(e => e.User).ToList();
             }
-                //var components = _db.Editors.Include(e=>e.User).ToList();
+            //var components = _db.Editors.Include(e=>e.User).ToList();
             return View(editors);
         }
         public async Task<IActionResult> Details(string id, Favorite favorite)
@@ -56,7 +55,7 @@ namespace MaryoNetwork.Controllers
             return View(user);
         }
 
-         public ActionResult Create()
+        public ActionResult Create()
         {
             return View();
         }
@@ -96,8 +95,8 @@ namespace MaryoNetwork.Controllers
         public async Task<IActionResult> Favorites(string editorId)
         {
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var isExist = _db.Favorites.SingleOrDefault(a=>a.UserId == currentUser && a.EditorId == editorId);
-            if(isExist == null)
+            var isExist = _db.Favorites.SingleOrDefault(a => a.UserId == currentUser && a.EditorId == editorId);
+            if (isExist == null)
             {
                 var addFavorite = new Favorite
                 {
@@ -106,7 +105,7 @@ namespace MaryoNetwork.Controllers
                 };
                 await _db.AddAsync(addFavorite);
             }
-            
+
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -116,8 +115,8 @@ namespace MaryoNetwork.Controllers
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var favorit = await _db.Favorites
                 .Where(a => a.UserId == currentUser)
-                .Include(a=>a.Editor.User)
-                .Include(a=>a.Editor)
+                .Include(a => a.Editor.User)
+                .Include(a => a.Editor)
                 .ToListAsync();
             return View(favorit);
         }
@@ -127,7 +126,7 @@ namespace MaryoNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteFavorite(string id, Favorite favorite)
         {
-            var favId = _db.Favorites.Include(a=>a.Editor).FirstOrDefault(a => a.Id == id);
+            var favId = _db.Favorites.Include(a => a.Editor).FirstOrDefault(a => a.Id == id);
             _db.Remove(favId);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(MyFavorites));

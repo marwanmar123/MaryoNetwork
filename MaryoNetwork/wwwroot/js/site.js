@@ -1,15 +1,6 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-
-// Write your JavaScript code.
-
-///////////////multiselect
-
-//return to top
+﻿
 var mybutton = document.getElementById("myBtn");
 
-// When the user scrolls down 20px from the top of the document, show the button
 window.onscroll = function () { scrollFunction() };
 
 function scrollFunction() {
@@ -20,7 +11,6 @@ function scrollFunction() {
     }
 }
 
-// When the user clicks on the button, scroll to the top of the document
 function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
@@ -102,11 +92,60 @@ $(document).ready(function () {
 
 
 
-//////////////slide
+//////////////darkmode
 
 
 
+const darkSwitch = document.getElementById('darkSwitch');
+window.addEventListener('load', () => {
+    if (darkSwitch) {
+        initTheme();
+        darkSwitch.addEventListener('change', () => {
+            resetTheme();
+        });
+    }
+});
+
+function initTheme() {
+    const darkThemeSelected =
+        localStorage.getItem('darkSwitch') !== null &&
+        localStorage.getItem('darkSwitch') === 'dark';
+    darkSwitch.checked = darkThemeSelected;
+    if (darkThemeSelected) {
+        document.body.setAttribute('data-theme', 'dark');
+        $('.card').attr('style', 'background-color: #212121');
+        $('.chiller-theme .sidebar-wrapper').attr('style', 'background-color: #212121');
+        $('.navtop').attr('style', 'background-color: #212121 !important');
+        $('.panel-title > a, .panel-title > a:active').attr('style', 'background-color: #212121 !important');
+    }
+    else {
+        document.body.removeAttribute('data-theme');
+        $('.card').attr('style', 'background-color: white');
+        $('.chiller-theme .sidebar-wrapper').attr('style', 'background-color: white');
+        $('.navtop').attr('style', 'background-color: white');
+        $('.panel-title > a, .panel-title > a:active').attr('style', 'background-color: white');
+    }
+}
 
 
+function resetTheme() {
+    if (darkSwitch.checked) {
+        document.body.setAttribute('data-theme', 'dark');
+        $('.card').attr('style', 'background-color: #212121');
+        $('.chiller-theme .sidebar-wrapper').attr('style', 'background-color: #212121');
+        $('.navtop').attr('style', 'background-color: #212121 !important');
+        $('.panel-title > a, .panel-title > a:active').attr('style', 'background-color: #212121 !important');
+    }
+    else {
+        document.body.removeAttribute('data-theme');
+        $('.card').attr('style', 'background-color: white');
+        $('.chiller-theme .sidebar-wrapper').attr('style', 'background-color: white');
+        $('.navtop').attr('style', 'background-color: white');
+        $('.panel-title > a, .panel-title > a:active').attr('style', 'background-color: white');
 
-//////////////Endslide
+        localStorage.removeItem('darkSwitch');
+    }
+}
+
+
+//////////////darkmode

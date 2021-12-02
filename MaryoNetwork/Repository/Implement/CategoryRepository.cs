@@ -2,9 +2,7 @@
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MaryoNetwork.Repository.Implement
@@ -28,14 +26,14 @@ namespace MaryoNetwork.Repository.Implement
         public async Task<int> DeleteItem(string id)
         {
             var user = await _db.Categories
-                .Include(a=>a.Post)
-                .ThenInclude(a=>a.Comments)
+                .Include(a => a.Post)
+                .ThenInclude(a => a.Comments)
                 .Include(a => a.Post)
                 .ThenInclude(a => a.Likes)
                 .Include(a => a.Post)
                 .ThenInclude(a => a.Images)
                 .FirstOrDefaultAsync(i => i.Id == id);
-            foreach(var p in user.Post)
+            foreach (var p in user.Post)
             {
                 _db.Remove(p);
                 foreach (var i in p.Images)

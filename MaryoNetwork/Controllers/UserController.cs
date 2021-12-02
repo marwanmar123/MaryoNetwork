@@ -1,13 +1,11 @@
 ﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models;
 using MaryoNetwork.Models.Friends;
-using MaryoNetwork.Models.Posts;
 using MaryoNetwork.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -82,7 +80,7 @@ namespace MaryoNetwork.Controllers
                 User = _db.Users.FirstOrDefault(a => a.Id == id)
             };
             var requestFriend = _db.Friends.SingleOrDefault(a => a.ReceiverId == currentUser && a.SenderId == id || a.SenderId == currentUser && a.ReceiverId == id);
-            
+
             ViewBag.requestFriend = requestFriend;
             if (requestFriend != null)
             {
@@ -92,7 +90,7 @@ namespace MaryoNetwork.Controllers
             return View(data);
         }
 
-        
+
         private bool UserExists(string id)
         {
             return _db.Users.Any(e => e.Id == id);
@@ -169,11 +167,11 @@ namespace MaryoNetwork.Controllers
                 RequestStatusId = "3"
             };
             _db.Add(addFriend);
-            
+
             await _db.SaveChangesAsync();
             return RedirectToAction("profile", "User", new { id = friend.ReceiverId });
         }
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

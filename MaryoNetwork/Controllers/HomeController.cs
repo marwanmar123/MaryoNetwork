@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -104,7 +103,7 @@ namespace MaryoNetwork.Controllers
         {
 
             var reqId = _db.Requests.FirstOrDefault(a => a.Id == id);
-            if(reqId.Like < 10)
+            if (reqId.Like < 10)
             {
                 reqId.Like += add;
             }

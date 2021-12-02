@@ -1,5 +1,3 @@
-using System;
-
 namespace MaryoNetwork.Models
 {
     public class ErrorViewModel

@@ -1,5 +1,4 @@
 ﻿using MaryoNetwork.Data;
-using MaryoNetwork.Extensions;
 using MaryoNetwork.Models.Categories;
 using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Images;
@@ -9,17 +8,12 @@ using MaryoNetwork.Services.Posts;
 using MaryoNetwork.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -62,7 +56,7 @@ namespace MaryoNetwork.Controllers
                 .Include(l => l.Likes)
                 .Include(u => u.Category)
                 .Include(u => u.FavoritePost)
-                .ThenInclude(a=>a.User)
+                .ThenInclude(a => a.User)
                 .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
                 .ToList();
 
@@ -99,7 +93,7 @@ namespace MaryoNetwork.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost(Post post, List<IFormFile> files, string postId)
@@ -140,7 +134,7 @@ namespace MaryoNetwork.Controllers
             }
 
 
-            
+
             await _db.SaveChangesAsync();
 
             return RedirectToAction("index", "post", new { id = post.CategoryId });
@@ -275,12 +269,12 @@ namespace MaryoNetwork.Controllers
                 _db.Likes.Remove(like);
             }
             await _db.SaveChangesAsync();
-            var likeCount =  _db.Likes.Where(l => l.PostId == postId).CountAsync();
+            var likeCount = _db.Likes.Where(l => l.PostId == postId).CountAsync();
             ViewBag.likeCount = likeCount;
 
             return RedirectToAction("Index", "Post", new { id = post.CategoryId });
         }
 
-        
+
     }
 }

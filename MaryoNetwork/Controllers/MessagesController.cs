@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using MaryoNetwork.Data;
 using MaryoNetwork.Hubs;
-using MaryoNetwork.Models;
 using MaryoNetwork.Models.Messenger;
 using MaryoNetwork.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;

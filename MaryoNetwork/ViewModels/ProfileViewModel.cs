@@ -1,14 +1,5 @@
 ﻿using MaryoNetwork.Models;
-using MaryoNetwork.Models.Categories;
-using MaryoNetwork.Models.Comments;
-using MaryoNetwork.Models.Friends;
-using MaryoNetwork.Models.Likes;
-using MaryoNetwork.Models.Posts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace MaryoNetwork.ViewModels
 {

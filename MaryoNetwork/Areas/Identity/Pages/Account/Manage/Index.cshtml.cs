@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using MaryoNetwork.Data;
+﻿using MaryoNetwork.Data;
 using MaryoNetwork.Models;
-using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Friends;
-using MaryoNetwork.Models.Likes;
-using MaryoNetwork.Models.Posts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
 {
@@ -208,7 +204,7 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
                 }
                 await _userManager.UpdateAsync(user);
             }
-            
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

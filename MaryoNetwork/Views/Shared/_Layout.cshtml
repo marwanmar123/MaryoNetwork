@@ -26,7 +26,7 @@
               crossorigin="anonymous" />
     }
 </head>
-<body>
+<body class="Body">
     <div class="d-flex justify-content-around">
 
         <div class="headerSide d-flex flex-row">
@@ -36,7 +36,7 @@
             }
         </div>
         <div class="content p-3 pt-5">
-            <nav class="navbar fixed-top navbar-expand-lg bg-white">
+            <nav class="navbar navtop fixed-top navbar-expand-lg bg-white">
                 <div class="text-center container justify-content-between">
 
                     <a asp-controller="home" asp-action="index" class="navbar-brand text-dark font-weight-bold">
@@ -51,19 +51,26 @@
                             </svg>
                         </a>
                     }
-                    <div>
-                        <button type="button" class="navbar-toggler" data-target="#navbarNav" data-toggle="collapse">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+                <div>
+                    <button type="button" class="navbar-toggler" data-target="#navbarNav" data-toggle="collapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav ml-auto">
-                                <li class="nav-item dropdown">
-                                    <partial name="_LoginPartial" />
-                                </li>
-                            </ul>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item dropdown">
+                                <partial name="_LoginPartial" />
+                            </li>
+                        </ul>
+                        <div class="navbar-nav">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="darkSwitch">
+                                <label class="custom-control-label" style="font-weight:400" for="darkSwitch">Dark Mode</label>
+                            </div>
                         </div>
                     </div>
+                    
+                </div>
                 </div>
             </nav>
             <div class="pt-3">

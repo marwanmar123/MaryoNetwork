@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MaryoNetwork.Data;
+﻿using MaryoNetwork.Data;
+using MaryoNetwork.Models.Comments;
 using MaryoNetwork.Models.Groups;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.AspNetCore.Authorization;
+using MaryoNetwork.Models.Images;
+using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Posts;
 using MaryoNetwork.Services.Posts;
-using MaryoNetwork.Models.Images;
 using MaryoNetwork.Services.Users;
-using MaryoNetwork.Models.Comments;
-using MaryoNetwork.Models.Likes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace MaryoNetwork.Controllers
 {
@@ -47,7 +46,7 @@ namespace MaryoNetwork.Controllers
             {
                 groups = _db.Groups.Include(a => a.Members).Include(a => a.User);
             }
-                //var applicationDbContext = _db.Groups.Include(a=>a.Members).Include(a => a.User);
+            //var applicationDbContext = _db.Groups.Include(a=>a.Members).Include(a => a.User);
             return View(groups);
         }
         public async Task<IActionResult> Details(string id)
@@ -62,10 +61,10 @@ namespace MaryoNetwork.Controllers
 
             var group = await _db.Groups
                 .Include(a => a.User)
-                .Include(a=>a.Members)
-                .ThenInclude(a=>a.User)
-                .Include(a=>a.Post)
-                    .ThenInclude(a=>a.Images)
+                .Include(a => a.Members)
+                .ThenInclude(a => a.User)
+                .Include(a => a.Post)
+                    .ThenInclude(a => a.Images)
                 .Include(a => a.Post)
                     .ThenInclude(a => a.Comments)
                 .Include(a => a.Post)
@@ -74,8 +73,8 @@ namespace MaryoNetwork.Controllers
                     .ThenInclude(a => a.User)
                 .Include(a => a.Post)
                     .ThenInclude(a => a.FavoritePost)
-                 //.Include(a => a.Post)
-                 //   .ThenInclude(a => a.FavoritePost.)
+                //.Include(a => a.Post)
+                //   .ThenInclude(a => a.FavoritePost.)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (group == null)
             {
@@ -89,7 +88,7 @@ namespace MaryoNetwork.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Group group)
@@ -136,7 +135,7 @@ namespace MaryoNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Quitter(string id)
         {
-            var favId = _db.GroupMembers.Include(a=>a.Group).FirstOrDefault(a => a.Id == id);
+            var favId = _db.GroupMembers.Include(a => a.Group).FirstOrDefault(a => a.Id == id);
             _db.Remove(favId);
             await _db.SaveChangesAsync();
 
