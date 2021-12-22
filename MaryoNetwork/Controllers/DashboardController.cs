@@ -39,7 +39,9 @@ namespace MaryoNetwork.Controllers
             var list = _db.Posts
                 .Include(u => u.Images)
                 .Include(c => c.Comments)
+                .ThenInclude(c => c.User)
                 .Include(c => c.Likes)
+                .ThenInclude(c => c.User)
                 .Include(u => u.User)
                 .Where(x => x.CategoryId == id)
                 .OrderByDescending(y => y.CreatedOn)
@@ -63,7 +65,7 @@ namespace MaryoNetwork.Controllers
         public ActionResult DeletePost(string id)
         {
 
-            var resId = _db.Posts.Include(a => a.Comments).Include(a => a.Likes).Include(a => a.Images).FirstOrDefault(a => a.Id == id);
+            var resId = _db.Posts.Include(a => a.Comments).ThenInclude(a => a.User).Include(a => a.Likes).ThenInclude(a => a.User).Include(a => a.Images).FirstOrDefault(a => a.Id == id);
             foreach (var a in resId.Comments)
             {
                 _db.Remove(a);

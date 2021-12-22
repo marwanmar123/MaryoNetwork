@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -68,12 +69,14 @@ namespace MaryoNetwork.Controllers
                 .Include(p => p.FriendRequestSent)
                 .Include(p => p.Groups)
                 .Include(p => p.Posts
-                .Where(p => p.UserId == user.Id))
+                .Where(p => p.UserId == user.Id).OrderByDescending(p=>p.CreatedOn))
                 .ThenInclude(p => p.Comments)
+                .ThenInclude(p => p.User)
                 .Include(a => a.Posts)
                 .ThenInclude(x => x.Category)
                 .Include(a => a.Posts)
                 .ThenInclude(x => x.Likes)
+                .ThenInclude(x => x.User)
                 .Include(a => a.Posts)
                 .ThenInclude(x => x.Images)
                 .ToListAsync(),

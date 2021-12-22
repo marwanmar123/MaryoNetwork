@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -105,8 +106,9 @@ namespace MaryoNetwork.Areas.Identity.Pages.Account.Manage
                 CoverPicture = coverPicture,
                 Users = await _db.Users
                 .Include(p => p.Posts
-                .Where(p => p.UserId == user.Id))
-                .ThenInclude(p => p.Comments).Include(a => a.Posts)
+                .Where(p => p.UserId == user.Id).OrderByDescending(p=>p.CreatedOn))
+                .ThenInclude(p => p.Comments)
+                .Include(a => a.Posts)
                 .ThenInclude(x => x.Category)
                 .Include(a => a.Posts)
                 .ThenInclude(x => x.Likes)

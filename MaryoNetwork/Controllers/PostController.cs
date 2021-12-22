@@ -53,10 +53,12 @@ namespace MaryoNetwork.Controllers
                 .Include(u => u.User)
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
+                    .ThenInclude(c => c.User)
                 .Include(l => l.Likes)
+                    .ThenInclude(l => l.User)
                 .Include(u => u.Category)
                 .Include(u => u.FavoritePost)
-                .ThenInclude(a => a.User)
+                    .ThenInclude(a => a.User)
                 .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
                 .ToList();
 
@@ -66,11 +68,13 @@ namespace MaryoNetwork.Controllers
                 posts = _db.Posts
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
+                    .ThenInclude(c => c.User)
                 .Include(l => l.Likes)
+                    .ThenInclude(l => l.User)
                 .Include(u => u.User)
                 .Include(u => u.Category)
                 .Include(u => u.FavoritePost)
-                .ThenInclude(a => a.User)
+                    .ThenInclude(a => a.User)
                 .Where(x => x.CategoryId == id && x.Approved == true)
                 .OrderByDescending(y => y.CreatedOn)
                 .ToList();
@@ -106,8 +110,8 @@ namespace MaryoNetwork.Controllers
                 Content = post.Content,
                 UserId = await _userService.GetCurrentUserIdAsync(),
                 CategoryId = post.CategoryId,
-                Approved = false
             };
+            _ = User.IsInRole("admin") ? addPost.Approved = true : addPost.Approved = false;
 
             _db.Add(addPost);
 
@@ -171,8 +175,10 @@ namespace MaryoNetwork.Controllers
                 .ThenInclude(a => a.User)
                 .Include(a => a.Post)
                 .ThenInclude(a => a.Comments)
+                .ThenInclude(a => a.User)
                 .Include(a => a.Post)
                 .ThenInclude(a => a.Likes)
+                .ThenInclude(a => a.User)
                 .Include(a => a.Post)
                 .ThenInclude(a => a.Images)
                 .Include(a => a.Post)
