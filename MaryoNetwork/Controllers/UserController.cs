@@ -121,7 +121,54 @@ namespace MaryoNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var aspNetUser = await _db.Users.FindAsync(id);
+            var aspNetUser = _db.Users
+                .Include(u => u.Posts)
+                .ThenInclude(u => u.Comments)
+                .Include(u => u.Posts)
+                .ThenInclude(u => u.Likes)
+                .Include(u => u.Images)
+                .Include(u => u.Groups)
+                .Include(u => u.Requests)
+                .Include(u => u.FriendRequestSent)
+                .Include(u => u.FriendRequestReceived)
+                .FirstOrDefault(a => a.Id == id);
+           
+            foreach (var p in aspNetUser.Posts)
+            {
+                _db.Remove(p);
+                foreach (var i in p.Images)
+                {
+                    _db.Remove(i);
+                }
+                foreach (var c in p.Comments)
+                {
+                    _db.Remove(c);
+                }
+                foreach (var l in p.Likes)
+                {
+                    _db.Remove(l);
+                }
+            }
+            foreach(var u in aspNetUser.Groups)
+            {
+                _db.Remove(u);
+            }
+            foreach (var u in aspNetUser.Requests)
+            {
+                _db.Remove(u);
+            }
+            foreach (var u in aspNetUser.FriendRequestReceived)
+            {
+                _db.Remove(u);
+            }
+            foreach (var u in aspNetUser.FriendRequestSent)
+            {
+                _db.Remove(u);
+            }
+            foreach (var u in aspNetUser.Images)
+            {
+                _db.Remove(u);
+            }
             _db.Users.Remove(aspNetUser);
             await _db.SaveChangesAsync();
             return RedirectToAction("Index", "Role");

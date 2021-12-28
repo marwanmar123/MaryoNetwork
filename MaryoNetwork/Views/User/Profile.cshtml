@@ -150,8 +150,16 @@
 
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex flex-row align-items-center muted-color">
-                                    <img src="~/image/like.png" />
+                                    <img src="~/image/like.png" 
+                                         onmouseover="document.getElementById('hoverLike').style.display = 'block';" 
+                                         onmouseout="document.getElementById('hoverLike').style.display = 'none';"/>
                                     <span>@post.Likes.Count()</span>
+                                    <div class="bg-secondary p-2 border rounded" id="hoverLike">
+                                        @foreach (var l in post.Likes)
+                                        {
+                                            <h6>@l.User.FullName</h6>
+                                        }
+                                    </div>
                                 </div>
                                 <div class="d-flex flex-row muted-color">
                                     @if (post.CategoryId != null)

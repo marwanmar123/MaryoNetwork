@@ -5,6 +5,7 @@ using MaryoNetwork.Models.Images;
 using MaryoNetwork.Models.Likes;
 using MaryoNetwork.Models.Messenger;
 using MaryoNetwork.Models.Posts;
+using MaryoNetwork.Models.Requests;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
@@ -25,11 +26,12 @@ namespace MaryoNetwork.Models
         public ICollection<Image> Images { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Like> Likes { get; set; }
+        public ICollection<Request> Requests { get; set; }
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Message> Messages { get; set; }
-        public ICollection<Friend> FriendRequestSent { get; set; }
         public ICollection<Group> Groups { get; set; }
         public ICollection<GroupMembers> Members { get; set; }
+        public ICollection<Friend> FriendRequestSent { get; set; }
         public ICollection<Friend> FriendRequestReceived { get; set; }
     }
 }

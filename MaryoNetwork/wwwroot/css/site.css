@@ -1010,3 +1010,6 @@ body {
 }
 
 /*    darkmode//////////////:::::*/
+#hoverLike{
+    display:none;
+}
