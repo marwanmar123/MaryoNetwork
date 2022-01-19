@@ -28,12 +28,12 @@ namespace MaryoNetwork.Controllers
             _db = db;
         }
         //[Authorize]
-        public IActionResult Index(string search = null)
+        public async Task<IActionResult> Index(string search = null)
         {
             IEnumerable<Post> posts;
             if (!string.IsNullOrEmpty(search))
             {
-                posts = _db.Posts
+                posts = await _db.Posts
                 .Include(u => u.User)
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
@@ -44,12 +44,12 @@ namespace MaryoNetwork.Controllers
                 .Include(u => u.FavoritePost)
                 .ThenInclude(u => u.User)
                 .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
-                .ToList();
+                .ToListAsync();
 
             }
             else
             {
-                posts = _db.Posts
+                posts = await _db.Posts
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
                 .ThenInclude(c => c.User)
@@ -60,15 +60,15 @@ namespace MaryoNetwork.Controllers
                 .Include(u => u.FavoritePost)
                 .ThenInclude(u => u.User)
                 .OrderByDescending(y => y.CreatedOn)
-                .ToList();
+                .ToListAsync();
             }
 
             var homeData = new HomeViewModel()
             {
-                Category = _db.Categories.ToList(),
+                Category = await _db.Categories.Include(c => c.Post).ToListAsync(),
                 Post = (List<Post>)posts,
-                Group = _db.Groups.Include(e => e.Members).ToList(),
-                Request = _db.Requests.ToList()
+                Group = await _db.Groups.Include(e => e.Members).ToListAsync(),
+                Request = await _db.Requests.ToListAsync()
             };
             return View(homeData);
         }
@@ -79,11 +79,11 @@ namespace MaryoNetwork.Controllers
         }
 
         //[Authorize]
-        public IActionResult Posts(string id)
+        public async Task<IActionResult> Posts(string id)
         {
 
             Category ctgr = _db.Categories.Find(id);
-            var result = _db.Posts.Where(x => x.CategoryId == id).OrderByDescending(y => y.CreatedOn).ToList();
+            var result = await _db.Posts.Where(x => x.CategoryId == id).OrderByDescending(y => y.CreatedOn).ToListAsync();
             return View(result);
         }
 

@@ -27,7 +27,7 @@ namespace MaryoNetwork.Controllers
         }
 
 
-        public IActionResult Index(string search = null)
+        public async Task<IActionResult> Index(string search = null)
         {
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             IEnumerable<User> users;
@@ -40,10 +40,11 @@ namespace MaryoNetwork.Controllers
             }
             else
             {
-                users = _db.Users
+                users = await _db.Users
                 .Where(a => a.Id != currentUser)
                 .Include(a => a.FriendRequestSent)
-                .Include(a => a.FriendRequestReceived).ToList();
+                .Include(a => a.FriendRequestReceived)
+                .ToListAsync();
             }
             //var usersList = _db.Users
             //    .Where(a => a.Id != currentUser )
@@ -82,7 +83,7 @@ namespace MaryoNetwork.Controllers
                 .ToListAsync(),
                 User = _db.Users.FirstOrDefault(a => a.Id == id)
             };
-            var requestFriend = _db.Friends.SingleOrDefault(a => a.ReceiverId == currentUser && a.SenderId == id || a.SenderId == currentUser && a.ReceiverId == id);
+            var requestFriend = await _db.Friends.SingleOrDefaultAsync(a => a.ReceiverId == currentUser && a.SenderId == id || a.SenderId == currentUser && a.ReceiverId == id);
 
             ViewBag.requestFriend = requestFriend;
             if (requestFriend != null)
@@ -194,12 +195,12 @@ namespace MaryoNetwork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult IsOnline(bool online, string id)
+        public async Task<IActionResult> IsOnline(bool online, string id)
         {
 
-            var resId = _db.Users.FirstOrDefault(a => a.Id == id);
+            var resId =  _db.Users.FirstOrDefault(a => a.Id == id);
             resId.IsOnline = online;
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
 
         }

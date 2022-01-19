@@ -73,7 +73,7 @@
             </ul>
         </div>
         <div class="chat-input">
-            <input id="chat-message" type="text" value="" data-bind="value:message, valueUpdate: 'afterkeydown', event: { keypress: onEnter }" placeholder="What's on your mind?" />
+            <input id="chat-message" type="text" value="" data-bind="value:message, valueUpdate: 'afterkeydown', event: { keypress: onEnter }" placeholder="Write Message" />
             <div class="actions d-flex align-items-center">
                 <form method="post" asp-action="Upload" asp-controller="Upload" enctype="multipart/form-data" id="uploadForm">
                     <input type="hidden" name="RoomId" data-bind="value: joinedRoomId()" />
