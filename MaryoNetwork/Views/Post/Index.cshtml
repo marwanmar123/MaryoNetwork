@@ -145,6 +145,12 @@
                                 <img src="~/image/comment.png" />
                                 <span>@post.Comments.Count() comments</span>
                             </div>
+                            <div class="d-flex flex-row muted-color">
+                            <form method="post" asp-controller="Post" asp-action="Share">
+                                <input type="hidden" name="PostId" value="@post.Id" />
+                                <button type="submit" class="btn btn-outline-light"><img src="~/image/share.png" /></button>
+                            </form>
+                        </div>
                         </div>
                         <hr>
                         <form class="comment-input" id="form" method="post" asp-controller="Post" asp-action="CreateComment">
