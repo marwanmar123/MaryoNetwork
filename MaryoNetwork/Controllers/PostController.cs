@@ -43,13 +43,13 @@ namespace MaryoNetwork.Controllers
 
         [Route("Post/cat/{id?}")]
         [Authorize]
-        public IActionResult Index(string id, string search = null)
+        public async Task<IActionResult> Index(string id, string search = null)
         {
             var currentUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             IEnumerable<Post> posts;
             if (!string.IsNullOrEmpty(search))
             {
-                posts = _db.Posts
+                 posts = await _db.Posts
                 .Include(u => u.User)
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
@@ -60,12 +60,12 @@ namespace MaryoNetwork.Controllers
                 .Include(u => u.FavoritePost)
                     .ThenInclude(a => a.User)
                 .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
-                .ToList();
+                .ToListAsync();
 
             }
             else
             {
-                posts = _db.Posts
+                posts = await _db.Posts
                 .Include(i => i.Images)
                 .Include(c => c.Comments)
                     .ThenInclude(c => c.User)
@@ -77,7 +77,7 @@ namespace MaryoNetwork.Controllers
                     .ThenInclude(a => a.User)
                 .Where(x => x.CategoryId == id && x.Approved == true)
                 .OrderByDescending(y => y.CreatedOn)
-                .ToList();
+                .ToListAsync();
             }
             //var list = _db.Posts
             //    .Include(i=>i.Images)

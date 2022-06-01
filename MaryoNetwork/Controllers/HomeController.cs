@@ -30,7 +30,7 @@ namespace MaryoNetwork.Controllers
         //[Authorize]
         public async Task<IActionResult> Index(string search = null)
         {
-            IEnumerable<Post> posts;
+            List<Post> posts;
             if (!string.IsNullOrEmpty(search))
             {
                 posts = await _db.Posts
