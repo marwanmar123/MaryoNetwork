@@ -282,5 +282,16 @@ namespace MaryoNetwork.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Share(string postId)
+        {
+            var post = await _postService.GetPostWithUserAsync(postId);
+            post.CreatedOn = DateTime.Now;
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index", "Post", new { id = post.CategoryId });
+        }
     }
+
+
 }

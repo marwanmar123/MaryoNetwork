@@ -207,6 +207,10 @@
                             <img src="~/image/comment.png" />
                             <span>@post.Comments.Count() comments</span>
                         </div>
+                        <div class="d-flex flex-row muted-color">
+                            <img src="~/image/share.png" />
+                            <a asp-controller="Post" asp-action="Share" asp-route-id="@post.Id">Share</a>
+                        </div>
                     </div>
                     <hr style="background-color: rgb(58, 46, 224);">
                     <div class="comments">
