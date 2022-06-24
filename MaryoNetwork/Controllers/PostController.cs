@@ -49,18 +49,18 @@ namespace MaryoNetwork.Controllers
             IEnumerable<Post> posts;
             if (!string.IsNullOrEmpty(search))
             {
-                 posts = await _db.Posts
-                .Include(u => u.User)
-                .Include(i => i.Images)
-                .Include(c => c.Comments)
-                    .ThenInclude(c => c.User)
-                .Include(l => l.Likes)
-                    .ThenInclude(l => l.User)
-                .Include(u => u.Category)
-                .Include(u => u.FavoritePost)
-                    .ThenInclude(a => a.User)
-                .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
-                .ToListAsync();
+                posts = await _db.Posts
+               .Include(u => u.User)
+               .Include(i => i.Images)
+               .Include(c => c.Comments)
+                   .ThenInclude(c => c.User)
+               .Include(l => l.Likes)
+                   .ThenInclude(l => l.User)
+               .Include(u => u.Category)
+               .Include(u => u.FavoritePost)
+                   .ThenInclude(a => a.User)
+               .Where(s => s.Content.ToLower().Contains(search.ToLower()) && s.Approved == true)
+               .ToListAsync();
 
             }
             else
@@ -79,14 +79,7 @@ namespace MaryoNetwork.Controllers
                 .OrderByDescending(y => y.CreatedOn)
                 .ToListAsync();
             }
-            //var list = _db.Posts
-            //    .Include(i=>i.Images)
-            //    .Include(c => c.Comments)
-            //    .Include(l=>l.Likes)
-            //    .Include(u => u.User)
-            //    .Where(x => x.CategoryId == id && x.Approved == true)
-            //    .OrderByDescending(y => y.CreatedOn)
-            //    .ToList();
+
             Category ctgr = _db.Categories.Find(id);
             ViewBag.nameCat = ctgr.Name;
             return View(posts);
